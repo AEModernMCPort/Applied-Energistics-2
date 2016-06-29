@@ -55,7 +55,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import appeng.api.parts.CableRenderMode;
 import appeng.api.util.AEColor;
 import appeng.block.AEBaseBlock;
-import appeng.client.render.ParticleTextures;
+import appeng.client.render.textures.ParticleTextures;
 import appeng.client.render.effects.AssemblerFX;
 import appeng.client.render.effects.CraftingFx;
 import appeng.client.render.effects.EnergyFx;

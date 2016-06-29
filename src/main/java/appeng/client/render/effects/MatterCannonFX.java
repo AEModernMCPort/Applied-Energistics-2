@@ -27,7 +27,7 @@ import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
 import appeng.api.util.AEPartLocation;
-import appeng.client.render.ParticleTextures;
+import appeng.client.render.textures.ParticleTextures;
 
 
 public class MatterCannonFX extends ParticleBreaking

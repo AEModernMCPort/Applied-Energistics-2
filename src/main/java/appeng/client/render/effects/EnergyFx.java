@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.util.AEPartLocation;
-import appeng.client.render.ParticleTextures;
+import appeng.client.render.textures.ParticleTextures;
 
 
 @SideOnly( Side.CLIENT )
