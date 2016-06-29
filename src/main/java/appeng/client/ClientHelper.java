@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import appeng.client.render.ParticleTextures;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -51,12 +48,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import appeng.api.parts.CableRenderMode;
 import appeng.api.util.AEColor;
 import appeng.block.AEBaseBlock;
+import appeng.client.render.ParticleTextures;
 import appeng.client.render.effects.AssemblerFX;
 import appeng.client.render.effects.CraftingFx;
 import appeng.client.render.effects.EnergyFx;
@@ -118,7 +117,7 @@ public class ClientHelper extends ServerHelper
 		{
 			if( feature instanceof AEBaseBlock )
 			{
-				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler( new AEBaseBlockColor(), ( Block ) feature );
+				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler( new AEBaseBlockColor(), (Block) feature );
 			}
 		}
 
@@ -141,7 +140,7 @@ public class ClientHelper extends ServerHelper
 	@Override
 	public void bindTileEntitySpecialRenderer( final Class<? extends TileEntity> tile, final AEBaseBlock blk )
 	{
-		
+
 	}
 
 	@Override
@@ -408,10 +407,10 @@ public class ClientHelper extends ServerHelper
 	}
 
 	@SubscribeEvent
-	public void onTextureStitch(final TextureStitchEvent.Pre event){
-		ParticleTextures.registerSprite(event);
+	public void onTextureStitch( final TextureStitchEvent.Pre event )
+	{
+		ParticleTextures.registerSprite( event );
 	}
-
 
 	private static class IconReg
 	{
@@ -437,6 +436,7 @@ public class ClientHelper extends ServerHelper
 		}
 	}
 
+
 	public static class AEBaseBlockColor implements IBlockColor
 	{
 
@@ -445,8 +445,8 @@ public class ClientHelper extends ServerHelper
 		{
 			return tintIndex;
 		}
-
 	}
+
 
 	public class ItemPaintBallColor implements IItemColor
 	{
@@ -454,7 +454,7 @@ public class ClientHelper extends ServerHelper
 		@Override
 		public int getColorFromItemstack( ItemStack stack, int tintIndex )
 		{
-			final AEColor col = ( ( ItemPaintBall ) stack.getItem() ).getColor( stack );
+			final AEColor col = ( (ItemPaintBall) stack.getItem() ).getColor( stack );
 
 			final int colorValue = stack.getItemDamage() >= 20 ? col.mediumVariant : col.mediumVariant;
 			final int r = ( colorValue >> 16 ) & 0xff;
@@ -472,6 +472,5 @@ public class ClientHelper extends ServerHelper
 				return r << 16 | g << 8 | b | 0xff << 24;
 			}
 		}
-
 	}
 }
