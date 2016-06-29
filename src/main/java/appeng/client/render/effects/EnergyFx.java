@@ -19,6 +19,7 @@
 package appeng.client.render.effects;
 
 
+import appeng.client.render.ParticleTextures;
 import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -51,8 +52,7 @@ public class EnergyFx extends ParticleBreaking
 		this.particleRed = 255;
 		this.particleAlpha = 1.4f;
 		this.particleScale = 3.5f;
-		//TODO 1.10-R - Find exact atlas it was holding and replace this broken code with the atlas.	
-		this.particleTextureIndex = ExtraBlockTextures.BlockEnergyParticle.getIcon().getAtlas();
+		this.particleTextureIndex = ParticleTextures.BlockEnergyParticle;
 
 		this.startBlkX = MathHelper.floor_double( this.posX );
 		this.startBlkY = MathHelper.floor_double( this.posY );

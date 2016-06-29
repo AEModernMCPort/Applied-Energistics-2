@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import appeng.client.render.ParticleTextures;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -403,6 +406,12 @@ public class ClientHelper extends ServerHelper
 			}
 		}
 	}
+
+	@SubscribeEvent
+	public void onTextureStitch(final TextureStitchEvent.Pre event){
+		ParticleTextures.registerSprite(event);
+	}
+
 
 	private static class IconReg
 	{

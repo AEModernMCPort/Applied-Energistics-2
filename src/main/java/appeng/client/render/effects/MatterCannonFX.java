@@ -19,6 +19,8 @@
 package appeng.client.render.effects;
 
 
+import appeng.client.render.ParticleTextures;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -46,8 +48,7 @@ public class MatterCannonFX extends ParticleBreaking
 		this.motionX = 0.0f;
 		this.motionY = 0.0f;
 		this.motionZ = 0.0f;
-		//TODO 1.10-R - Find exact atlas it was holding and replace this broken code with the atlas.
-		this.particleTextureIndex = ExtraBlockTextures.BlockMatterCannonParticle.getIcon().getAtlas();
+		this.particleTextureIndex = ParticleTextures.BlockMatterCannonParticle;
 	}
 
 	public void fromItem( final AEPartLocation d )

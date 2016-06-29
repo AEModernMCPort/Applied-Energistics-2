@@ -19,6 +19,7 @@
 package appeng.client.render.effects;
 
 
+import appeng.client.render.ParticleTextures;
 import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -51,8 +52,7 @@ public class CraftingFx extends ParticleBreaking
 		this.particleRed = 1;
 		this.particleAlpha = 1.3f;
 		this.particleScale = 1.5f;
-		//TODO 1.10-R - Find exact atlas it was holding and replace this broken code with the atlas.
-		this.particleTextureIndex = ExtraBlockTextures.BlockEnergyParticle.getIcon().getAtlas();
+		this.particleTextureIndex = ParticleTextures.BlockEnergyParticle;
 		this.particleMaxAge /= 1.2;
 
 		this.startBlkX = MathHelper.floor_double( this.posX );
