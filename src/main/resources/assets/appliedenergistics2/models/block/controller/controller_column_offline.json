@@ -1,0 +1,6 @@
+{
+    "parent": "appliedenergistics2:block/controller/controller_base",
+    "textures": {
+        "block": "appliedenergistics2:blocks/BlockControllerColumn"
+    }
+}
