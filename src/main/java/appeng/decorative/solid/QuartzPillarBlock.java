@@ -73,7 +73,7 @@ public class QuartzPillarBlock extends AEBaseBlock implements IOrientableBlock
 	@Override
 	public IOrientable getOrientable( final IBlockAccess w, final BlockPos pos )
 	{
-		return new MetaRotation( w, pos, false );
+		return new MetaRotation( w, pos, null );
 	}
 
 }

@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -52,11 +52,15 @@ import appeng.helpers.MetaRotation;
 
 public class BlockQuartzTorch extends AEBaseBlock implements IOrientableBlock, ICustomCollision
 {
+	
+	// Cannot use the vanilla FACING property here because it excludes facing DOWN
+	public static final PropertyDirection FACING = PropertyDirection.create("facing");
+	
 	public BlockQuartzTorch()
 	{
 		super( Material.CIRCUITS );
 
-		this.setDefaultState(this.blockState.getBaseState().withProperty(BlockTorch.FACING, EnumFacing.UP));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
 		this.setFeature( EnumSet.of( AEFeature.DecorativeLights ) );
 		this.setLightLevel( 0.9375F );
 		this.setLightOpacity( 0 );
@@ -67,48 +71,20 @@ public class BlockQuartzTorch extends AEBaseBlock implements IOrientableBlock, I
 	@Override
 	public int getMetaFromState( final IBlockState state )
 	{
-		switch (state.getValue(BlockTorch.FACING))
-		{
-			case EAST:
-				return 1;
-			case WEST:
-				return 2;
-			case SOUTH:
-				return 3;
-			case NORTH:
-				return 4;
-			case DOWN:
-			case UP:
-			default:
-				return 5;
-		}
+		return state.getValue(FACING).ordinal();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta( final int meta )
 	{
-		IBlockState state = this.getDefaultState();
-
-		switch (meta)
-		{
-			case 1:
-				return state.withProperty(BlockTorch.FACING, EnumFacing.EAST);
-			case 2:
-				return state.withProperty(BlockTorch.FACING, EnumFacing.WEST);
-			case 3:
-				return state.withProperty(BlockTorch.FACING, EnumFacing.SOUTH);
-			case 4:
-				return state.withProperty(BlockTorch.FACING, EnumFacing.NORTH);
-			case 5:
-			default:
-				return state.withProperty(BlockTorch.FACING, EnumFacing.UP);
-		}
+		EnumFacing facing = EnumFacing.values()[meta];
+		return getDefaultState().withProperty(FACING, facing);
 	}
 
 	@Override
 	protected IProperty[] getAEStates()
 	{
-		return new IProperty[] { BlockTorch.FACING };
+		return new IProperty[] { FACING };
 	}
 
 	@Override
@@ -210,6 +186,6 @@ public class BlockQuartzTorch extends AEBaseBlock implements IOrientableBlock, I
 	@Override
 	public IOrientable getOrientable( final IBlockAccess w, final BlockPos pos )
 	{
-		return new MetaRotation( w, pos, true );
+		return new MetaRotation( w, pos, FACING );
 	}
 }
