@@ -56,6 +56,7 @@ public class BlockQuartzTorch extends AEBaseBlock implements IOrientableBlock, I
 	{
 		super( Material.CIRCUITS );
 
+		this.setDefaultState(this.blockState.getBaseState().withProperty(BlockTorch.FACING, EnumFacing.UP));
 		this.setFeature( EnumSet.of( AEFeature.DecorativeLights ) );
 		this.setLightLevel( 0.9375F );
 		this.setLightOpacity( 0 );
@@ -66,13 +67,42 @@ public class BlockQuartzTorch extends AEBaseBlock implements IOrientableBlock, I
 	@Override
 	public int getMetaFromState( final IBlockState state )
 	{
-		return 0;
+		switch (state.getValue(BlockTorch.FACING))
+		{
+			case EAST:
+				return 1;
+			case WEST:
+				return 2;
+			case SOUTH:
+				return 3;
+			case NORTH:
+				return 4;
+			case DOWN:
+			case UP:
+			default:
+				return 5;
+		}
 	}
 
 	@Override
 	public IBlockState getStateFromMeta( final int meta )
 	{
-		return this.getDefaultState();
+		IBlockState state = this.getDefaultState();
+
+		switch (meta)
+		{
+			case 1:
+				return state.withProperty(BlockTorch.FACING, EnumFacing.EAST);
+			case 2:
+				return state.withProperty(BlockTorch.FACING, EnumFacing.WEST);
+			case 3:
+				return state.withProperty(BlockTorch.FACING, EnumFacing.SOUTH);
+			case 4:
+				return state.withProperty(BlockTorch.FACING, EnumFacing.NORTH);
+			case 5:
+			default:
+				return state.withProperty(BlockTorch.FACING, EnumFacing.UP);
+		}
 	}
 
 	@Override
