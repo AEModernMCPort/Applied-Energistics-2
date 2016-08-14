@@ -1,7 +1,7 @@
 {
   "textures": {
     "quartz": "appliedenergistics2:blocks/BlockQuartzTorch",
-    "metal": "blocks/hopper_outside"
+    "metal": "appliedenergistics2:blocks/BlockQuartzTorchMetal"
   },
   "elements": [
     {
