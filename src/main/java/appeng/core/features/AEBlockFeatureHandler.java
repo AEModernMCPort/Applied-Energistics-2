@@ -39,7 +39,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 import appeng.api.definitions.IBlockDefinition;
-import appeng.block.IHasItemMeshDefinition;
+import appeng.block.AEBaseBlock;
 import appeng.block.IHasSpecialItemModel;
 import appeng.client.render.model.AEIgnoringStateMapper;
 import appeng.core.AppEng;
@@ -109,9 +109,16 @@ public final class AEBlockFeatureHandler implements IFeatureHandler
 		ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 		Item item = this.definition.maybeItem().get();
 
-		if ( featured instanceof IHasItemMeshDefinition )
+		// Retrieve a custom item mesh definition, if the block defines one
+		ItemMeshDefinition itemMeshDefinition = null;
+		if( featured instanceof AEBaseBlock )
 		{
-			ItemMeshDefinition itemMeshDefinition = ( (IHasItemMeshDefinition) featured ).getItemMeshDefinition();
+			itemMeshDefinition = ( (AEBaseBlock) featured ).getItemMeshDefinition();
+		}
+
+		if ( itemMeshDefinition != null )
+		{
+			// This block has a custom item mesh definition, so register it instead of the resource location
 			itemModelMesher.register( item, itemMeshDefinition );
 		}
 		else if( !featured.getBlockState().getProperties().isEmpty() || featured instanceof IHasSpecialItemModel )

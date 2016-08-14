@@ -38,14 +38,13 @@ import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.block.AEBaseItemBlock;
 import appeng.block.AEBaseItemBlockChargeable;
 import appeng.block.AEBaseTileBlock;
-import appeng.block.IHasItemMeshDefinition;
 import appeng.core.features.AEFeature;
 import appeng.helpers.AEGlassMaterial;
 import appeng.tile.networking.TileEnergyCell;
 import appeng.util.Platform;
 
 
-public class BlockEnergyCell extends AEBaseTileBlock implements IHasItemMeshDefinition
+public class BlockEnergyCell extends AEBaseTileBlock
 {
 
 	public static final PropertyInteger ENERGY_STORAGE = PropertyInteger.create( "fullness", 0, 8 );
