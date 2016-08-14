@@ -30,6 +30,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.util.AEColor;
 import appeng.core.features.AEFeature;
@@ -135,6 +137,7 @@ public class ItemPaintBall extends AEBaseItem
 	}
 
 	@Override
+	@SideOnly( Side.CLIENT )
 	public ItemMeshDefinition getItemMeshDefinition()
 	{
 		return is -> isLumen( is ) ? MODEL_SHIMMER : MODEL_NORMAL;
