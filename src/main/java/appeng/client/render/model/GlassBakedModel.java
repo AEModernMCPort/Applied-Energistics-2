@@ -64,7 +64,11 @@ public class GlassBakedModel implements IBakedModel
 	// Generates the required textures for the frame
 	private static ResourceLocation[] generateTexturesFrame()
 	{
-		return IntStream.range( 1, 16 ).mapToObj( Integer::toBinaryString ).map( s -> Strings.padStart( s, 4, '0' ) ).map( s -> new ResourceLocation( "appliedenergistics2:blocks/glass/BlockQuartzGlassFrame" + s ) ).toArray( ResourceLocation[]::new );
+		return IntStream.range( 1, 16 )
+				.mapToObj( Integer::toBinaryString )
+				.map( s -> Strings.padStart( s, 4, '0' ) )
+				.map( s -> new ResourceLocation( "appliedenergistics2:blocks/glass/BlockQuartzGlassFrame" + s ) )
+				.toArray( ResourceLocation[]::new );
 	}
 
 	private final TextureAtlasSprite[] glassTextures;
