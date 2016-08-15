@@ -159,16 +159,17 @@ public enum UVLModelLoader implements ICustomModelLoader
 			return false;
 		}
 
-		try( IResource resource = Minecraft.getMinecraft().getResourceManager().getResource( modelLocation ) )
+		ResourceLocation actualLoc = new ResourceLocation( modelLocation.getResourceDomain(), modelLocation.getResourcePath() + ".json" );
+
+		try( IResource resource = Minecraft.getMinecraft().getResourceManager().getResource( actualLoc ) )
 		{
 			return gson.fromJson( new InputStreamReader( resource.getInputStream() ), UVLMarker.class ).uvlMarker;
 		}
 		catch( IOException e )
 		{
-
+			return false;
 		}
 
-		return false;
 	}
 
 	@Override
