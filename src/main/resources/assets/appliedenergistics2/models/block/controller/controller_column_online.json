@@ -1,4 +1,5 @@
 {
+    "uvlMarker": true,
     "parent": "block/block",
     "display": {
         "firstperson_righthand": {
@@ -9,8 +10,8 @@
     },
     "textures": {
         "particle": "#block",
-        "block": "appliedenergistics2:blocks/BlockControllerPowered",
-        "lights": "appliedenergistics2:blocks/BlockControllerConflict"
+        "block": "appliedenergistics2:blocks/BlockControllerColumnPowered",
+        "lights": "appliedenergistics2:blocks/BlockControllerColumnLights"
     },
     "elements": [
         {
