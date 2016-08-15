@@ -11,7 +11,7 @@
     "textures": {
         "particle": "#block",
         "block": "appliedenergistics2:blocks/BlockControllerColumnPowered",
-        "lights": "appliedenergistics2:blocks/BlockControllerColumnLights"
+        "lights": "appliedenergistics2:blocks/BlockControllerColumnConflict"
     },
     "elements": [
         {
