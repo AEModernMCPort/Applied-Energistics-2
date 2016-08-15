@@ -62,7 +62,10 @@ public class CachingRotatingBakedModel implements IBakedModel
 					VertexRotator rot = new VertexRotator( f2r, quad.getFace() );
 					rot.setParent( builder );
 					quad.pipe( rot );
-					builder.setQuadOrientation( f2r.rotate( quad.getFace() ) );
+					if (quad.getFace() != null)
+					{
+						builder.setQuadOrientation( f2r.rotate( quad.getFace() ) );
+					}
 					BakedQuad q = builder.build();
 					rotated.add( q );
 				}
@@ -199,6 +202,15 @@ public class CachingRotatingBakedModel implements IBakedModel
 
 		private float[] transformNormal( float[] fs )
 		{
+			// Rotate normals of quads that are not flush with one of the faces the normal way
+			if (face == null)
+			{
+				Vector3f n = new Vector3f( fs );
+				f2r.getMat().transform( n );
+				n.normalize();
+				return new float[] { n.getX(), n.getY(), n.getZ() };
+			}
+
 			switch( fs.length )
 			{
 				case 3:

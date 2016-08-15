@@ -1,0 +1,196 @@
+/*
+ * This file is part of Applied Energistics 2.
+ * Copyright (c) 2013 - 2014, AlgorithmX2, All rights reserved.
+ *
+ * Applied Energistics 2 is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Applied Energistics 2 is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Applied Energistics 2.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
+
+package appeng.client.render.model;
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nullable;
+import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Matrix4f;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+import net.minecraftforge.common.property.IExtendedBlockState;
+
+import appeng.block.misc.BlockSkyCompass;
+import appeng.hooks.CompassManager;
+import appeng.hooks.CompassResult;
+
+
+/**
+ * This baked model combines the quads of a compass base and the quads of a compass pointer, which will be rotated
+ * around the Y-axis to get the compass to point in the right direction.
+ */
+public class CompassBakedModel implements IBakedModel
+{
+
+	private final IBakedModel base;
+
+	private final IBakedModel pointer;
+
+	private float fallbackRotation = 0;
+
+	public CompassBakedModel( IBakedModel base, IBakedModel pointer )
+	{
+		this.base = base;
+		this.pointer = pointer;
+	}
+
+	@Override
+	public List<BakedQuad> getQuads( @Nullable IBlockState state, @Nullable EnumFacing side, long rand )
+	{
+		float rotation = 0;
+		// Get rotation from the special block state
+		if( state instanceof IExtendedBlockState )
+		{
+			Float rotationOpt = ( (IExtendedBlockState) state ).getValue( BlockSkyCompass.ROTATION );
+			if( rotationOpt != null )
+			{
+				rotation = rotationOpt;
+			}
+		}
+		else if( state == null )
+		{
+			// This is used to render a compass pointing in a specific direction when being held in hand
+			rotation = fallbackRotation;
+		}
+
+		// Pre-compute the quad count to avoid list resizes
+		List<BakedQuad> quads = new ArrayList<>();
+
+		quads.addAll( base.getQuads( state, side, rand ) );
+
+		// We'll add the pointer as "sideless"
+		if( side == null )
+		{
+			// Set up the rotation around the Y-axis for the pointer
+			Matrix4f matrix = new Matrix4f();
+			matrix.setIdentity();
+			matrix.setRotation( new AxisAngle4f( 0, 1, 0, rotation ) );
+
+			MatrixVertexTransformer transformer = new MatrixVertexTransformer( matrix );
+			for( BakedQuad bakedQuad : pointer.getQuads( state, side, rand ) )
+			{
+				UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder( bakedQuad.getFormat() );
+
+				transformer.setParent( builder );
+				transformer.setVertexFormat( builder.getVertexFormat() );
+				bakedQuad.pipe( transformer );
+				builder.setQuadOrientation( null ); // After rotation, facing a specific side cannot be guaranteed anymore
+				BakedQuad q = builder.build();
+				quads.add( q );
+			}
+		}
+
+		return quads;
+	}
+
+	@Override
+	public boolean isAmbientOcclusion()
+	{
+		return base.isAmbientOcclusion();
+	}
+
+	@Override
+	public boolean isGui3d()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isBuiltInRenderer()
+	{
+		return false;
+	}
+
+	@Override
+	public TextureAtlasSprite getParticleTexture()
+	{
+		return base.getParticleTexture();
+	}
+
+	@Override
+	public ItemCameraTransforms getItemCameraTransforms()
+	{
+		return base.getItemCameraTransforms();
+	}
+
+	@Override
+	public ItemOverrideList getOverrides()
+	{
+		/*
+		 This handles
+		 */
+		return new ItemOverrideList( Collections.emptyList() )
+		{
+
+			@Override
+			public IBakedModel handleItemState( IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity )
+			{
+				// In the creative inventory for example, the world is null, but the player is set
+				if( world != null && entity instanceof EntityPlayerSP )
+				{
+
+					EntityPlayer player = (EntityPlayer) entity;
+
+					final float offRads = player.rotationYaw / 180.0f * (float) Math.PI;
+
+					BlockPos pos = entity.getPosition();
+					CompassResult cr = CompassManager.INSTANCE.getCompassDirection( 0, pos.getX(), pos.getY(), pos.getZ() );
+
+					// This seems to have the effect of pre-requesting from the server where meteorites are for the surrounding blocks
+					for( int i = 0; i < 3; i++ )
+					{
+						for( int j = 0; j < 3; j++ )
+						{
+							CompassManager.INSTANCE.getCompassDirection( 0, pos.getX() + i - 1, pos.getY(), pos.getZ() + j - 1 );
+						}
+					}
+
+					if( cr.isValidResult() && !cr.isSpin() )
+					{
+						fallbackRotation = (float) ( cr.getRad() + offRads + Math.PI );
+						return originalModel;
+					}
+				}
+
+				long timeMillis = System.currentTimeMillis();
+				// 3 seconds per full rotation
+				timeMillis %= 3000;
+				fallbackRotation = timeMillis / 3000.f * (float) Math.PI * 2;
+
+				return originalModel;
+			}
+		};
+	}
+}

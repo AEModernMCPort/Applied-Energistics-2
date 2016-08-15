@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -62,7 +64,9 @@ import appeng.client.render.effects.EnergyFx;
 import appeng.client.render.effects.LightningArcFX;
 import appeng.client.render.effects.LightningFX;
 import appeng.client.render.effects.VibrantFX;
-import appeng.client.render.model.GlassModelLoader;
+import appeng.client.render.model.BuiltInModelLoader;
+import appeng.client.render.model.CompassModel;
+import appeng.client.render.model.GlassModel;
 import appeng.client.render.model.UVLModelLoader;
 import appeng.client.render.textures.ParticleTextures;
 import appeng.core.AEConfig;
@@ -94,7 +98,10 @@ public class ClientHelper extends ServerHelper
 	{
 		MinecraftForge.EVENT_BUS.register( this );
 		ModelLoaderRegistry.registerLoader( UVLModelLoader.INSTANCE );
-		ModelLoaderRegistry.registerLoader( new GlassModelLoader() );
+		ModelLoaderRegistry.registerLoader( new BuiltInModelLoader( ImmutableMap.of(
+				"models/block/builtin/connected_glass", new GlassModel(),
+				"models/block/builtin/compass", new CompassModel()
+		) ) );
 		for( IAEFeature feature : Api.INSTANCE.definitions().getFeatureRegistry().getRegisteredFeatures() )
 		{
 			feature.handler().registerStateMapper();

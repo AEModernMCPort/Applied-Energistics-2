@@ -19,6 +19,10 @@
 package appeng.client.render.model;
 
 
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
@@ -28,23 +32,28 @@ import appeng.core.AppEng;
 
 
 /**
- * Model loader to manage connected texture glass.
+ * This model loader manages built-in singleton models.
  */
-public class GlassModelLoader implements ICustomModelLoader
+public class BuiltInModelLoader implements ICustomModelLoader
 {
 
-	private static final GlassModel GLASS_MODEL = new GlassModel();
+	private final ImmutableMap<String, IModel> models;
+
+	public BuiltInModelLoader( Map<String, IModel> models )
+	{
+		this.models = ImmutableMap.copyOf( models );
+	}
 
 	@Override
 	public boolean accepts( ResourceLocation modelLocation )
 	{
-		return modelLocation.getResourceDomain().equals( AppEng.MOD_ID ) && "models/block/builtin/connected_glass".equals( modelLocation.getResourcePath() );
+		return AppEng.MOD_ID.equals( modelLocation.getResourceDomain() ) && models.containsKey( modelLocation.getResourcePath() );
 	}
 
 	@Override
 	public IModel loadModel( ResourceLocation modelLocation ) throws Exception
 	{
-		return GLASS_MODEL;
+		return models.get( modelLocation.getResourcePath() );
 	}
 
 	@Override
