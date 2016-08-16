@@ -52,6 +52,7 @@ import appeng.entity.EntityGrowingCrystal;
 import appeng.entity.EntityIds;
 import appeng.items.AEBaseItem;
 import appeng.util.Platform;
+import appeng.util.item.PickupDelayHelper;
 
 
 public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
@@ -233,9 +234,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 		egc.motionY = location.motionY;
 		egc.motionZ = location.motionZ;
 
-		// Cannot read the pickup delay of the original item, so we
-		// use the pickup delay used for items dropped by a player instead
-		egc.setPickupDelay(40);
+		PickupDelayHelper.copyPickupDelay( location, egc );
 
 		return egc;
 	}
