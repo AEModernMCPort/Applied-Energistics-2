@@ -38,6 +38,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IMaterials;
@@ -274,12 +276,14 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 	};
 
 	@Override
+	@SideOnly( Side.CLIENT )
 	public List<ResourceLocation> getItemVariants()
 	{
 		return ImmutableList.<ResourceLocation>builder().add( MODELS_CERTUS ).add( MODELS_FLUIX ).add( MODELS_NETHER ).build();
 	}
 
 	@Override
+	@SideOnly( Side.CLIENT )
 	public ItemMeshDefinition getItemMeshDefinition()
 	{
 		return is -> {
