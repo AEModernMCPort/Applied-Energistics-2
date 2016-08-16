@@ -25,7 +25,6 @@ import com.google.common.base.Optional;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -138,8 +137,7 @@ public final class ItemFeatureHandler implements IFeatureHandler
 
 		if( meshDefinition != null )
 		{
-			ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-			itemModelMesher.register( item, meshDefinition );
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register( item, meshDefinition );
 		}
 		else
 		{
