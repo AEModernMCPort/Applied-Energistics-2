@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -52,6 +53,7 @@ import appeng.entity.EntityGrowingCrystal;
 import appeng.entity.EntityIds;
 import appeng.items.AEBaseItem;
 import appeng.util.Platform;
+import appeng.util.item.PickupDelayHelper;
 
 
 public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
@@ -233,9 +235,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 		egc.motionY = location.motionY;
 		egc.motionZ = location.motionZ;
 
-		// Cannot read the pickup delay of the original item, so we
-		// use the pickup delay used for items dropped by a player instead
-		egc.setPickupDelay(40);
+		egc.setPickupDelay( PickupDelayHelper.getPickupDelay( (EntityItem) location ) );
 
 		return egc;
 	}
