@@ -52,6 +52,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.config.Upgrades;
@@ -445,6 +447,7 @@ public final class MultiItem extends AEBaseItem implements IStorageComponent, IU
 	}
 
 	@Override
+	@SideOnly( Side.CLIENT )
 	public List<ResourceLocation> getItemVariants()
 	{
 		// Register a resource location for every material type
@@ -455,6 +458,7 @@ public final class MultiItem extends AEBaseItem implements IStorageComponent, IU
 	}
 
 	@Override
+	@SideOnly( Side.CLIENT )
 	public ItemMeshDefinition getItemMeshDefinition()
 	{
 		return is -> getTypeByStack( is ).getModel();

@@ -26,8 +26,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.core.AppEng;
 import appeng.core.features.AEFeature;
@@ -118,8 +116,6 @@ public enum MaterialType
 	CardCrafting( 53 );
 
 	private final EnumSet<AEFeature> features;
-	// TextureAtlasSprite for the material.
-	@SideOnly( Side.CLIENT )
 	private final ModelResourceLocation model = new ModelResourceLocation( "appliedenergistics2:ItemMaterial." + name() );
 	private Item itemInstance;
 	private int damageValue;
