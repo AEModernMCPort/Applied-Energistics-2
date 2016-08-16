@@ -71,6 +71,7 @@ import appeng.core.features.MaterialStackSrc;
 import appeng.items.AEBaseItem;
 import appeng.util.InventoryAdaptor;
 import appeng.util.Platform;
+import appeng.util.item.PickupDelayHelper;
 
 
 public final class MultiItem extends AEBaseItem implements IStorageComponent, IUpgradeModule
@@ -358,9 +359,7 @@ public final class MultiItem extends AEBaseItem implements IStorageComponent, IU
 
 		if( location instanceof EntityItem && eqi instanceof EntityItem )
 		{
-			// TODO: Entity Pick up time?
-			// needs fixing?
-			// ( (EntityItem) eqi ).setPickupDelay( ( (EntityItem) location ).pick;
+			PickupDelayHelper.copyPickupDelay( location, (EntityItem) eqi );
 		}
 
 		return eqi;

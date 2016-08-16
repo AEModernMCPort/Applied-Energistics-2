@@ -31,7 +31,6 @@ import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -235,7 +234,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 		egc.motionY = location.motionY;
 		egc.motionZ = location.motionZ;
 
-		egc.setPickupDelay( PickupDelayHelper.getPickupDelay( (EntityItem) location ) );
+		PickupDelayHelper.copyPickupDelay( location, egc );
 
 		return egc;
 	}
