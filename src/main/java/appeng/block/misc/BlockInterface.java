@@ -20,15 +20,17 @@ package appeng.block.misc;
 
 
 import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import appeng.api.util.AEPartLocation;
@@ -43,12 +45,31 @@ import appeng.util.Platform;
 public class BlockInterface extends AEBaseTileBlock
 {
 
+	public static final PropertyAEPartLocation POINT_AT = new PropertyAEPartLocation( "point_at" );
+
 	public BlockInterface()
 	{
 		super( Material.IRON );
 
 		this.setTileEntity( TileInterface.class );
 		this.setFeature( EnumSet.of( AEFeature.Core ) );
+		this.setDefaultState( getDefaultState().withProperty( POINT_AT, AEPartLocation.INTERNAL ) );
+	}
+
+	@Override
+	protected IProperty[] getAEStates()
+	{
+		// Remove mapping of forward / up
+		return new IProperty[] {
+				POINT_AT
+		};
+	}
+
+	@Override
+	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
+	{
+		// Remove mapping of forward / up
+		return state;
 	}
 
 	@Override
@@ -84,5 +105,24 @@ public class BlockInterface extends AEBaseTileBlock
 		{
 			( (TileInterface) rotatable ).setSide( AEPartLocation.fromFacing( axis ) );
 		}
+	}
+
+	@Override
+	public IBlockState getStateFromMeta( int meta )
+	{
+		AEPartLocation pointAt = AEPartLocation.INTERNAL;
+		if( meta >= 0 && meta < AEPartLocation.values().length )
+		{
+			pointAt = AEPartLocation.values()[meta];
+		}
+
+		return getDefaultState().withProperty( POINT_AT, pointAt );
+	}
+
+	@Override
+	public int getMetaFromState( IBlockState state )
+	{
+		AEPartLocation pointAt = state.getValue( POINT_AT );
+		return pointAt.ordinal();
 	}
 }

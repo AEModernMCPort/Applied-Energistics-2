@@ -55,6 +55,7 @@ import appeng.api.util.AECableType;
 import appeng.api.util.AEPartLocation;
 import appeng.api.util.DimensionalCoord;
 import appeng.api.util.IConfigManager;
+import appeng.block.misc.BlockInterface;
 import appeng.helpers.DualityInterface;
 import appeng.helpers.IInterfaceHost;
 import appeng.helpers.IPriorityHost;
@@ -116,6 +117,8 @@ public class TileInterface extends AENetworkInvTile implements IGridTickable, IT
 		{
 			this.setOrientation( this.pointAt.yOffset != 0 ? EnumFacing.SOUTH : EnumFacing.UP, this.pointAt.getOpposite().getFacing() );
 		}
+
+		setBlockProperty( BlockInterface.POINT_AT, this.pointAt );
 
 		this.configureNodeSides();
 		this.markForUpdate();
