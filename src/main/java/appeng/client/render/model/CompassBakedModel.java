@@ -149,7 +149,8 @@ public class CompassBakedModel implements IBakedModel
 	public ItemOverrideList getOverrides()
 	{
 		/*
-		 This handles
+		 This handles setting the rotation of the compass when being held in hand. If it's not held in hand, it'll animate using the
+		 spinning animation.
 		 */
 		return new ItemOverrideList( Collections.emptyList() )
 		{
@@ -157,40 +158,66 @@ public class CompassBakedModel implements IBakedModel
 			@Override
 			public IBakedModel handleItemState( IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity )
 			{
-				// In the creative inventory for example, the world is null, but the player is set
 				if( world != null && entity instanceof EntityPlayerSP )
 				{
-
 					EntityPlayer player = (EntityPlayer) entity;
 
-					final float offRads = player.rotationYaw / 180.0f * (float) Math.PI;
+					float offRads = (float) ( player.rotationYaw / 180.0f * (float) Math.PI + Math.PI );
 
-					BlockPos pos = entity.getPosition();
-					CompassResult cr = CompassManager.INSTANCE.getCompassDirection( 0, pos.getX(), pos.getY(), pos.getZ() );
-
-					// This seems to have the effect of pre-requesting from the server where meteorites are for the surrounding blocks
-					for( int i = 0; i < 3; i++ )
-					{
-						for( int j = 0; j < 3; j++ )
-						{
-							CompassManager.INSTANCE.getCompassDirection( 0, pos.getX() + i - 1, pos.getY(), pos.getZ() + j - 1 );
-						}
-					}
-
-					if( cr.isValidResult() && !cr.isSpin() )
-					{
-						fallbackRotation = (float) ( cr.getRad() + offRads + Math.PI );
-						return originalModel;
-					}
+					fallbackRotation = offRads + getAnimatedRotation( player.getPosition(), true );
 				}
-
-				long timeMillis = System.currentTimeMillis();
-				// 3 seconds per full rotation
-				timeMillis %= 3000;
-				fallbackRotation = timeMillis / 3000.f * (float) Math.PI * 2;
+				else
+				{
+					fallbackRotation = getAnimatedRotation( null, false );
+				}
 
 				return originalModel;
 			}
 		};
+	}
+
+	/**
+	 * Gets the effective, animated rotation for the compass given the current position of the compass.
+	 */
+	public static float getAnimatedRotation( @Nullable BlockPos pos, boolean prefetch )
+	{
+
+		// Only query for a meteor position if we know our own position
+		if( pos != null )
+		{
+			CompassResult cr = CompassManager.INSTANCE.getCompassDirection( 0, pos.getX(), pos.getY(), pos.getZ() );
+
+			// Prefetch meteor positions from the server for adjacent blocks so they are available more quickly when we're moving
+			if( prefetch )
+			{
+				for( int i = 0; i < 3; i++ )
+				{
+					for( int j = 0; j < 3; j++ )
+					{
+						CompassManager.INSTANCE.getCompassDirection( 0, pos.getX() + i - 1, pos.getY(), pos.getZ() + j - 1 );
+					}
+				}
+			}
+
+			if( cr.isValidResult() )
+			{
+				if( cr.isSpin() )
+				{
+					long timeMillis = System.currentTimeMillis();
+					// .5 seconds per full rotation
+					timeMillis %= 500;
+					return timeMillis / 500.f * (float) Math.PI * 2;
+				}
+				else
+				{
+					return (float) cr.getRad();
+				}
+			}
+		}
+
+		long timeMillis = System.currentTimeMillis();
+		// 3 seconds per full rotation
+		timeMillis %= 3000;
+		return timeMillis / 3000.f * (float) Math.PI * 2;
 	}
 }

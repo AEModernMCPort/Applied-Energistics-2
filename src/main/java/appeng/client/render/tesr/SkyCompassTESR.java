@@ -28,7 +28,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.animation.Animation;
 import net.minecraftforge.client.model.animation.FastTESR;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.Properties;
@@ -36,8 +35,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.block.misc.BlockSkyCompass;
-import appeng.hooks.CompassManager;
-import appeng.hooks.CompassResult;
+import appeng.client.render.model.CompassBakedModel;
 import appeng.tile.misc.TileSkyCompass;
 
 
@@ -45,7 +43,7 @@ import appeng.tile.misc.TileSkyCompass;
 public class SkyCompassTESR extends FastTESR<TileSkyCompass>
 {
 
-	protected static BlockRendererDispatcher blockRenderer;
+	private static BlockRendererDispatcher blockRenderer;
 
 	@Override
 	public void renderTileEntityFast( TileSkyCompass te, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer )
@@ -73,8 +71,6 @@ public class SkyCompassTESR extends FastTESR<TileSkyCompass>
 		{
 			IExtendedBlockState exState = (IExtendedBlockState) state;
 
-			float time = Animation.getWorldTime( getWorld(), partialTicks );
-
 			IBakedModel model = blockRenderer.getBlockModelShapes().getModelForState( exState.getClean() );
 			exState = exState.withProperty( BlockSkyCompass.ROTATION, getRotation( te ) );
 
@@ -86,46 +82,29 @@ public class SkyCompassTESR extends FastTESR<TileSkyCompass>
 
 	private static float getRotation( TileSkyCompass skyCompass )
 	{
-
-		CompassResult cr;
+		float rotation;
 
 		if( skyCompass.getUp() == EnumFacing.UP || skyCompass.getUp() == EnumFacing.DOWN )
 		{
-			BlockPos pos = skyCompass.getPos();
-			cr = CompassManager.INSTANCE.getCompassDirection( 0, pos.getX(), pos.getY(), pos.getZ() );
+			rotation = CompassBakedModel.getAnimatedRotation( skyCompass.getPos(), false );
 		}
 		else
 		{
-			cr = new CompassResult( false, true, 0 );
+			rotation = CompassBakedModel.getAnimatedRotation( null, false );
 		}
 
-		if( cr.isValidResult() )
+		if( skyCompass.getUp() == EnumFacing.DOWN )
 		{
-			if( cr.isSpin() )
-			{
-				long timeMillis = System.currentTimeMillis();
-				// 3 seconds per full rotation
-				timeMillis %= 3000;
-				return timeMillis / 3000.f * (float) Math.PI * 2;
-			}
-			else
-			{
-				return (float) ( skyCompass.getForward() == EnumFacing.DOWN ? flipidiy( cr.getRad() ) : cr.getRad() );
-			}
+			rotation = flipidiy( rotation );
 		}
-		else
-		{
-			long timeMillis = System.currentTimeMillis();
-			// 3 seconds per full rotation
-			timeMillis %= 3000;
-			return timeMillis / 3000.f * (float) Math.PI * 2;
-		}
+
+		return rotation;
 	}
 
-	private static double flipidiy( final double rad )
+	private static float flipidiy( float rad )
 	{
-		final double x = Math.cos( rad );
-		final double y = Math.sin( rad );
-		return Math.atan2( -y, x );
+		float x = (float) Math.cos( rad );
+		float y = (float) Math.sin( rad );
+		return (float) Math.atan2( -y, x );
 	}
 }
