@@ -1,5 +1,5 @@
 
-# Applied Energistics 3
+# Applied Energistics 2
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ After Built You install this mod by putting it into the `minecraft/mods/` folder
 
 ## Issues
 
-Applied Energistics 3 crashing, have a suggestion, found a bug?  Create an issue now!
+Applied Energistics 2 crashing, have a suggestion, found a bug?  Create an issue now!
 
 1. Make sure your issue has not already been answered or fixed and you are using the latest version. Also think about whether your issue is a valid one before submitting it.
 2. Click Issues then New Issue.
@@ -29,7 +29,7 @@ Applied Energistics 3 crashing, have a suggestion, found a bug?  Create an issue
     * Do not tag it with something like `[Feature]` or `[Bug]`. When it is applicable, we will take care of it.
     * The following details are required. Not including them can cause the issue to be closed.
         * Forge version
-        * AE3 version
+        * AE2 version
         * Crash log, when reporting a crash (Please make sure to use [pastebin](http://pastebin.com/))
             * Do not post an excerpt of what you consider important, instead:
             * Post the full log
