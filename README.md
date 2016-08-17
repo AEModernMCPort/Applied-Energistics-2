@@ -53,7 +53,7 @@ Providing as many details as possible does help us to find and resolve the issue
 
 1. Clone this repository via 
    Download Zip or Release and extract in a new folder.
-2. Open terminal and run gradlew build (or "./gradlew build" if your on linux)
+2. Open terminal and run gradlew build (or "sudo ./gradlew build" if your on linux)
   
 
 ## Contribution
