@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,7 @@ import appeng.util.Platform;
 public class BlockInterface extends AEBaseTileBlock
 {
 
-	public static final PropertyAEPartLocation POINT_AT = new PropertyAEPartLocation( "point_at" );
+	private static final PropertyBool OMNIDIRECTIONAL = PropertyBool.create( "omnidirectional" );
 
 	public BlockInterface()
 	{
@@ -53,23 +54,26 @@ public class BlockInterface extends AEBaseTileBlock
 
 		this.setTileEntity( TileInterface.class );
 		this.setFeature( EnumSet.of( AEFeature.Core ) );
-		this.setDefaultState( getDefaultState().withProperty( POINT_AT, AEPartLocation.INTERNAL ) );
 	}
 
 	@Override
 	protected IProperty[] getAEStates()
 	{
-		// Remove mapping of forward / up
-		return new IProperty[] {
-				POINT_AT
-		};
+		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP, OMNIDIRECTIONAL };
 	}
 
 	@Override
 	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
-		// Remove mapping of forward / up
-		return state;
+		// Determine whether the interface is omni-directional or not
+		TileInterface te = getTileEntity( world, pos );
+		boolean omniDirectional = true; // The default
+		if (te != null) {
+			omniDirectional = te.isOmniDirectional();
+		}
+
+		return super.getActualState( state, world, pos )
+				.withProperty( OMNIDIRECTIONAL, omniDirectional );
 	}
 
 	@Override
@@ -103,26 +107,8 @@ public class BlockInterface extends AEBaseTileBlock
 	{
 		if( rotatable instanceof TileInterface )
 		{
-			( (TileInterface) rotatable ).setSide( AEPartLocation.fromFacing( axis ) );
+			( (TileInterface) rotatable ).setSide( axis );
 		}
 	}
 
-	@Override
-	public IBlockState getStateFromMeta( int meta )
-	{
-		AEPartLocation pointAt = AEPartLocation.INTERNAL;
-		if( meta >= 0 && meta < AEPartLocation.values().length )
-		{
-			pointAt = AEPartLocation.values()[meta];
-		}
-
-		return getDefaultState().withProperty( POINT_AT, pointAt );
-	}
-
-	@Override
-	public int getMetaFromState( IBlockState state )
-	{
-		AEPartLocation pointAt = state.getValue( POINT_AT );
-		return pointAt.ordinal();
-	}
 }

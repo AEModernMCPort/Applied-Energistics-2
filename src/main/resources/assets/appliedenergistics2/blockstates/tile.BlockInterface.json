@@ -1,11 +1,6 @@
 {
   "variants": {
-    "point_at=internal": { "model": "appliedenergistics2:tile.BlockInterface" },
-    "point_at=up": { "model": "appliedenergistics2:tile.BlockInterfaceDirected" },
-    "point_at=down": { "model": "appliedenergistics2:tile.BlockInterfaceDirected", "x": 180 },
-    "point_at=north": { "model": "appliedenergistics2:tile.BlockInterfaceDirected", "x": 90 },
-    "point_at=east": { "model": "appliedenergistics2:tile.BlockInterfaceDirected", "x": 90, "y": 90 },
-    "point_at=south": { "model": "appliedenergistics2:tile.BlockInterfaceDirected", "x": 270 },
-    "point_at=west": { "model": "appliedenergistics2:tile.BlockInterfaceDirected", "x": 270, "y": 90 }
+    "omnidirectional=true": { "model": "appliedenergistics2:tile.BlockInterface" },
+    "omnidirectional=false": { "model": "appliedenergistics2:tile.BlockInterfaceOriented" }
   }
 }

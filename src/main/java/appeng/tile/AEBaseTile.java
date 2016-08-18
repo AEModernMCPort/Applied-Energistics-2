@@ -34,7 +34,6 @@ import javax.annotation.Nullable;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -314,20 +313,6 @@ public class AEBaseTile extends TileEntity implements ITickable, IOrientable, IC
 				AELog.blockUpdate( this.pos, this );
 				this.worldObj.notifyBlockUpdate( this.pos, getBlockState(), getBlockState(), 3 );
 			}
-		}
-	}
-
-	/**
-	 * Changes a property of the block associated with this tile entity.
-	 * Handles updates to the client automatically.
-	 */
-	protected <T extends Comparable<T>> void setBlockProperty( IProperty<T> property, T newValue )
-	{
-		IBlockState newState = worldObj.getBlockState( getPos() );
-		if( newState.getValue( property ) != newValue )
-		{
-			newState = newState.withProperty( property, newValue );
-			worldObj.setBlockState( getPos(), newState, 3 );
 		}
 	}
 

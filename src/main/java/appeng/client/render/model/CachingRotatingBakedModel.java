@@ -4,6 +4,7 @@ package appeng.client.render.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
@@ -114,13 +115,6 @@ public class CachingRotatingBakedModel implements IBakedModel
 		{
 			return parent.getQuads( state, side, rand );
 		}
-
-		if( !state.getProperties().containsKey( AEBaseTileBlock.AE_BLOCK_FORWARD )
-				|| !state.getProperties().containsKey( AEBaseTileBlock.AE_BLOCK_UP ) )
-		{
-			return parent.getQuads( state, side, rand );
-		}
-
 		return quadCache.getUnchecked( new ImmutablePair<IBlockState, EnumFacing>( state, side ) );
 	}
 
