@@ -95,24 +95,24 @@ public class TileInterface extends AENetworkInvTile implements IGridTickable, IT
 			return;
 		}
 
-		EnumFacing newUp = facing;
+		EnumFacing newForward = facing;
 
-		if( !omniDirectional && getUp() == facing.getOpposite() )
+		if( !omniDirectional && getForward() == facing.getOpposite() )
 		{
-			newUp = facing;
+			newForward = facing;
 		}
-		else if( !omniDirectional && ( getUp() == facing || getUp() == facing.getOpposite() ) )
+		else if( !omniDirectional && ( getForward() == facing || getForward() == facing.getOpposite() ) )
 		{
 			omniDirectional = true;
 		}
 		else if( omniDirectional )
 		{
-			newUp = facing.getOpposite();
+			newForward = facing.getOpposite();
 			omniDirectional = false;
 		}
 		else
 		{
-			newUp = Platform.rotateAround( getUp(), facing );
+			newForward = Platform.rotateAround( getForward(), facing );
 		}
 
 		if( omniDirectional )
@@ -121,10 +121,10 @@ public class TileInterface extends AENetworkInvTile implements IGridTickable, IT
 		}
 		else
 		{
-			EnumFacing newForward = EnumFacing.UP;
-			if( newUp == EnumFacing.UP || newUp == EnumFacing.DOWN )
+			EnumFacing newUp = EnumFacing.UP;
+			if( newForward == EnumFacing.UP || newForward == EnumFacing.DOWN )
 			{
-				newForward = EnumFacing.NORTH;
+				newUp = EnumFacing.NORTH;
 			}
 			this.setOrientation( newForward, newUp );
 		}
@@ -142,7 +142,7 @@ public class TileInterface extends AENetworkInvTile implements IGridTickable, IT
 		}
 		else
 		{
-			this.getProxy().setValidSides( EnumSet.complementOf( EnumSet.of( getUp() ) ) );
+			this.getProxy().setValidSides( EnumSet.complementOf( EnumSet.of( getForward() ) ) );
 		}
 	}
 
@@ -281,7 +281,7 @@ public class TileInterface extends AENetworkInvTile implements IGridTickable, IT
 		{
 			return EnumSet.allOf( EnumFacing.class );
 		}
-		return EnumSet.of( getUp() );
+		return EnumSet.of( getForward() );
 	}
 
 	@Override
