@@ -26,6 +26,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -127,6 +128,14 @@ public abstract class AEBaseItem extends Item implements IAEFeature
 	 */
 	@SideOnly( Side.CLIENT )
 	public ItemMeshDefinition getItemMeshDefinition() {
+		return null;
+	}
+
+	/**
+	 * @return Null if no special item color handler is needed, otherwise the handler to register.
+	 */
+	@SideOnly( Side.CLIENT )
+	public IItemColor getItemColor() {
 		return null;
 	}
 

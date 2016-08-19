@@ -30,7 +30,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +76,7 @@ import appeng.entity.RenderTinyTNTPrimed;
 import appeng.helpers.IMouseWheelItem;
 import appeng.hooks.TickHandler;
 import appeng.hooks.TickHandler.PlayerColor;
-import appeng.items.misc.ItemPaintBall;
+import appeng.items.AEBaseItem;
 import appeng.server.ServerHelper;
 import appeng.transformer.MissingCoreMod;
 import appeng.util.Platform;
@@ -138,12 +137,17 @@ public class ClientHelper extends ServerHelper
 					Minecraft.getMinecraft().getItemColors().registerItemColorHandler( itemColor, baseBlock );
 				}
 			}
-		}
+			else if( feature instanceof AEBaseItem )
+			{
+				AEBaseItem baseItem = (AEBaseItem) feature;
 
-		// Register color handling for paintball items
-		ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
-		Item paintballItem = Api.INSTANCE.definitions().items().paintBall().maybeItem().get();
-		itemColors.registerItemColorHandler( ItemPaintBall::getColorFromItemstack, paintballItem );
+				IItemColor itemColor = baseItem.getItemColor();
+				if( itemColor != null )
+				{
+					Minecraft.getMinecraft().getItemColors().registerItemColorHandler( itemColor, baseItem );
+				}
+			}
+		}
 	}
 
 	@Override
