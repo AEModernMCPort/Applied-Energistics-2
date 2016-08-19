@@ -13,7 +13,6 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.annotation.Nullable;
 
 import com.google.common.base.Charsets;
@@ -154,15 +153,23 @@ public enum UVLModelLoader implements ICustomModelLoader
 	@Override
 	public boolean accepts( ResourceLocation modelLocation )
 	{
-		try
+		// Skip vanilla resources because those will never include UVL models
+		if( modelLocation.getResourceDomain().equals( "minecraft" ) )
 		{
-			return gson.fromJson( new InputStreamReader( Minecraft.getMinecraft().getResourceManager().getResource( modelLocation ).getInputStream() ), UVLMarker.class ).uvlMarker;
+			return false;
+		}
+
+		ResourceLocation actualLoc = new ResourceLocation( modelLocation.getResourceDomain(), modelLocation.getResourcePath() + ".json" );
+
+		try( IResource resource = Minecraft.getMinecraft().getResourceManager().getResource( actualLoc ) )
+		{
+			return gson.fromJson( new InputStreamReader( resource.getInputStream() ), UVLMarker.class ).uvlMarker;
 		}
 		catch( IOException e )
 		{
-
+			return false;
 		}
-		return false;
+
 	}
 
 	@Override
