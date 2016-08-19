@@ -6,11 +6,11 @@
     },
     {
       "when": { "type": "block", "state": "online" },
-      "apply": { "model": "appliedenergistics2:controller/controller_block_online.uvl" }
+      "apply": { "model": "appliedenergistics2:controller/controller_block_online" }
     },
     {
       "when": { "type": "block", "state": "conflicted" },
-      "apply": { "model": "appliedenergistics2:controller/controller_block_conflicted.uvl" }
+      "apply": { "model": "appliedenergistics2:controller/controller_block_conflicted" }
     },
     {
       "when": { "type": "column", "state": "offline" },
@@ -18,11 +18,11 @@
     },
     {
       "when": { "type": "column", "state": "online" },
-      "apply": { "model": "appliedenergistics2:controller/controller_column_online.uvl" }
+      "apply": { "model": "appliedenergistics2:controller/controller_column_online" }
     },
     {
       "when": { "type": "column", "state": "conflicted" },
-      "apply": { "model": "appliedenergistics2:controller/controller_column_conflicted.uvl" }
+      "apply": { "model": "appliedenergistics2:controller/controller_column_conflicted" }
     },
     {
       "when": { "type": "inside_a", "state": "offline|online|conflicted" },
