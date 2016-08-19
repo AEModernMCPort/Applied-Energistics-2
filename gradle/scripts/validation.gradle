@@ -1,0 +1,29 @@
+
+task(validateResourceFilenames) << {
+
+    // What characters are allowed as part of file and directory names in the assets directory
+    def filenamePattern = ~/[a-z_0-9]+(?:\.[a-z]+)*/;
+    def directoryPattern = ~/[a-z_0-9]+/;
+    def dir = file("src/main/resources/assets")
+
+    println "Checking resource filenames in ${dir}"
+
+    def violations = []
+
+    dir.eachFileRecurse {
+        if (it.file && !filenamePattern.matcher(it.name).matches()) {
+            violations.add(it)
+        } else if (!it.file && !directoryPattern.matcher(it.name).matches()) {
+            violations.add(it)
+        }
+    }
+
+    if (!violations.empty) {
+        violations.each {
+            def shortName = it.toString().replace(dir.toString(), "")
+            println "Filename contains invalid characters: ${shortName}"
+        }
+        throw new GradleException("There are ${violations.size()} resources that violate the filename rules.");
+    }
+
+}
