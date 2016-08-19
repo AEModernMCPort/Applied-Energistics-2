@@ -30,11 +30,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -580,6 +581,24 @@ public abstract class AEBaseBlock extends Block implements IAEFeature
 	 */
 	@SideOnly( Side.CLIENT )
 	public ItemMeshDefinition getItemMeshDefinition()
+	{
+		return null;
+	}
+
+	/**
+	 * @return Null if no special block color handler is needed, otherwise the handler to register.
+	 */
+	@SideOnly( Side.CLIENT )
+	public IBlockColor getBlockColor()
+	{
+		return null;
+	}
+
+	/**
+	 * @return Null if no special item color handler is needed, otherwise the handler to register.
+	 */
+	@SideOnly( Side.CLIENT )
+	public IItemColor getItemColor()
 	{
 		return null;
 	}
