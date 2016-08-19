@@ -26,11 +26,10 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
@@ -40,10 +39,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.MouseEvent;
@@ -127,7 +124,19 @@ public class ClientHelper extends ServerHelper
 			feature.handler().registerModel();
 			if( feature instanceof AEBaseBlock )
 			{
-				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler( new AEBaseBlockColor(), (Block) feature );
+				AEBaseBlock baseBlock = (AEBaseBlock) feature;
+
+				IBlockColor blockColor = baseBlock.getBlockColor();
+				if( blockColor != null )
+				{
+					Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler( blockColor, baseBlock );
+				}
+
+				IItemColor itemColor = baseBlock.getItemColor();
+				if( itemColor != null )
+				{
+					Minecraft.getMinecraft().getItemColors().registerItemColorHandler( itemColor, baseBlock );
+				}
 			}
 		}
 
@@ -455,17 +464,6 @@ public class ClientHelper extends ServerHelper
 			this.name = name2;
 			this.item = item2;
 			this.loc = res;
-		}
-	}
-
-
-	public static class AEBaseBlockColor implements IBlockColor
-	{
-
-		@Override
-		public int colorMultiplier( IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex )
-		{
-			return tintIndex;
 		}
 	}
 
