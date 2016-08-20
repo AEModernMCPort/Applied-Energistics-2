@@ -20,13 +20,10 @@ package appeng.block;
 
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
@@ -58,9 +55,6 @@ import appeng.api.implementations.tiles.IColorableTile;
 import appeng.api.util.AEColor;
 import appeng.api.util.IOrientable;
 import appeng.block.networking.BlockCableBus;
-import appeng.core.features.AEFeature;
-import appeng.core.features.AETileBlockFeatureHandler;
-import appeng.core.features.IAEFeature;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.AEBaseTile;
 import appeng.tile.networking.TileCableBus;
@@ -69,7 +63,7 @@ import appeng.util.Platform;
 import appeng.util.SettingsFrom;
 
 
-public abstract class AEBaseTileBlock extends AEBaseBlock implements IAEFeature, ITileEntityProvider
+public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntityProvider
 {
 
 	@Nonnull
@@ -78,11 +72,6 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements IAEFeature,
 	public AEBaseTileBlock( final Material mat )
 	{
 		super( mat );
-	}
-
-	protected AEBaseTileBlock( final Material mat, final Optional<String> subName )
-	{
-		super( mat, subName );
 	}
 
 	public static final PropertyDirection AE_BLOCK_FORWARD = PropertyDirection.create( "forward" );
@@ -116,13 +105,6 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements IAEFeature,
 	public boolean hasItemTESR()
 	{
 		return false;
-	}
-
-	@Override
-	protected void setFeature( final EnumSet<AEFeature> f )
-	{
-		final AETileBlockFeatureHandler featureHandler = new AETileBlockFeatureHandler( f, this, this.getFeatureSubName() );
-		this.setHandler( featureHandler );
 	}
 
 	protected void setTileEntity( final Class<? extends AEBaseTile> c )

@@ -19,7 +19,6 @@
 package appeng.block.misc;
 
 
-import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.block.SoundType;
@@ -37,7 +36,6 @@ import appeng.block.AEBaseTileBlock;
 import appeng.client.render.effects.LightningFX;
 import appeng.core.AEConfig;
 import appeng.core.CommonHelper;
-import appeng.core.features.AEFeature;
 import appeng.tile.misc.TileQuartzGrowthAccelerator;
 import appeng.util.Platform;
 
@@ -52,7 +50,6 @@ public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock
 		super( Material.ROCK );
 		this.setSoundType( SoundType.METAL );
 		this.setTileEntity( TileQuartzGrowthAccelerator.class );
-		this.setFeature( EnumSet.of( AEFeature.Core ) );
 		this.setDefaultState( getDefaultState().withProperty( POWERED, false ) );
 	}
 

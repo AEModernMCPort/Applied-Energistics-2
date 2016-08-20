@@ -72,7 +72,6 @@ import appeng.core.AELog;
 import appeng.core.Api;
 import appeng.core.AppEng;
 import appeng.core.CommonHelper;
-import appeng.core.features.IAEFeature;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketAssemblerAnimation;
 import appeng.core.sync.packets.PacketValueConfig;
@@ -100,10 +99,6 @@ public class ClientHelper extends ServerHelper
 		MinecraftForge.EVENT_BUS.register( this );
 		ModelLoaderRegistry.registerLoader( UVLModelLoader.INSTANCE );
 		( (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager() ).registerReloadListener( ModelsCache.INSTANCE );
-		for( IAEFeature feature : Api.INSTANCE.definitions().getFeatureRegistry().getRegisteredFeatures() )
-		{
-			feature.handler().registerStateMapper();
-		}
 	}
 
 	@Override
@@ -127,10 +122,6 @@ public class ClientHelper extends ServerHelper
 		// AELog.info( "Registering with %s with unlocalized %s", item, item.getUnlocalizedName() );
 		// mesher.register( item, DEFAULT_ITEM_SUBTYPE, fluixStairModel );
 		// }
-		for( IAEFeature feature : Api.INSTANCE.definitions().getFeatureRegistry().getRegisteredFeatures() )
-		{
-			feature.handler().registerModel();
-		}
 
 		// Register color handling for paintball items
 		ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
@@ -379,10 +370,6 @@ public class ClientHelper extends ServerHelper
 	public void onModelBakeEvent( final ModelBakeEvent event )
 	{
 		UVLModelLoader.INSTANCE.setLoader( event.getModelLoader() );
-		for( IAEFeature feature : Api.INSTANCE.definitions().getFeatureRegistry().getRegisteredFeatures() )
-		{
-			feature.handler().registerCustomModelOverride( event.getModelRegistry() );
-		}
 	}
 
 	@SubscribeEvent

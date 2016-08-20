@@ -19,8 +19,6 @@
 package appeng.block.misc;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
@@ -34,11 +32,12 @@ import net.minecraft.world.World;
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.misc.TileCellWorkbench;
 import appeng.util.Platform;
 
-
+@Features( AEFeature.StorageCells )
 public class BlockCellWorkbench extends AEBaseTileBlock
 {
 
@@ -47,7 +46,6 @@ public class BlockCellWorkbench extends AEBaseTileBlock
 		super( Material.IRON );
 
 		this.setTileEntity( TileCellWorkbench.class );
-		this.setFeature( EnumSet.of( AEFeature.StorageCells ) );
 	}
 
 	@Override

@@ -19,8 +19,6 @@
 package appeng.decorative.solid;
 
 
-import java.util.EnumSet;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -33,9 +31,10 @@ import appeng.api.util.IOrientable;
 import appeng.api.util.IOrientableBlock;
 import appeng.block.AEBaseBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.helpers.MetaRotation;
 
-
+@Features( AEFeature.DecorativeQuartzBlocks )
 public class BlockQuartzPillar extends AEBaseBlock implements IOrientableBlock
 {
 	public static final PropertyEnum<EnumFacing.Axis> AXIS_ORIENTATION = PropertyEnum.create( "axis", EnumFacing.Axis.class );
@@ -43,7 +42,6 @@ public class BlockQuartzPillar extends AEBaseBlock implements IOrientableBlock
 	public BlockQuartzPillar()
 	{
 		super( Material.ROCK );
-		this.setFeature( EnumSet.of( AEFeature.DecorativeQuartzBlocks ) );
 	}
 
 	@Override

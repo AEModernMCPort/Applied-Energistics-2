@@ -20,10 +20,8 @@ package appeng.block.misc;
 
 
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -53,12 +51,10 @@ import appeng.client.render.renderable.ItemRenderable;
 import appeng.client.render.tesr.ModularTESR;
 import appeng.core.AEConfig;
 import appeng.core.CommonHelper;
-import appeng.core.features.AEFeature;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.AEBaseTile;
 import appeng.tile.misc.TileCharger;
 import appeng.util.Platform;
-
 
 public class BlockCharger extends AEBaseTileBlock implements ICustomCollision
 {
@@ -70,7 +66,6 @@ public class BlockCharger extends AEBaseTileBlock implements ICustomCollision
 		this.setTileEntity( TileCharger.class );
 		this.setLightOpacity( 2 );
 		this.setFullSize( this.setOpaque( false ) );
-		this.setFeature( EnumSet.of( AEFeature.Core ) );
 	}
 
 	@Override

@@ -19,7 +19,6 @@
 package appeng.items.misc;
 
 
-import java.util.EnumSet;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -34,7 +33,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.util.AEColor;
-import appeng.core.features.AEFeature;
 import appeng.core.localization.GuiText;
 import appeng.items.AEBaseItem;
 
@@ -46,7 +44,6 @@ public class ItemPaintBall extends AEBaseItem
 
 	public ItemPaintBall()
 	{
-		this.setFeature( EnumSet.of( AEFeature.PaintBalls ) );
 		this.setHasSubtypes( true );
 	}
 

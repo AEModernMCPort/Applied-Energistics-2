@@ -22,7 +22,6 @@ package appeng.items.materials;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -83,7 +82,6 @@ public final class ItemMultiItem extends AEBaseItem implements IStorageComponent
 
 	public ItemMultiItem()
 	{
-		this.setFeature( EnumSet.of( AEFeature.Core ) );
 		this.setHasSubtypes( true );
 		instance = this;
 	}

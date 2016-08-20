@@ -19,8 +19,6 @@
 package appeng.block.networking;
 
 
-import java.util.EnumSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -35,9 +33,10 @@ import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.tile.networking.TileController;
 
-
+@Features( AEFeature.Channels )
 public class BlockController extends AEBaseTileBlock
 {
 
@@ -164,7 +163,6 @@ public class BlockController extends AEBaseTileBlock
 		super( Material.IRON );
 		this.setTileEntity( TileController.class );
 		this.setHardness( 6 );
-		this.setFeature( EnumSet.of( AEFeature.Channels ) );
 		this.setDefaultState( getDefaultState().withProperty( CONTROLLER_STATE, ControllerBlockState.offline ).withProperty( CONTROLLER_TYPE, ControllerRenderType.block ) );
 	}
 

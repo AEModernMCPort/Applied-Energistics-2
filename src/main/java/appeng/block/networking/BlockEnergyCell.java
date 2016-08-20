@@ -19,7 +19,6 @@
 package appeng.block.networking;
 
 
-import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.block.properties.IProperty;
@@ -38,7 +37,6 @@ import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.block.AEBaseItemBlock;
 import appeng.block.AEBaseItemBlockChargeable;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
 import appeng.helpers.AEGlassMaterial;
 import appeng.tile.networking.TileEnergyCell;
 import appeng.util.Platform;
@@ -66,7 +64,6 @@ public class BlockEnergyCell extends AEBaseTileBlock
 		super( AEGlassMaterial.INSTANCE );
 
 		this.setTileEntity( TileEnergyCell.class );
-		this.setFeature( EnumSet.of( AEFeature.Core ) );
 	}
 
 	@Override

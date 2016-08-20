@@ -19,7 +19,6 @@
 package appeng.decorative.solid;
 
 
-import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
@@ -31,15 +30,19 @@ import appeng.client.render.effects.VibrantFX;
 import appeng.core.AEConfig;
 import appeng.core.CommonHelper;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 
 
+@Features( {
+		AEFeature.DecorativeQuartzBlocks,
+		AEFeature.DecorativeLights
+} )
 public class BlockQuartzLamp extends BlockQuartzGlass
 {
 
 	public BlockQuartzLamp()
 	{
 		this.setLightLevel( 1.0f );
-		this.setFeature( EnumSet.of( AEFeature.DecorativeQuartzBlocks, AEFeature.DecorativeLights ) );
 	}
 
 	@Override

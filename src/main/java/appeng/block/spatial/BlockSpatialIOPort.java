@@ -19,8 +19,6 @@
 package appeng.block.spatial;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -36,11 +34,12 @@ import net.minecraft.world.World;
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.spatial.TileSpatialIOPort;
 import appeng.util.Platform;
 
-
+@Features( AEFeature.SpatialIO )
 public class BlockSpatialIOPort extends AEBaseTileBlock
 {
 
@@ -48,7 +47,6 @@ public class BlockSpatialIOPort extends AEBaseTileBlock
 	{
 		super( Material.IRON );
 		this.setTileEntity( TileSpatialIOPort.class );
-		this.setFeature( EnumSet.of( AEFeature.SpatialIO ) );
 	}
 
 	@Override

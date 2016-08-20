@@ -21,7 +21,6 @@ package appeng.core.features;
 
 import java.lang.reflect.Constructor;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;
@@ -39,24 +38,12 @@ import appeng.block.AEBaseBlock;
 
 public class BlockDefinition extends ItemDefinition implements IBlockDefinition
 {
-	private static final ItemBlockTransformer ITEMBLOCK_TRANSFORMER = new ItemBlockTransformer();
 	private final Optional<Block> block;
 
-	public BlockDefinition( final String identifier, final Block block, final ActivityState state )
+	public BlockDefinition( String registryName, Block block )
 	{
-		super( identifier, constructItemFromBlock( block ), state );
-
-		Preconditions.checkNotNull( block );
-		Preconditions.checkNotNull( state );
-
-		if( state == ActivityState.Enabled )
-		{
-			this.block = Optional.of( block );
-		}
-		else
-		{
-			this.block = Optional.absent();
-		}
+		super( registryName, constructItemFromBlock( block ) );
+		this.block = Optional.fromNullable( block );
 	}
 
 	/**
@@ -66,10 +53,13 @@ public class BlockDefinition extends ItemDefinition implements IBlockDefinition
 	 *
 	 * @return item from block
 	 */
-	private static Item constructItemFromBlock( final Block block )
+	private static Item constructItemFromBlock( Block block )
 	{
-		final Class<? extends ItemBlock> itemclass = getItemBlockConstructor( block );
-		return constructItemBlock( block, itemclass );
+		if( block == null )
+		{
+			return null;
+		}
+		return constructItemBlock( block, getItemBlockConstructor( block ) );
 	}
 
 	/**
@@ -135,13 +125,15 @@ public class BlockDefinition extends ItemDefinition implements IBlockDefinition
 	@Override
 	public final Optional<ItemBlock> maybeItemBlock()
 	{
-		return this.block.transform( ITEMBLOCK_TRANSFORMER );
+		return this.block.transform( ItemBlock::new );
 	}
 
 	@Override
-	public final Optional<ItemStack> maybeStack( final int stackSize )
+	public final Optional<ItemStack> maybeStack( int stackSize )
 	{
-		return this.block.transform( new ItemStackTransformer( stackSize ) );
+		Preconditions.checkArgument( stackSize > 0 );
+
+		return this.block.transform( b -> new ItemStack( b, stackSize ) );
 	}
 
 	@Override
@@ -150,30 +142,4 @@ public class BlockDefinition extends ItemDefinition implements IBlockDefinition
 		return this.isEnabled() && world.getBlockState( pos ).getBlock() == this.block.get();
 	}
 
-	private static class ItemBlockTransformer implements Function<Block, ItemBlock>
-	{
-		@Override
-		public ItemBlock apply( final Block input )
-		{
-			return new ItemBlock( input );
-		}
-	}
-
-	private static class ItemStackTransformer implements Function<Block, ItemStack>
-	{
-		private final int stackSize;
-
-		public ItemStackTransformer( final int stackSize )
-		{
-			Preconditions.checkArgument( stackSize > 0 );
-
-			this.stackSize = stackSize;
-		}
-
-		@Override
-		public ItemStack apply( final Block input )
-		{
-			return new ItemStack( input, this.stackSize );
-		}
-	}
 }

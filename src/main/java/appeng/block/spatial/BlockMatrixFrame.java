@@ -20,7 +20,6 @@ package appeng.block.spatial;
 
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
@@ -39,9 +38,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.block.AEBaseBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.helpers.ICustomCollision;
 
-
+@Features( AEFeature.SpatialIO )
 public class BlockMatrixFrame extends AEBaseBlock implements ICustomCollision
 {
 
@@ -52,7 +52,6 @@ public class BlockMatrixFrame extends AEBaseBlock implements ICustomCollision
 		this.setBlockUnbreakable();
 		this.setLightOpacity( 0 );
 		this.setOpaque( false );
-		this.setFeature( EnumSet.of( AEFeature.SpatialIO ) );
 	}
 
 	@Override

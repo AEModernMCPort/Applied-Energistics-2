@@ -19,8 +19,6 @@
 package appeng.block.grindstone;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -39,11 +37,12 @@ import net.minecraftforge.common.util.FakePlayer;
 import appeng.api.implementations.tiles.ICrankable;
 import appeng.block.AEBaseTileBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.core.stats.Stats;
 import appeng.tile.AEBaseTile;
 import appeng.tile.grindstone.TileCrank;
 
-
+@Features( AEFeature.GrindStone )
 public class BlockCrank extends AEBaseTileBlock
 {
 
@@ -55,7 +54,6 @@ public class BlockCrank extends AEBaseTileBlock
 		this.setLightOpacity( 0 );
 		this.setHarvestLevel( "axe", 0 );
 		this.setFullSize( this.setOpaque( false ) );
-		this.setFeature( EnumSet.of( AEFeature.GrindStone ) );
 	}
 
 	@Override

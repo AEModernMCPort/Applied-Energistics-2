@@ -19,8 +19,6 @@
 package appeng.debug;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
@@ -33,8 +31,13 @@ import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 
 
+@Features( {
+		AEFeature.UnsupportedDeveloperTools,
+		AEFeature.Creative
+} )
 public class BlockPhantomNode extends AEBaseTileBlock
 {
 
@@ -42,7 +45,6 @@ public class BlockPhantomNode extends AEBaseTileBlock
 	{
 		super( Material.IRON );
 		this.setTileEntity( TilePhantomNode.class );
-		this.setFeature( EnumSet.of( AEFeature.UnsupportedDeveloperTools, AEFeature.Creative ) );
 	}
 
 	@Override

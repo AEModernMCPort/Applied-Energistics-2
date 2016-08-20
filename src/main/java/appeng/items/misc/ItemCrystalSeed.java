@@ -19,7 +19,6 @@
 package appeng.items.misc;
 
 
-import java.util.EnumSet;
 import java.util.List;
 import javax.annotation.Nullable;
 
@@ -46,7 +45,6 @@ import appeng.api.definitions.IMaterials;
 import appeng.api.implementations.items.IGrowableCrystal;
 import appeng.api.recipes.ResolverResult;
 import appeng.core.AppEng;
-import appeng.core.features.AEFeature;
 import appeng.core.localization.ButtonToolTips;
 import appeng.entity.EntityGrowingCrystal;
 import appeng.entity.EntityIds;
@@ -68,7 +66,6 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 	public ItemCrystalSeed()
 	{
 		this.setHasSubtypes( true );
-		this.setFeature( EnumSet.of( AEFeature.Core ) );
 
 		EntityRegistry.registerModEntity( EntityGrowingCrystal.class, EntityGrowingCrystal.class.getSimpleName(), EntityIds.get( EntityGrowingCrystal.class ), AppEng.instance(), 16, 4, true );
 	}

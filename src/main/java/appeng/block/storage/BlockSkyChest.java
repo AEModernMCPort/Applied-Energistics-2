@@ -20,9 +20,7 @@ package appeng.block.storage;
 
 
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
-
 import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
@@ -47,16 +45,18 @@ import appeng.block.AEBaseTileBlock;
 import appeng.block.IHasSpecialItemModel;
 import appeng.client.render.tesr.SkyChestTESR;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.core.sync.GuiBridge;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.storage.TileSkyChest;
 import appeng.util.Platform;
 
 
+@Features( AEFeature.SkyStoneChests )
 public class BlockSkyChest extends AEBaseTileBlock implements ICustomCollision, IHasSpecialItemModel
 {
 
-	public static enum SkyChestType
+	public enum SkyChestType
 	{
 		STONE, BLOCK
 	};
@@ -65,7 +65,7 @@ public class BlockSkyChest extends AEBaseTileBlock implements ICustomCollision, 
 
 	public BlockSkyChest( final SkyChestType type )
 	{
-		super( Material.ROCK, Optional.of( type.name() ) );
+		super( Material.ROCK );
 		this.setTileEntity( TileSkyChest.class );
 		this.setOpaque( this.setFullSize( false ) );
 		this.lightOpacity = 0;
@@ -73,7 +73,6 @@ public class BlockSkyChest extends AEBaseTileBlock implements ICustomCollision, 
 		this.setHardness( 50 );
 		this.blockResistance = 150.0f;
 		this.type = type;
-		this.setFeature( EnumSet.of( AEFeature.Core, AEFeature.SkyStoneChests ) );
 	}
 
 	@Override

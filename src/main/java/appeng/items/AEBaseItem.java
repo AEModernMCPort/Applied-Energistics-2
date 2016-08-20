@@ -19,10 +19,8 @@
 package appeng.items;
 
 
-import java.util.EnumSet;
 import java.util.List;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -34,52 +32,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import appeng.core.features.AEFeature;
-import appeng.core.features.FeatureNameExtractor;
-import appeng.core.features.IAEFeature;
-import appeng.core.features.IFeatureHandler;
-import appeng.core.features.ItemFeatureHandler;
 
-
-public abstract class AEBaseItem extends Item implements IAEFeature
+public abstract class AEBaseItem extends Item
 {
-	private final String fullName;
-	private final Optional<String> subName;
-	private IFeatureHandler feature;
 
 	public AEBaseItem()
 	{
-		this( Optional.<String>absent() );
 		this.setNoRepair();
-	}
-
-	public AEBaseItem( final Optional<String> subName )
-	{
-		this.subName = subName;
-		this.fullName = new FeatureNameExtractor( this.getClass(), subName ).get();
 	}
 
 	@Override
 	public String toString()
 	{
-		return this.fullName;
-	}
-
-	@Override
-	public IFeatureHandler handler()
-	{
-		return this.feature;
-	}
-
-	@Override
-	public void postInit()
-	{
-		// override!
-	}
-
-	public void setFeature( final EnumSet<AEFeature> f )
-	{
-		this.feature = new ItemFeatureHandler( f, this, this, this.subName );
+		String regName = getRegistryName() != null ? getRegistryName().getResourcePath() : "unregistered";
+		return getClass().getSimpleName() + "[" + regName  + "]";
 	}
 
 	@Override

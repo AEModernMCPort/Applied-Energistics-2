@@ -22,7 +22,6 @@ package appeng.core;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.annotation.Nonnull;
 
 import com.google.common.base.Preconditions;
@@ -32,7 +31,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -65,8 +63,6 @@ import appeng.api.networking.ticking.ITickManager;
 import appeng.api.parts.IPartHelper;
 import appeng.block.networking.BlockCableBus;
 import appeng.core.features.AEFeature;
-import appeng.core.features.IAEFeature;
-import appeng.core.features.IFeatureHandler;
 import appeng.core.features.registries.P2PTunnelRegistry;
 import appeng.core.features.registries.entries.BasicCellHandler;
 import appeng.core.features.registries.entries.CreativeCellHandler;
@@ -150,18 +146,11 @@ public final class Registration
 
 		MinecraftForge.EVENT_BUS.register( OreDictionaryHandler.INSTANCE );
 
-		final ApiDefinitions definitions = api.definitions();
+		ApiDefinitions definitions = api.definitions();
 
 		// Register all detected handlers and features (items, blocks) in pre-init
-		for( final IFeatureHandler handler : definitions.getFeatureHandlerRegistry().getRegisteredFeatureHandlers() )
-		{
-			handler.register( event.getSide() );
-		}
+		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.preInitialize( event.getSide() ) );
 
-		for( final IAEFeature feature : definitions.getFeatureRegistry().getRegisteredFeatures() )
-		{
-			feature.postInit();
-		}
 	}
 
 	private void registerSpatial( final boolean force )
@@ -247,9 +236,12 @@ public final class Registration
 		Preconditions.checkArgument( !recipeDirectory.isFile() );
 		Preconditions.checkNotNull( customRecipeConfig );
 
-		final IAppEngApi api = AEApi.instance();
+		final Api api = Api.INSTANCE;
 		final IPartHelper partHelper = api.partHelper();
 		final IRegistryContainer registries = api.registries();
+
+		ApiDefinitions definitions = api.definitions();
+		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.initialize( event.getSide() ) );
 
 		// Perform ore camouflage!
 		ItemMultiItem.instance.makeUnique();
@@ -447,7 +439,7 @@ public final class Registration
 
 		final IMovableRegistry mr = registries.movable();
 
-		/**
+		/*
 		 * You can't move bed rock.
 		 */
 		mr.blacklistBlock( net.minecraft.init.Blocks.BEDROCK );
@@ -475,12 +467,12 @@ public final class Registration
 		mr.whiteListTileEntity( net.minecraft.tileentity.TileEntityNote.class );
 		mr.whiteListTileEntity( net.minecraft.tileentity.TileEntityHopper.class );
 
-		/**
+		/*
 		 * Whitelist AE2
 		 */
 		mr.whiteListTileEntity( AEBaseTile.class );
 
-		/**
+		/*
 		 * world gen
 		 */
 		for( final WorldGenType type : WorldGenType.values() )
@@ -500,7 +492,7 @@ public final class Registration
 			registries.worldgen().enableWorldGenForDimension( WorldGenType.Meteorites, dimension );
 		}
 
-		/**
+		/*
 		 * initial recipe bake, if ore dictionary changes after this it re-bakes.
 		 */
 		OreDictionaryHandler.INSTANCE.bakeRecipes();

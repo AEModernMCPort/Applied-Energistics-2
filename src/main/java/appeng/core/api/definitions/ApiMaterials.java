@@ -21,9 +21,10 @@ package appeng.core.api.definitions;
 
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.IMaterials;
+import appeng.bootstrap.FeatureFactory;
 import appeng.core.features.DamagedItemDefinition;
-import appeng.items.materials.MaterialType;
 import appeng.items.materials.ItemMultiItem;
+import appeng.items.materials.MaterialType;
 
 
 /**
@@ -103,10 +104,10 @@ public final class ApiMaterials implements IMaterials
 	private final IItemDefinition qESingularity;
 	private final IItemDefinition blankPattern;
 
-	public ApiMaterials( final DefinitionConstructor constructor )
+	public ApiMaterials( FeatureFactory registry )
 	{
 		final ItemMultiItem materials = new ItemMultiItem();
-		constructor.registerItemDefinition( materials );
+		registry.item( "multi_material", () -> materials ).build();
 
 		this.cell2SpatialPart = new DamagedItemDefinition( "material.cell.spatial.2", materials.createMaterial( MaterialType.Cell2SpatialPart ) );
 		this.cell16SpatialPart = new DamagedItemDefinition( "material.cell.spatial.16", materials.createMaterial( MaterialType.Cell16SpatialPart ) );

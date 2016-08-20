@@ -19,8 +19,6 @@
 package appeng.block.misc;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
@@ -34,11 +32,12 @@ import net.minecraft.world.World;
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
 import appeng.core.features.AEFeature;
+import appeng.core.features.Features;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.misc.TileInscriber;
 import appeng.util.Platform;
 
-
+@Features( AEFeature.Inscriber )
 public class BlockInscriber extends AEBaseTileBlock
 {
 
@@ -49,7 +48,6 @@ public class BlockInscriber extends AEBaseTileBlock
 		this.setTileEntity( TileInscriber.class );
 		this.setLightOpacity( 2 );
 		this.setFullSize( this.setOpaque( false ) );
-		this.setFeature( EnumSet.of( AEFeature.Inscriber ) );
 	}
 
 	@Override
