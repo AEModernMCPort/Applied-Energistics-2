@@ -2,7 +2,6 @@ package appeng.bootstrap;
 
 
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -29,13 +28,13 @@ public class RenderingCustomizer implements IRenderingCustomizer
 	BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> modelCustomizer;
 
 	@SideOnly( Side.CLIENT )
-	private Supplier<IBlockColor> blockColorSupplier;
+	private IBlockColor blockColor;
 
 	@SideOnly( Side.CLIENT )
-	private Supplier<IItemColor> itemColorSupplier;
+	private IItemColor itemColor;
 
 	@SideOnly( Side.CLIENT )
-	private Supplier<TileEntitySpecialRenderer<?>> tesrSupplier;
+	private TileEntitySpecialRenderer<?> tesr;
 
 	@SideOnly( Side.CLIENT )
 	public IRenderingCustomizer modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer )
@@ -45,30 +44,26 @@ public class RenderingCustomizer implements IRenderingCustomizer
 	}
 
 	@SideOnly( Side.CLIENT )
-	public IRenderingCustomizer blockColor( Supplier<IBlockColor> blockColor )
+	@Override
+	public IRenderingCustomizer blockColor( IBlockColor blockColor )
 	{
-		blockColorSupplier = blockColor;
+		this.blockColor = blockColor;
 		return this;
 	}
 
 	@SideOnly( Side.CLIENT )
-	public IRenderingCustomizer itemColor( Supplier<IItemColor> itemColor )
+	@Override
+	public IRenderingCustomizer itemColor( IItemColor itemColor )
 	{
-		itemColorSupplier = itemColor;
+		this.itemColor = itemColor;
 		return this;
 	}
 
 	@SideOnly( Side.CLIENT )
-	public IRenderingCustomizer tesr( Supplier<TileEntitySpecialRenderer<?>> tesr )
-	{
-		tesrSupplier = tesr;
-		return this;
-	}
-
-	@SideOnly( Side.CLIENT )
+	@Override
 	public IRenderingCustomizer tesr( TileEntitySpecialRenderer<?> tesr )
 	{
-		tesrSupplier = () -> tesr;
+		this.tesr = tesr;
 		return this;
 	}
 
@@ -77,9 +72,8 @@ public class RenderingCustomizer implements IRenderingCustomizer
 		registry.addBootstrapComponent( new ItemVariantsComponent( item ) );
 		registry.addBootstrapComponent( new ItemModelRegistrationComponent( block, item ) );
 
-		if( tesrSupplier != null )
+		if( tesr != null )
 		{
-			TileEntitySpecialRenderer<?> tesr = tesrSupplier.get();
 			registry.addBootstrapComponent( new TesrComponent( tileEntityClass, tesr ) );
 		}
 
@@ -92,14 +86,14 @@ public class RenderingCustomizer implements IRenderingCustomizer
 			registry.modelOverrideComponent.addOverride( block.getRegistryName().getResourcePath(), ( l, m ) -> new CachingRotatingBakedModel( m ) );
 		}
 
-		if( blockColorSupplier != null )
+		if( blockColor != null )
 		{
-			registry.addBootstrapComponent( new BlockColorRegistration( block, blockColorSupplier.get() ) );
+			registry.addBootstrapComponent( new BlockColorRegistration( block, blockColor ) );
 		}
 
-		if( itemColorSupplier != null )
+		if( itemColor != null )
 		{
-			registry.addBootstrapComponent( new ItemColorRegistration( item, itemColorSupplier.get() ) );
+			registry.addBootstrapComponent( new ItemColorRegistration( item, itemColor ) );
 		}
 	}
 }

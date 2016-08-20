@@ -19,11 +19,7 @@
 package appeng.core.api.definitions;
 
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.lwjgl.util.vector.Vector3f;
-
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -71,12 +67,10 @@ import appeng.block.storage.BlockDrive;
 import appeng.block.storage.BlockIOPort;
 import appeng.block.storage.BlockSkyChest;
 import appeng.block.storage.BlockSkyChest.SkyChestType;
+import appeng.block.storage.SkyChestRenderingCustomization;
 import appeng.bootstrap.FeatureFactory;
 import appeng.bootstrap.IRenderingCustomizer;
-import appeng.bootstrap.RenderingCustomizerCallback;
-import appeng.client.render.renderable.ItemRenderable;
-import appeng.client.render.tesr.ModularTESR;
-import appeng.client.render.tesr.SkyChestTESR;
+import appeng.bootstrap.RenderingCustomization;
 import appeng.core.features.AEFeature;
 import appeng.debug.BlockChunkloader;
 import appeng.debug.BlockCubeGenerator;
@@ -94,7 +88,6 @@ import appeng.decorative.solid.BlockSkyStone;
 import appeng.decorative.solid.BlockSkyStone.SkystoneType;
 import appeng.decorative.stair.BlockStairCommon;
 import appeng.hooks.DispenserBehaviorTinyTNT;
-import appeng.tile.misc.TileCharger;
 
 
 /**
@@ -211,25 +204,11 @@ public final class ApiBlocks implements IBlocks
 
 		this.skyChest = registry.tile( "sky_chest_stone", () -> new BlockSkyChest( SkyChestType.STONE ) )
 				.features( AEFeature.SkyStoneChests )
-				.rendering( new RenderingCustomizerCallback()
-				{
-					@Override
-					public void customize( IRenderingCustomizer rendering )
-					{
-						rendering.tesr( SkyChestTESR::new );
-					}
-				} )
+				.rendering( new SkyChestRenderingCustomization() )
 				.build();
 		this.skyChestBlock = registry.tile( "sky_chest_block", () -> new BlockSkyChest( SkyChestType.BLOCK ) )
 				.features( AEFeature.SkyStoneChests )
-				.rendering( new RenderingCustomizerCallback()
-				{
-					@Override
-					public void customize( IRenderingCustomizer rendering )
-					{
-						rendering.tesr( SkyChestTESR::new );
-					}
-				} )
+				.rendering( new SkyChestRenderingCustomization() )
 				.build();
 
 		this.skyCompass = registry.block( "sky_compass", BlockSkyCompass::new ).features( AEFeature.MeteoriteCompass ).build();
@@ -238,13 +217,12 @@ public final class ApiBlocks implements IBlocks
 		this.inscriber = registry.tile( "inscriber", BlockInscriber::new ).features( AEFeature.Inscriber ).build();
 		this.wireless = registry.tile( "wireless", BlockWireless::new ).features( AEFeature.WirelessAccessTerminal ).build();
 		this.charger = registry.tile( "charger", BlockCharger::new )
-				.rendering( new RenderingCustomizerCallback()
+				.rendering( new RenderingCustomization()
 				{
 					@Override
-					@SideOnly( Side.CLIENT )
 					public void customize( IRenderingCustomizer rendering )
 					{
-						rendering.tesr( new ModularTESR( new ItemRenderable<TileCharger>( tile -> new ImmutablePair<>( tile.getStackInSlot( 0 ), new Matrix4f().translate( new Vector3f( 0.5f, 0.4f, 0.5f ) ) ) ) ) );
+						rendering.tesr( BlockCharger.createTesr() );
 					}
 				} )
 				.build();
@@ -296,13 +274,14 @@ public final class ApiBlocks implements IBlocks
 		this.quartzPillarStair = makeStairs( registry, this.quartzPillar() );
 
 		this.multiPart = registry.tile( "multipart_block", BlockCableBus::new )
-				.rendering( new RenderingCustomizerCallback()
+				.rendering( new RenderingCustomization()
 				{
 					@Override
+					@SideOnly( Side.CLIENT )
 					public void customize( IRenderingCustomizer rendering )
 					{
 						rendering.modelCustomizer( new CableModelCustomizer()::customizeModel )
-								.blockColor( CableBusColor::new );
+								.blockColor( new CableBusColor() );
 					}
 				} )
 				.build();

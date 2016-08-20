@@ -31,7 +31,7 @@ public class TileDefinitionBuilder extends DefinitionBuilder<TileDefinitionBuild
 		this.blockSupplier = blockSupplier;
 	}
 
-	public TileDefinitionBuilder rendering( RenderingCustomizerCallback callback )
+	public TileDefinitionBuilder rendering( RenderingCustomization callback )
 	{
 		if( Platform.isClient() )
 		{
@@ -42,7 +42,7 @@ public class TileDefinitionBuilder extends DefinitionBuilder<TileDefinitionBuild
 	}
 
 	@SideOnly( Side.CLIENT )
-	private void customizeForClient( RenderingCustomizerCallback callback )
+	private void customizeForClient( RenderingCustomization callback )
 	{
 		if( renderingCustomizer == null )
 		{

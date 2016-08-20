@@ -2,7 +2,6 @@ package appeng.bootstrap;
 
 
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,15 +19,11 @@ public interface IRenderingCustomizer
 	IRenderingCustomizer modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer );
 
 	@SideOnly( Side.CLIENT )
-	IRenderingCustomizer blockColor( Supplier<IBlockColor> blockColor );
+	IRenderingCustomizer blockColor( IBlockColor blockColor );
 
 	@SideOnly( Side.CLIENT )
-	IRenderingCustomizer itemColor( Supplier<IItemColor> itemColor );
-
-	@SideOnly( Side.CLIENT )
-	IRenderingCustomizer tesr( Supplier<TileEntitySpecialRenderer<?>> tesr );
+	IRenderingCustomizer itemColor( IItemColor itemColor );
 
 	@SideOnly( Side.CLIENT )
 	IRenderingCustomizer tesr( TileEntitySpecialRenderer<?> tesr );
-
 }
