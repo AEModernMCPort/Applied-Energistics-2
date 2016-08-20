@@ -9,9 +9,9 @@ import appeng.tile.AEBaseTile;
 
 
 /**
- * @author Sebastian
- * @version rv3 - 20.08.2016
- * @since rv3 20.08.2016
+ * Registers a TESR for a given tile entity class.
+ *
+ * @param <T>
  */
 public class TesrComponent<T extends AEBaseTile> implements PreInitComponent
 {

@@ -12,6 +12,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 
+/**
+ * Allows for client-side rendering to be customized in the context of block/item registration.
+ */
 public interface IRenderingCustomizer
 {
 
@@ -26,4 +29,5 @@ public interface IRenderingCustomizer
 
 	@SideOnly( Side.CLIENT )
 	IRenderingCustomizer tesr( TileEntitySpecialRenderer<?> tesr );
+
 }

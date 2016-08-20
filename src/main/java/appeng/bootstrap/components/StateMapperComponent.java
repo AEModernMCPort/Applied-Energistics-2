@@ -11,6 +11,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import appeng.client.render.model.AEIgnoringStateMapper;
 
 
+/**
+ * Registers a custom state mapper for a given block.
+ */
 public class StateMapperComponent implements InitComponent
 {
 
@@ -31,5 +34,4 @@ public class StateMapperComponent implements InitComponent
 		ModelLoader.setCustomStateMapper( block, mapper );
 		( (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager() ).registerReloadListener( mapper );
 	}
-
 }
