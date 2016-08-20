@@ -37,11 +37,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.block.AEBaseBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.helpers.ICustomCollision;
 
-@Features( AEFeature.SpatialIO )
 public class BlockMatrixFrame extends AEBaseBlock implements ICustomCollision
 {
 

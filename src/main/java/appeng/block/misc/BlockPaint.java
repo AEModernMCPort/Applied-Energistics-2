@@ -38,12 +38,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.tile.misc.TilePaint;
 import appeng.util.Platform;
 
-@Features( AEFeature.PaintBalls )
 public class BlockPaint extends AEBaseTileBlock
 {
 

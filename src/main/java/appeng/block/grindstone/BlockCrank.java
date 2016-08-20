@@ -36,13 +36,10 @@ import net.minecraftforge.common.util.FakePlayer;
 
 import appeng.api.implementations.tiles.ICrankable;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.core.stats.Stats;
 import appeng.tile.AEBaseTile;
 import appeng.tile.grindstone.TileCrank;
 
-@Features( AEFeature.GrindStone )
 public class BlockCrank extends AEBaseTileBlock
 {
 

@@ -19,11 +19,8 @@
 package appeng.block.networking;
 
 
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.tile.networking.TileDenseEnergyCell;
 
-@Features( AEFeature.DenseEnergyCells )
 public class BlockDenseEnergyCell extends BlockEnergyCell
 {
 

@@ -33,13 +33,10 @@ import net.minecraft.world.World;
 
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.spatial.TileSpatialIOPort;
 import appeng.util.Platform;
 
-@Features( AEFeature.SpatialIO )
 public class BlockSpatialIOPort extends AEBaseTileBlock
 {
 

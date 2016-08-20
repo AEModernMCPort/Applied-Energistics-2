@@ -34,18 +34,12 @@ import appeng.api.AEApi;
 import appeng.api.storage.ICellHandler;
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.core.localization.PlayerMessages;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.storage.TileChest;
 import appeng.util.Platform;
 
 
-@Features( {
-		AEFeature.StorageCells,
-		AEFeature.MEChest
-} )
 public class BlockChest extends AEBaseTileBlock
 {
 

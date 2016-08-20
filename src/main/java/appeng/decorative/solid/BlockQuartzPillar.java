@@ -30,11 +30,8 @@ import net.minecraft.world.IBlockAccess;
 import appeng.api.util.IOrientable;
 import appeng.api.util.IOrientableBlock;
 import appeng.block.AEBaseBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.helpers.MetaRotation;
 
-@Features( AEFeature.DecorativeQuartzBlocks )
 public class BlockQuartzPillar extends AEBaseBlock implements IOrientableBlock
 {
 	public static final PropertyEnum<EnumFacing.Axis> AXIS_ORIENTATION = PropertyEnum.create( "axis", EnumFacing.Axis.class );

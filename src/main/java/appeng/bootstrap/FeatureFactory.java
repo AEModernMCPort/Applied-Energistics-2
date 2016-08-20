@@ -7,19 +7,22 @@ import java.util.function.Supplier;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.util.AEColor;
 import appeng.api.util.AEColoredItemDefinition;
 import appeng.block.AEBaseTileBlock;
 import appeng.bootstrap.components.InitComponent;
+import appeng.bootstrap.components.ModelOverrideComponent;
 import appeng.bootstrap.components.PostInitComponent;
 import appeng.bootstrap.components.PreInitComponent;
-import appeng.bootstrap.components.ModelOverrideComponent;
 import appeng.core.features.AEFeature;
 import appeng.core.features.ActivityState;
 import appeng.core.features.ColoredItemDefinition;
 import appeng.core.features.ItemStackSrc;
+import appeng.util.Platform;
 
 
 public class FeatureFactory
@@ -29,22 +32,29 @@ public class FeatureFactory
 
 	private final List<IBootstrapComponent> bootstrapComponents;
 
-	final ModelOverrideComponent modelOverrideComponent;
+	@SideOnly( Side.CLIENT )
+	ModelOverrideComponent modelOverrideComponent;
 
 	public FeatureFactory()
 	{
 		this.defaultFeatures = new AEFeature[] { AEFeature.Core };
 		this.bootstrapComponents = new ArrayList<>();
 
-		modelOverrideComponent = new ModelOverrideComponent();
-		this.bootstrapComponents.add( modelOverrideComponent );
+		if( Platform.isClient() )
+		{
+			modelOverrideComponent = new ModelOverrideComponent();
+			this.bootstrapComponents.add( modelOverrideComponent );
+		}
 	}
 
 	private FeatureFactory( FeatureFactory parent, AEFeature... defaultFeatures )
 	{
 		this.defaultFeatures = defaultFeatures.clone();
 		this.bootstrapComponents = parent.bootstrapComponents;
-		this.modelOverrideComponent = parent.modelOverrideComponent;
+		if( Platform.isClient() )
+		{
+			this.modelOverrideComponent = parent.modelOverrideComponent;
+		}
 	}
 
 	public BlockDefinitionBuilder block( String id, Supplier<Block> block )

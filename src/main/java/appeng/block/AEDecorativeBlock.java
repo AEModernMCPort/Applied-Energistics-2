@@ -21,11 +21,7 @@ package appeng.block;
 
 import net.minecraft.block.material.Material;
 
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 
-
-@Features( AEFeature.DecorativeQuartzBlocks )
 public abstract class AEDecorativeBlock extends AEBaseBlock
 {
 	public AEDecorativeBlock( final Material mat )

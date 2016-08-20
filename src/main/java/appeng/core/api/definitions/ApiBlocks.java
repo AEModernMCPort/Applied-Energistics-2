@@ -19,8 +19,14 @@
 package appeng.core.api.definitions;
 
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.lwjgl.util.vector.Vector3f;
+
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.definitions.IBlockDefinition;
@@ -66,6 +72,11 @@ import appeng.block.storage.BlockIOPort;
 import appeng.block.storage.BlockSkyChest;
 import appeng.block.storage.BlockSkyChest.SkyChestType;
 import appeng.bootstrap.FeatureFactory;
+import appeng.bootstrap.IRenderingCustomizer;
+import appeng.bootstrap.RenderingCustomizerCallback;
+import appeng.client.render.renderable.ItemRenderable;
+import appeng.client.render.tesr.ModularTESR;
+import appeng.client.render.tesr.SkyChestTESR;
 import appeng.core.features.AEFeature;
 import appeng.debug.BlockChunkloader;
 import appeng.debug.BlockCubeGenerator;
@@ -83,6 +94,7 @@ import appeng.decorative.solid.BlockSkyStone;
 import appeng.decorative.solid.BlockSkyStone.SkystoneType;
 import appeng.decorative.stair.BlockStairCommon;
 import appeng.hooks.DispenserBehaviorTinyTNT;
+import appeng.tile.misc.TileCharger;
 
 
 /**
@@ -197,15 +209,45 @@ public final class ApiBlocks implements IBlocks
 		this.skyStone_brick = deco.block( "sky_stone_block_brick", () -> new BlockSkyStone( SkystoneType.BRICK ) ).build();
 		this.skyStone_smallbrick = deco.block( "sky_stone_block_small_brick", () -> new BlockSkyStone( SkystoneType.SMALL_BRICK ) ).build();
 
-		this.skyChest = registry.block( "sky_chest_stone", () -> new BlockSkyChest( SkyChestType.STONE ) ).features( AEFeature.SkyStoneChests ).build();
-		this.skyChestBlock = registry.block( "sky_chest_block", () -> new BlockSkyChest( SkyChestType.BLOCK ) ).features( AEFeature.SkyStoneChests ).build();
+		this.skyChest = registry.tile( "sky_chest_stone", () -> new BlockSkyChest( SkyChestType.STONE ) )
+				.features( AEFeature.SkyStoneChests )
+				.rendering( new RenderingCustomizerCallback()
+				{
+					@Override
+					public void customize( IRenderingCustomizer rendering )
+					{
+						rendering.tesr( SkyChestTESR::new );
+					}
+				} )
+				.build();
+		this.skyChestBlock = registry.tile( "sky_chest_block", () -> new BlockSkyChest( SkyChestType.BLOCK ) )
+				.features( AEFeature.SkyStoneChests )
+				.rendering( new RenderingCustomizerCallback()
+				{
+					@Override
+					public void customize( IRenderingCustomizer rendering )
+					{
+						rendering.tesr( SkyChestTESR::new );
+					}
+				} )
+				.build();
 
 		this.skyCompass = registry.block( "sky_compass", BlockSkyCompass::new ).features( AEFeature.MeteoriteCompass ).build();
 		this.grindStone = registry.tile( "grinder", BlockGrinder::new ).features( AEFeature.GrindStone ).build();
 		this.crankHandle = registry.tile( "crank", BlockCrank::new ).features( AEFeature.GrindStone ).build();
 		this.inscriber = registry.tile( "inscriber", BlockInscriber::new ).features( AEFeature.Inscriber ).build();
 		this.wireless = registry.tile( "wireless", BlockWireless::new ).features( AEFeature.WirelessAccessTerminal ).build();
-		this.charger = registry.tile( "charger", BlockCharger::new ).build();
+		this.charger = registry.tile( "charger", BlockCharger::new )
+				.rendering( new RenderingCustomizerCallback()
+				{
+					@Override
+					@SideOnly( Side.CLIENT )
+					public void customize( IRenderingCustomizer rendering )
+					{
+						rendering.tesr( new ModularTESR( new ItemRenderable<TileCharger>( tile -> new ImmutablePair<>( tile.getStackInSlot( 0 ), new Matrix4f().translate( new Vector3f( 0.5f, 0.4f, 0.5f ) ) ) ) ) );
+					}
+				} )
+				.build();
 		this.tinyTNT = registry.block( "tiny_tnt", BlockTinyTNT::new ).features( AEFeature.TinyTNT )
 				.postInit( ( block, item ) ->
 				{
@@ -254,8 +296,15 @@ public final class ApiBlocks implements IBlocks
 		this.quartzPillarStair = makeStairs( registry, this.quartzPillar() );
 
 		this.multiPart = registry.tile( "multipart_block", BlockCableBus::new )
-				.modelCustomizer( new CableModelCustomizer()::customizeModel )
-				.blockColor( new CableBusColor() )
+				.rendering( new RenderingCustomizerCallback()
+				{
+					@Override
+					public void customize( IRenderingCustomizer rendering )
+					{
+						rendering.modelCustomizer( new CableModelCustomizer()::customizeModel )
+								.blockColor( CableBusColor::new );
+					}
+				} )
 				.build();
 
 		// TODO Re-Add Slabs...

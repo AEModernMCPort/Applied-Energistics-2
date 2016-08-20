@@ -26,12 +26,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.helpers.AEGlassMaterial;
 import appeng.tile.spatial.TileSpatialPylon;
 
-@Features( AEFeature.SpatialIO )
 public class BlockSpatialPylon extends AEBaseTileBlock
 {
 

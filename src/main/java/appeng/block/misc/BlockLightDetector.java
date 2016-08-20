@@ -36,12 +36,9 @@ import net.minecraft.world.World;
 
 import appeng.api.util.IOrientableBlock;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.misc.TileLightDetector;
 
-@Features( AEFeature.LightDetector )
 public class BlockLightDetector extends AEBaseTileBlock implements IOrientableBlock, ICustomCollision
 {
 

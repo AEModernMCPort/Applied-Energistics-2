@@ -32,11 +32,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.tile.networking.TileController;
 
-@Features( AEFeature.Channels )
 public class BlockController extends AEBaseTileBlock
 {
 

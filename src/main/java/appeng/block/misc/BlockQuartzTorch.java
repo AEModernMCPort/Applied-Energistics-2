@@ -46,12 +46,9 @@ import appeng.block.AEBaseBlock;
 import appeng.client.render.effects.LightningFX;
 import appeng.core.AEConfig;
 import appeng.core.CommonHelper;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.helpers.ICustomCollision;
 import appeng.helpers.MetaRotation;
 
-@Features( AEFeature.DecorativeLights )
 public class BlockQuartzTorch extends AEBaseBlock implements IOrientableBlock, ICustomCollision
 {
 

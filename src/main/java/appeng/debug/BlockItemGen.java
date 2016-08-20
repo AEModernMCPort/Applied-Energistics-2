@@ -22,14 +22,8 @@ package appeng.debug;
 import net.minecraft.block.material.Material;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 
 
-@Features( {
-		AEFeature.UnsupportedDeveloperTools,
-		AEFeature.Creative
-} )
 public class BlockItemGen extends AEBaseTileBlock
 {
 

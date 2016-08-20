@@ -38,14 +38,11 @@ import net.minecraft.world.World;
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
 import appeng.core.AEConfig;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.AEBaseTile;
 import appeng.tile.misc.TileVibrationChamber;
 import appeng.util.Platform;
 
-@Features( AEFeature.PowerGen )
 public final class BlockVibrationChamber extends AEBaseTileBlock
 {
 

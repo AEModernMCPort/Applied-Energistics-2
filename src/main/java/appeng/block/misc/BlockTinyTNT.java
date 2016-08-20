@@ -45,13 +45,10 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import appeng.block.AEBaseBlock;
 import appeng.core.AppEng;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.entity.EntityIds;
 import appeng.entity.EntityTinyTNTPrimed;
 import appeng.helpers.ICustomCollision;
 
-@Features( AEFeature.TinyTNT )
 public class BlockTinyTNT extends AEBaseBlock implements ICustomCollision
 {
 

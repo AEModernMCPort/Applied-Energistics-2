@@ -32,7 +32,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -46,8 +45,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.implementations.items.IMemoryCard;
 import appeng.api.implementations.items.MemoryCardMessages;
@@ -94,17 +91,6 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 	public int getMetaFromState( IBlockState state )
 	{
 		return 0;
-	}
-
-	@SideOnly( Side.CLIENT )
-	public TileEntitySpecialRenderer<? extends AEBaseTile> getTESR()
-	{
-		return null;
-	}
-
-	public boolean hasItemTESR()
-	{
-		return false;
 	}
 
 	protected void setTileEntity( final Class<? extends AEBaseTile> c )

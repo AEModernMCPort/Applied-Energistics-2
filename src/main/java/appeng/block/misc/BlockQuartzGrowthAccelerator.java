@@ -31,6 +31,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.block.AEBaseTileBlock;
 import appeng.client.render.effects.LightningFX;
@@ -69,6 +71,7 @@ public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock
 		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP, POWERED };
 	}
 
+	@SideOnly( Side.CLIENT )
 	@Override
 	public void randomDisplayTick( final IBlockState state, final World w, final BlockPos pos, final Random r )
 	{

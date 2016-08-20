@@ -29,14 +29,8 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
 import appeng.block.AEBaseTileBlock;
 import appeng.core.AppEng;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 
 
-@Features( {
-		AEFeature.UnsupportedDeveloperTools,
-		AEFeature.Creative
-} )
 public class BlockChunkloader extends AEBaseTileBlock implements LoadingCallback
 {
 

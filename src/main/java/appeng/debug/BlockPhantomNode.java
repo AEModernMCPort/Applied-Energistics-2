@@ -30,14 +30,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 
 
-@Features( {
-		AEFeature.UnsupportedDeveloperTools,
-		AEFeature.Creative
-} )
 public class BlockPhantomNode extends AEBaseTileBlock
 {
 

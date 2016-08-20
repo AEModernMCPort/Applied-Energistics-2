@@ -24,14 +24,9 @@ import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -47,8 +42,6 @@ import appeng.api.AEApi;
 import appeng.api.util.AEAxisAlignedBB;
 import appeng.block.AEBaseTileBlock;
 import appeng.client.render.effects.LightningFX;
-import appeng.client.render.renderable.ItemRenderable;
-import appeng.client.render.tesr.ModularTESR;
 import appeng.core.AEConfig;
 import appeng.core.CommonHelper;
 import appeng.helpers.ICustomCollision;
@@ -123,13 +116,6 @@ public class BlockCharger extends AEBaseTileBlock implements ICustomCollision
 				}
 			}
 		}
-	}
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public TileEntitySpecialRenderer<TileCharger> getTESR()
-	{
-		return new ModularTESR( new ItemRenderable<TileCharger>( tile -> new ImmutablePair( tile.getStackInSlot( 0 ), new Matrix4f().translate( new Vector3f( 0.5f, 0.4f, 0.5f ) ) ) ) );
 	}
 
 	@Override

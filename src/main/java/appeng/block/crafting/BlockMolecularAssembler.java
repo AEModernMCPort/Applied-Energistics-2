@@ -33,13 +33,10 @@ import net.minecraft.world.World;
 
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.crafting.TileMolecularAssembler;
 import appeng.util.Platform;
 
-@Features( AEFeature.MolecularAssembler )
 public class BlockMolecularAssembler extends AEBaseTileBlock
 {
 

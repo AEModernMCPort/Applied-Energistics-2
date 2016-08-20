@@ -28,12 +28,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.qnb.TileQuantumBridge;
 
-@Features( AEFeature.QuantumNetworkBridge )
 public abstract class BlockQuantumBase extends AEBaseTileBlock implements ICustomCollision
 {
 

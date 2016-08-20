@@ -1,24 +1,14 @@
 package appeng.bootstrap;
 
 
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.bootstrap.components.BlockColorRegistration;
-import appeng.bootstrap.components.ItemColorRegistration;
-import appeng.bootstrap.components.ItemModelRegistrationComponent;
-import appeng.bootstrap.components.ItemVariantsComponent;
-import appeng.bootstrap.components.TesrComponent;
-import appeng.client.render.model.CachingRotatingBakedModel;
 import appeng.core.CreativeTab;
 import appeng.core.features.ActivityState;
 import appeng.core.features.BlockStackSrc;
@@ -32,11 +22,8 @@ public class TileDefinitionBuilder extends DefinitionBuilder<TileDefinitionBuild
 
 	private final Supplier<AEBaseTileBlock> blockSupplier;
 
-	private BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> modelCustomizer;
-
-	private IBlockColor blockColor;
-
-	private IItemColor itemColor;
+	@SideOnly( Side.CLIENT )
+	private RenderingCustomizer renderingCustomizer;
 
 	TileDefinitionBuilder( FeatureFactory registry, String id, Supplier<AEBaseTileBlock> blockSupplier )
 	{
@@ -44,20 +31,24 @@ public class TileDefinitionBuilder extends DefinitionBuilder<TileDefinitionBuild
 		this.blockSupplier = blockSupplier;
 	}
 
-	public TileDefinitionBuilder modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer )
+	public TileDefinitionBuilder rendering( RenderingCustomizerCallback callback )
 	{
-		this.modelCustomizer = customizer;
+		if( Platform.isClient() )
+		{
+			customizeForClient( callback );
+		}
+
 		return this;
 	}
 
-	public TileDefinitionBuilder blockColor(IBlockColor blockColor) {
-		this.blockColor = blockColor;
-		return this;
-	}
-
-	public TileDefinitionBuilder itemColor(IItemColor itemColor) {
-		this.itemColor = itemColor;
-		return this;
+	@SideOnly( Side.CLIENT )
+	private void customizeForClient( RenderingCustomizerCallback callback )
+	{
+		if( renderingCustomizer == null )
+		{
+			renderingCustomizer = new RenderingCustomizer();
+		}
+		callback.customize( renderingCustomizer );
 	}
 
 	public TileDefinition build()
@@ -88,35 +79,9 @@ public class TileDefinitionBuilder extends DefinitionBuilder<TileDefinitionBuild
 
 		GameRegistry.registerTileEntity( tileEntityClass, registryName );
 
-		if( Platform.isClient() )
+		if( Platform.isClient() && renderingCustomizer != null )
 		{
-			registry.addBootstrapComponent( new ItemVariantsComponent( item ) );
-			registry.addBootstrapComponent( new ItemModelRegistrationComponent( block, item ) );
-
-			TileEntitySpecialRenderer tesr = block.getTESR();
-			if( tesr != null )
-			{
-				registry.addBootstrapComponent( new TesrComponent<>( tileEntityClass, tesr ) );
-			}
-
-			if( modelCustomizer != null )
-			{
-				registry.modelOverrideComponent.addOverride( registryName, modelCustomizer );
-			}
-			else
-			{
-				registry.modelOverrideComponent.addOverride( registryName, ( l, m ) -> new CachingRotatingBakedModel( m ) );
-			}
-
-			if( blockColor != null )
-			{
-				registry.addBootstrapComponent( new BlockColorRegistration( block, blockColor ) );
-			}
-
-			if( itemColor != null )
-			{
-				registry.addBootstrapComponent( new ItemColorRegistration( item, itemColor ) );
-			}
+			renderingCustomizer.apply( registry, block, item, tileEntityClass );
 		}
 
 		return definition;

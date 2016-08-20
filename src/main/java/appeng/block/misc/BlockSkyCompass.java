@@ -32,12 +32,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
-import appeng.core.features.Features;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.misc.TileSkyCompass;
 
-@Features( AEFeature.MeteoriteCompass )
 public class BlockSkyCompass extends AEBaseTileBlock implements ICustomCollision
 {
 
