@@ -29,14 +29,11 @@ import com.google.common.collect.ImmutableMap;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
@@ -80,7 +77,6 @@ import appeng.entity.RenderTinyTNTPrimed;
 import appeng.helpers.IMouseWheelItem;
 import appeng.hooks.TickHandler;
 import appeng.hooks.TickHandler.PlayerColor;
-import appeng.items.misc.ItemPaintBall;
 import appeng.items.parts.PartType;
 import appeng.parts.AEBasePart;
 import appeng.server.ServerHelper;
@@ -452,29 +448,4 @@ public class ClientHelper extends ServerHelper
 			event.getMap().registerSprite( location );
 		}
 	}
-
-	private static class IconReg
-	{
-		public final String name;
-		public final Object item;
-		public final int meta;
-		public final ModelResourceLocation loc;
-
-		public IconReg( final Object item2, final int meta2, final String name2 )
-		{
-			this.meta = meta2;
-			this.name = name2;
-			this.item = item2;
-			this.loc = null;
-		}
-
-		public IconReg( final Item item2, final int meta2, final String name2, final ModelResourceLocation res )
-		{
-			this.meta = meta2;
-			this.name = name2;
-			this.item = item2;
-			this.loc = res;
-		}
-	}
-
 }
