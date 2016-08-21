@@ -2,6 +2,7 @@ package appeng.items.parts;
 
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.ItemStack;
 
 import appeng.bootstrap.IItemRendering;
 import appeng.bootstrap.ItemRenderingCustomizer;
@@ -20,6 +21,12 @@ public class ItemMultipartRendering extends ItemRenderingCustomizer
 	@Override
 	public void customize( IItemRendering rendering )
 	{
-		rendering.meshDefinition( is -> new ModelResourceLocation( item.getTypeByStack( is ).getModel(), null ) );
+		rendering.meshDefinition( this::getItemMeshDefinition );
 	}
+
+	private ModelResourceLocation getItemMeshDefinition( ItemStack is )
+	{
+		return new ModelResourceLocation( item.getTypeByStack( is ).getModel(), null );
+	}
+
 }
