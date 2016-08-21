@@ -13,5 +13,6 @@ public abstract class BlockRenderingCustomizer
 {
 
 	@SideOnly( Side.CLIENT )
-	public abstract void customize( IBlockRendering rendering );
+	public abstract void customize( IBlockRendering rendering, IItemRendering itemRendering );
+
 }

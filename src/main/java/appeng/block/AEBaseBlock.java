@@ -30,7 +30,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -102,7 +101,7 @@ public abstract class AEBaseBlock extends Block
 	public String toString()
 	{
 		String regName = getRegistryName() != null ? getRegistryName().getResourcePath() : "unregistered";
-		return getClass().getSimpleName() + "[" + regName  + "]";
+		return getClass().getSimpleName() + "[" + regName + "]";
 	}
 
 	@Override
@@ -338,7 +337,8 @@ public abstract class AEBaseBlock extends Block
 	{
 		if( this instanceof IOrientableBlock )
 		{
-			return ( (IOrientableBlock) this ).getOrientable( w, pos );
+			IOrientableBlock orientable = (IOrientableBlock) this;
+			return orientable.getOrientable( w, pos );
 		}
 		return null;
 	}
@@ -404,12 +404,6 @@ public abstract class AEBaseBlock extends Block
 		super.getSubBlocks( item, tabs, itemStacks );
 	}
 
-	@SideOnly( Side.CLIENT )
-	public void setRenderStateByMeta( final int itemDamage )
-	{
-
-	}
-
 	public String getUnlocalizedName( final ItemStack is )
 	{
 		return this.getUnlocalizedName();
@@ -418,11 +412,6 @@ public abstract class AEBaseBlock extends Block
 	public void addInformation( final ItemStack is, final EntityPlayer player, final List<String> lines, final boolean advancedItemTooltips )
 	{
 
-	}
-
-	public Class<? extends AEBaseItemBlock> getItemBlockClass()
-	{
-		return AEBaseItemBlock.class;
 	}
 
 	public boolean hasSubtypes()
@@ -525,17 +514,6 @@ public abstract class AEBaseBlock extends Block
 	public void setHasSubtypes( final boolean hasSubtypes )
 	{
 		this.hasSubtypes = hasSubtypes;
-	}
-
-	/**
-	 * Return the item mesh definition that should be used to determine the item model of an item stack,
-	 * instead of the default model. Return null if your Block doesn't use a custom ItemMeshDefinition (the default).
-	 * The returned ItemMeshDefinition will automatically be registered with the ItemModelMesher during the registration of the block.
-	 */
-	@SideOnly( Side.CLIENT )
-	public ItemMeshDefinition getItemMeshDefinition()
-	{
-		return null;
 	}
 
 }

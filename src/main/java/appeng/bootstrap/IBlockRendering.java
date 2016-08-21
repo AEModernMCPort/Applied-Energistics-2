@@ -26,9 +26,6 @@ public interface IBlockRendering
 	IBlockRendering blockColor( IBlockColor blockColor );
 
 	@SideOnly( Side.CLIENT )
-	IBlockRendering itemColor( IItemColor itemColor );
-
-	@SideOnly( Side.CLIENT )
 	IBlockRendering stateMapper( IStateMapper mapper );
 
 	@SideOnly( Side.CLIENT )

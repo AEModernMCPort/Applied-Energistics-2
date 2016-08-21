@@ -28,11 +28,13 @@ import net.minecraftforge.oredict.OreDictionary;
 import appeng.api.definitions.IBlockDefinition;
 import appeng.api.definitions.IBlocks;
 import appeng.api.definitions.ITileDefinition;
+import appeng.block.AEBaseItemBlockChargeable;
 import appeng.block.crafting.BlockCraftingMonitor;
 import appeng.block.crafting.BlockCraftingStorage;
 import appeng.block.crafting.BlockCraftingUnit;
 import appeng.block.crafting.BlockCraftingUnit.CraftingUnitType;
 import appeng.block.crafting.BlockMolecularAssembler;
+import appeng.block.crafting.ItemCraftingStorage;
 import appeng.block.grindstone.BlockCrank;
 import appeng.block.grindstone.BlockGrinder;
 import appeng.block.misc.BlockCellWorkbench;
@@ -54,6 +56,7 @@ import appeng.block.networking.BlockCreativeEnergyCell;
 import appeng.block.networking.BlockDenseEnergyCell;
 import appeng.block.networking.BlockEnergyAcceptor;
 import appeng.block.networking.BlockEnergyCell;
+import appeng.block.networking.BlockEnergyCellRenderCustomizer;
 import appeng.block.networking.BlockWireless;
 import appeng.block.networking.CableBusColor;
 import appeng.block.networking.CableModelCustomizer;
@@ -68,9 +71,10 @@ import appeng.block.storage.BlockIOPort;
 import appeng.block.storage.BlockSkyChest;
 import appeng.block.storage.BlockSkyChest.SkyChestType;
 import appeng.block.storage.SkyChestRenderingCustomizer;
+import appeng.bootstrap.BlockRenderingCustomizer;
 import appeng.bootstrap.FeatureFactory;
 import appeng.bootstrap.IBlockRendering;
-import appeng.bootstrap.BlockRenderingCustomizer;
+import appeng.bootstrap.IItemRendering;
 import appeng.core.features.AEFeature;
 import appeng.debug.BlockChunkloader;
 import appeng.debug.BlockCubeGenerator;
@@ -220,7 +224,7 @@ public final class ApiBlocks implements IBlocks
 				.rendering( new BlockRenderingCustomizer()
 				{
 					@Override
-					public void customize( IBlockRendering rendering )
+					public void customize( IBlockRendering rendering, IItemRendering itemRendering )
 					{
 						rendering.tesr( BlockCharger.createTesr() );
 					}
@@ -247,17 +251,35 @@ public final class ApiBlocks implements IBlocks
 		this.energyAcceptor = registry.block( "energy_acceptor", BlockEnergyAcceptor::new ).build();
 		this.vibrationChamber = registry.block( "vibration_chamber", BlockVibrationChamber::new ).features( AEFeature.PowerGen ).build();
 		this.quartzGrowthAccelerator = registry.block( "quartz_growth_accelerator", BlockQuartzGrowthAccelerator::new ).build();
-		this.energyCell = registry.block( "energy_cell", BlockEnergyCell::new ).build();
-		this.energyCellDense = registry.block( "dense_energy_cell", BlockDenseEnergyCell::new ).features( AEFeature.DenseEnergyCells ).build();
-		this.energyCellCreative = registry.block( "creative_energy_cell", BlockCreativeEnergyCell::new ).features( AEFeature.Creative ).build();
+		this.energyCell = registry.block( "energy_cell", BlockEnergyCell::new )
+				.item( AEBaseItemBlockChargeable::new )
+				.rendering( new BlockEnergyCellRenderCustomizer() )
+				.build();
+		this.energyCellDense = registry.block( "dense_energy_cell", BlockDenseEnergyCell::new )
+				.features( AEFeature.DenseEnergyCells )
+				.item( AEBaseItemBlockChargeable::new )
+				.rendering( new BlockEnergyCellRenderCustomizer() )
+				.build();
+		this.energyCellCreative = registry.block( "creative_energy_cell", BlockCreativeEnergyCell::new )
+				.features( AEFeature.Creative )
+				.item( AEBaseItemBlockChargeable::new )
+				.build();
 
 		FeatureFactory crafting = registry.features( AEFeature.CraftingCPU );
 		this.craftingUnit = crafting.block( "crafting_unit", () -> new BlockCraftingUnit( CraftingUnitType.UNIT ) ).build();
 		this.craftingAccelerator = crafting.block( "crafting_accelerator", () -> new BlockCraftingUnit( CraftingUnitType.ACCELERATOR ) ).build();
-		this.craftingStorage1k = crafting.block( "crafting_storage_1k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_1K ) ).build();
-		this.craftingStorage4k = crafting.block( "crafting_storage_4k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_4K ) ).build();
-		this.craftingStorage16k = crafting.block( "crafting_storage_16k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_16K ) ).build();
-		this.craftingStorage64k = crafting.block( "crafting_storage_64k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_64K ) ).build();
+		this.craftingStorage1k = crafting.block( "crafting_storage_1k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_1K ) )
+				.item( ItemCraftingStorage::new )
+				.build();
+		this.craftingStorage4k = crafting.block( "crafting_storage_4k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_4K ) )
+				.item( ItemCraftingStorage::new )
+				.build();
+		this.craftingStorage16k = crafting.block( "crafting_storage_16k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_16K ) )
+				.item( ItemCraftingStorage::new )
+				.build();
+		this.craftingStorage64k = crafting.block( "crafting_storage_64k", () -> new BlockCraftingStorage( CraftingUnitType.STORAGE_64K ) )
+				.item( ItemCraftingStorage::new )
+				.build();
 		this.craftingMonitor = crafting.block( "crafting_monitor", BlockCraftingMonitor::new ).build();
 
 		this.molecularAssembler = registry.block( "molecular_assembler", BlockMolecularAssembler::new ).features( AEFeature.MolecularAssembler ).build();
@@ -278,7 +300,7 @@ public final class ApiBlocks implements IBlocks
 				{
 					@Override
 					@SideOnly( Side.CLIENT )
-					public void customize( IBlockRendering rendering )
+					public void customize( IBlockRendering rendering, IItemRendering itemRendering  )
 					{
 						rendering.modelCustomizer( new CableModelCustomizer()::customizeModel )
 								.blockColor( new CableBusColor() );

@@ -1,7 +1,7 @@
 package appeng.bootstrap.components;
 
 
-import com.google.common.base.Preconditions;
+import java.util.Collection;
 
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.item.Item;
@@ -9,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 
 import appeng.bootstrap.IBootstrapComponent;
-import appeng.items.AEBaseItem;
 
 
 public class ItemVariantsComponent implements IBootstrapComponent
@@ -17,29 +16,18 @@ public class ItemVariantsComponent implements IBootstrapComponent
 
 	private final Item item;
 
-	private final ResourceLocation[] resourceLocations;
+	private final Collection<ResourceLocation> resources;
 
-	public ItemVariantsComponent( Item item )
+	public ItemVariantsComponent( Item item, Collection<ResourceLocation> resources )
 	{
 		this.item = item;
-
-		if( item instanceof AEBaseItem )
-		{
-			AEBaseItem baseItem = (AEBaseItem) item;
-
-			// Handle registration of item variants
-			this.resourceLocations = baseItem.getItemVariants().toArray( new ResourceLocation[0] );
-		}
-		else
-		{
-			this.resourceLocations = new ResourceLocation[] { item.getRegistryName() };
-		}
+		this.resources = resources;
 	}
 
 	@Override
 	public void preInitialize( Side side )
 	{
-		Preconditions.checkState( side == Side.CLIENT );
-		ModelBakery.registerItemVariants( item, resourceLocations );
+		ResourceLocation[] resourceArr = resources.toArray( new ResourceLocation[0] );
+		ModelBakery.registerItemVariants( item, resourceArr );
 	}
 }

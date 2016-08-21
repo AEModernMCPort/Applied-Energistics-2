@@ -7,14 +7,14 @@ import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraftforge.fml.relauncher.Side;
 
 
-public class BlockColorRegistration implements InitComponent
+public class BlockColorComponent implements InitComponent
 {
 
 	private final Block block;
 
 	private final IBlockColor blockColor;
 
-	public BlockColorRegistration( Block block, IBlockColor blockColor )
+	public BlockColorComponent( Block block, IBlockColor blockColor )
 	{
 		this.block = block;
 		this.blockColor = blockColor;

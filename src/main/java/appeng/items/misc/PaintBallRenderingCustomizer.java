@@ -13,7 +13,7 @@ public class PaintBallRenderingCustomizer extends ItemRenderingCustomizer
 	@Override
 	public void customize( IItemRendering rendering )
 	{
-		rendering.itemColor( PaintBallRenderingCustomizer::getColorFromItemstack );
+		rendering.color( PaintBallRenderingCustomizer::getColorFromItemstack );
 	}
 
 	private static int getColorFromItemstack( ItemStack stack, int tintIndex )

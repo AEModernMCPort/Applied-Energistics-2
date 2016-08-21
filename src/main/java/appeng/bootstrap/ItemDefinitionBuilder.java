@@ -31,7 +31,7 @@ class ItemDefinitionBuilder implements IItemBuilder
 	private final EnumSet<AEFeature> features = EnumSet.noneOf( AEFeature.class );
 
 	@SideOnly( Side.CLIENT )
-	private ItemRendering renderingCustomizer;
+	private ItemRendering itemRendering;
 
 	private CreativeTabs creativeTab = CreativeTab.instance;
 
@@ -40,6 +40,10 @@ class ItemDefinitionBuilder implements IItemBuilder
 		this.factory = factory;
 		this.registryName = registryName;
 		this.itemSupplier = itemSupplier;
+		if( Platform.isClient() )
+		{
+			itemRendering = new ItemRendering();
+		}
 	}
 
 	@Override
@@ -78,11 +82,7 @@ class ItemDefinitionBuilder implements IItemBuilder
 	@SideOnly( Side.CLIENT )
 	private void customizeForClient( ItemRenderingCustomizer callback )
 	{
-		if( renderingCustomizer == null )
-		{
-			renderingCustomizer = new ItemRendering();
-		}
-		callback.customize( renderingCustomizer );
+		callback.customize( itemRendering );
 	}
 
 	public ItemDefinition build()
@@ -104,11 +104,7 @@ class ItemDefinitionBuilder implements IItemBuilder
 
 		if( Platform.isClient() )
 		{
-			if (renderingCustomizer == null) {
-				renderingCustomizer = new ItemRendering();
-			}
-			renderingCustomizer.apply( factory, item );
-
+			itemRendering.apply( factory, item );
 		}
 
 		return definition;

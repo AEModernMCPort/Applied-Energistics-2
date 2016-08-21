@@ -7,14 +7,14 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 
 
-public class ItemColorRegistration implements InitComponent
+public class ItemColorComponent implements InitComponent
 {
 
 	private final Item item;
 
 	private final IItemColor itemColor;
 
-	public ItemColorRegistration( Item item, IItemColor itemColor )
+	public ItemColorComponent( Item item, IItemColor itemColor )
 	{
 		this.item = item;
 		this.itemColor = itemColor;
