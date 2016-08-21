@@ -39,6 +39,8 @@ public class BlockQuartzPillar extends AEBaseBlock implements IOrientableBlock
 	public BlockQuartzPillar()
 	{
 		super( Material.ROCK );
+		// The upwards facing pillar is the default (i.e. for the item model)
+		setDefaultState( getDefaultState().withProperty( AXIS_ORIENTATION, EnumFacing.Axis.Y ) );
 	}
 
 	@Override

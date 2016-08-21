@@ -9,10 +9,10 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import appeng.block.AEBaseTileBlock;
 import appeng.bootstrap.components.BlockColorComponent;
 import appeng.bootstrap.components.StateMapperComponent;
 import appeng.bootstrap.components.TesrComponent;
@@ -65,7 +65,7 @@ class BlockRendering implements IBlockRendering
 		return this;
 	}
 
-	void apply( FeatureFactory registry, Block block, Item item, Class<?> tileEntityClass )
+	void apply( FeatureFactory registry, Block block, Class<?> tileEntityClass )
 	{
 		if( tesr != null )
 		{
@@ -80,8 +80,9 @@ class BlockRendering implements IBlockRendering
 		{
 			registry.modelOverrideComponent.addOverride( block.getRegistryName().getResourcePath(), modelCustomizer );
 		}
-		else
+		else if ( block instanceof AEBaseTileBlock )
 		{
+			// This is a default rotating model if the base-block uses an AE tile entity which exposes UP/FRONT as extended props
 			registry.modelOverrideComponent.addOverride( block.getRegistryName().getResourcePath(), ( l, m ) -> new CachingRotatingBakedModel( m ) );
 		}
 

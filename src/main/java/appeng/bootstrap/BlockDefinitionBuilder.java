@@ -168,11 +168,11 @@ class BlockDefinitionBuilder implements IBlockBuilder
 			if( block instanceof AEBaseTileBlock )
 			{
 				AEBaseTileBlock tileBlock = (AEBaseTileBlock) block;
-				blockRendering.apply( factory, block, item, tileBlock.getTileEntityClass() );
+				blockRendering.apply( factory, block, tileBlock.getTileEntityClass() );
 			}
 			else
 			{
-				blockRendering.apply( factory, block, item, null );
+				blockRendering.apply( factory, block, null );
 			}
 
 			itemRendering.apply( factory, item );
