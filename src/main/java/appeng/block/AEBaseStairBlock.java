@@ -40,4 +40,11 @@ public abstract class AEBaseStairBlock extends BlockStairs implements IHasSpecia
 		this.setLightOpacity( 0 );
 	}
 
+	@Override
+	public String toString()
+	{
+		String regName = getRegistryName() != null ? getRegistryName().getResourcePath() : "unregistered";
+		return getClass().getSimpleName() + "[" + regName + "]";
+	}
+
 }

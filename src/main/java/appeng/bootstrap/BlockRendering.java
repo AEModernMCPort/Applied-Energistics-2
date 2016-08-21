@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import appeng.bootstrap.components.BlockColorComponent;
 import appeng.bootstrap.components.StateMapperComponent;
 import appeng.bootstrap.components.TesrComponent;
-import appeng.client.render.model.AEIgnoringStateMapper;
 import appeng.client.render.model.CachingRotatingBakedModel;
 
 
@@ -94,10 +93,6 @@ class BlockRendering implements IBlockRendering
 		if( stateMapper != null )
 		{
 			registry.addBootstrapComponent( new StateMapperComponent( block, stateMapper ) );
-		}
-		else
-		{
-			registry.addBootstrapComponent( new StateMapperComponent( block, new AEIgnoringStateMapper() ) );
 		}
 	}
 }

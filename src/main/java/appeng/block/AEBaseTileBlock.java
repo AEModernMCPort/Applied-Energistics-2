@@ -29,8 +29,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,6 +44,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 import appeng.api.implementations.items.IMemoryCard;
 import appeng.api.implementations.items.MemoryCardMessages;
@@ -71,20 +73,35 @@ public abstract class AEBaseTileBlock extends AEBaseBlock implements ITileEntity
 		super( mat );
 	}
 
-	public static final PropertyDirection AE_BLOCK_FORWARD = PropertyDirection.create( "forward" );
-	public static final PropertyDirection AE_BLOCK_UP = PropertyDirection.create( "up" );
+	public static final UnlistedDirection FORWARD = new UnlistedDirection( "forward" );
+	public static final UnlistedDirection UP = new UnlistedDirection( "up" );
 
 	@Override
-	protected IProperty[] getAEStates()
+	public IBlockState getExtendedState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
-		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP };
+		// A subclass may decide it doesn't want extended block state for whatever reason
+		if( !( state instanceof IExtendedBlockState ) )
+		{
+			return state;
+		}
+
+		AEBaseTile tile = getTileEntity( world, pos );
+		if( tile == null )
+		{
+			return state; // No info available
+		}
+
+		IExtendedBlockState extState = (IExtendedBlockState) state;
+		return extState.withProperty( FORWARD, tile.getForward() ).withProperty( UP, tile.getUp() );
 	}
 
 	@Override
-	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
+	protected BlockStateContainer createBlockState()
 	{
-		AEBaseTile tile = (AEBaseTile) world.getTileEntity( pos );
-		return super.getActualState( state, world, pos ).withProperty( AE_BLOCK_FORWARD, tile.getForward() ).withProperty( AE_BLOCK_UP, tile.getUp() );
+		return new ExtendedBlockState( this, getAEStates(), new IUnlistedProperty[] {
+				FORWARD,
+				UP
+		} );
 	}
 
 	@Override

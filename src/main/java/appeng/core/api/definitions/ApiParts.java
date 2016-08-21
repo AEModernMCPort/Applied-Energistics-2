@@ -30,6 +30,7 @@ import appeng.core.features.ColoredItemDefinition;
 import appeng.core.features.DamagedItemDefinition;
 import appeng.core.features.ItemStackSrc;
 import appeng.items.parts.ItemMultiPart;
+import appeng.items.parts.ItemMultipartRendering;
 import appeng.items.parts.PartType;
 
 
@@ -80,7 +81,9 @@ public final class ApiParts implements IParts
 	public ApiParts( FeatureFactory registry, IPartHelper partHelper )
 	{
 		final ItemMultiPart itemMultiPart = new ItemMultiPart( partHelper );
-		registry.item( "multipart", () -> itemMultiPart ).build();
+		registry.item( "multipart", () -> itemMultiPart )
+				.rendering( new ItemMultipartRendering( itemMultiPart ) )
+				.build();
 
 		this.cableSmart = constructColoredDefinition( itemMultiPart, PartType.CableSmart );
 		this.cableCovered = constructColoredDefinition( itemMultiPart, PartType.CableCovered );

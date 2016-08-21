@@ -9,10 +9,14 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -86,17 +90,51 @@ class ItemRendering implements IItemRendering
 		// Register a default item model if neither items by meta nor an item mesh definition exist
 		if( this.itemMeshDefinition == null && this.itemModels.isEmpty() )
 		{
-			ModelResourceLocation model = new ModelResourceLocation( item.getRegistryName(), "inventory" );
-			factory.addBootstrapComponent( new ItemModelComponent( item, ImmutableMap.of( 0, model ) ) );
+			ModelResourceLocation model;
 
+			// For block items, the default will try to use the default state of the associated block
+			if( item instanceof ItemBlock )
+			{
+				Block block = ( (ItemBlock) item ).getBlock();
+
+				// We can only do this once the blocks are actually registered...
+				StateMapperHelper helper = new StateMapperHelper( block.getRegistryName() );
+				model = helper.getModelResourceLocation( block.getDefaultState() );
+			}
+			else
+			{
+				model = new ModelResourceLocation( item.getRegistryName(), "inventory" );
+			}
+
+			factory.addBootstrapComponent( new ItemModelComponent( item, ImmutableMap.of( 0, model ) ) );
 			resources.add( model );
 		}
 
-		factory.addBootstrapComponent( new ItemVariantsComponent( item, resources ) );
+		if( !resources.isEmpty() )
+		{
+			factory.addBootstrapComponent( new ItemVariantsComponent( item, resources ) );
+		}
 
 		if( itemColor != null )
 		{
 			factory.addBootstrapComponent( new ItemColorComponent( item, itemColor ) );
+		}
+	}
+
+	private static class StateMapperHelper extends StateMapperBase
+	{
+
+		private final ResourceLocation registryName;
+
+		public StateMapperHelper( ResourceLocation registryName )
+		{
+			this.registryName = registryName;
+		}
+
+		@Override
+		protected ModelResourceLocation getModelResourceLocation( IBlockState state )
+		{
+			return new ModelResourceLocation( registryName, getPropertyString( state.getProperties() ) );
 		}
 	}
 }

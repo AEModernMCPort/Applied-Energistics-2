@@ -21,16 +21,10 @@ package appeng.items;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 public abstract class AEBaseItem extends Item
@@ -76,24 +70,6 @@ public abstract class AEBaseItem extends Item
 	protected void getCheckedSubItems( final Item sameItem, final CreativeTabs creativeTab, final List<ItemStack> itemStacks )
 	{
 		super.getSubItems( sameItem, creativeTab, itemStacks );
-	}
-
-	/**
-	 * During registration of the item in the registry, this method is used to determine which models need to be registered for the item to be
-	 * rendered. If your item subclass requires more than just the default, override this method and add them to the list, or replace it entirely.
-	 */
-	@SideOnly( Side.CLIENT )
-	public List<ResourceLocation> getItemVariants() {
-		return Lists.newArrayList( getRegistryName() );
-	}
-
-	/**
-	 * If this item requires special logic to select the model for rendering, this method can be overriden to return that selection logic.
-	 * Return null to use the standard logic.
-	 */
-	@SideOnly( Side.CLIENT )
-	public ItemMeshDefinition getItemMeshDefinition() {
-		return null;
 	}
 
 }

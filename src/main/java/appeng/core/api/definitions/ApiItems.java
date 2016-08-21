@@ -31,9 +31,10 @@ import appeng.debug.ToolMeteoritePlacer;
 import appeng.debug.ToolReplicatorCard;
 import appeng.items.materials.MaterialType;
 import appeng.items.misc.ItemCrystalSeed;
+import appeng.items.misc.ItemCrystalSeedRendering;
 import appeng.items.misc.ItemEncodedPattern;
 import appeng.items.misc.ItemPaintBall;
-import appeng.items.misc.PaintBallRenderingCustomizer;
+import appeng.items.misc.ItemPaintBallRendering;
 import appeng.items.parts.ItemFacade;
 import appeng.items.storage.ItemBasicStorageCell;
 import appeng.items.storage.ItemCreativeStorageCell;
@@ -124,8 +125,8 @@ public final class ApiItems implements IItems
 		this.certusQuartzShovel = certusTools.item( "certus_quartz_spade", () -> new ToolQuartzSpade( AEFeature.CertusQuartzTools ) ).addFeatures( AEFeature.QuartzSpade ).build();
 		this.certusQuartzPick = certusTools.item( "certus_quartz_pickaxe", () -> new ToolQuartzPickaxe( AEFeature.CertusQuartzTools ) ).addFeatures( AEFeature.QuartzPickaxe ).build();
 		this.certusQuartzSword = certusTools.item( "certus_quartz_sword", () -> new ToolQuartzSword( AEFeature.CertusQuartzTools ) ).addFeatures( AEFeature.QuartzSword ).build();
-		this.certusQuartzWrench = certusTools.item( "certus_quartz_wrench", () -> new ToolQuartzWrench() ).addFeatures( AEFeature.QuartzWrench ).build();
-		this.certusQuartzKnife = certusTools.item( "certus_quartz_knife", () -> new ToolQuartzCuttingKnife( AEFeature.CertusQuartzTools ) ).addFeatures( AEFeature.QuartzKnife ).build();
+		this.certusQuartzWrench = certusTools.item( "certus_quartz_wrench", ToolQuartzWrench::new ).addFeatures( AEFeature.QuartzWrench ).build();
+		this.certusQuartzKnife = certusTools.item( "certus_quartz_cutting_knife", () -> new ToolQuartzCuttingKnife( AEFeature.CertusQuartzTools ) ).addFeatures( AEFeature.QuartzKnife ).build();
 
 		FeatureFactory netherTools = registry.features( AEFeature.NetherQuartzTools );
 		this.netherQuartzAxe = netherTools.item( "nether_quartz_axe", () -> new ToolQuartzAxe( AEFeature.NetherQuartzTools ) ).addFeatures( AEFeature.QuartzAxe ).build();
@@ -133,8 +134,8 @@ public final class ApiItems implements IItems
 		this.netherQuartzShovel = netherTools.item( "nether_quartz_spade", () -> new ToolQuartzSpade( AEFeature.NetherQuartzTools ) ).addFeatures( AEFeature.QuartzSpade ).build();
 		this.netherQuartzPick = netherTools.item( "nether_quartz_pickaxe", () -> new ToolQuartzPickaxe( AEFeature.NetherQuartzTools ) ).addFeatures( AEFeature.QuartzPickaxe ).build();
 		this.netherQuartzSword = netherTools.item( "nether_quartz_sword", () -> new ToolQuartzSword( AEFeature.NetherQuartzTools ) ).addFeatures( AEFeature.QuartzSword ).build();
-		this.netherQuartzWrench = netherTools.item( "nether_quartz_wrench", () -> new ToolQuartzWrench() ).addFeatures( AEFeature.QuartzWrench ).build();
-		this.netherQuartzKnife = netherTools.item( "nether_quartz_knife", () -> new ToolQuartzCuttingKnife( AEFeature.NetherQuartzTools ) ).addFeatures( AEFeature.QuartzKnife ).build();
+		this.netherQuartzWrench = netherTools.item( "nether_quartz_wrench", ToolQuartzWrench::new ).addFeatures( AEFeature.QuartzWrench ).build();
+		this.netherQuartzKnife = netherTools.item( "nether_quartz_cutting_knife", () -> new ToolQuartzCuttingKnife( AEFeature.NetherQuartzTools ) ).addFeatures( AEFeature.QuartzKnife ).build();
 
 		FeatureFactory powerTools = registry.features( AEFeature.PoweredTools );
 		this.entropyManipulator = powerTools.item( "entropy_manipulator", ToolEntropyManipulator::new ).addFeatures( AEFeature.EntropyManipulator ).build();
@@ -166,14 +167,16 @@ public final class ApiItems implements IItems
 				.features( AEFeature.Facades )
 				.creativeTab( CreativeTabFacade.instance )
 				.build();
-		this.crystalSeed = registry.item( "crystal_seed", ItemCrystalSeed::new ).build();
+		this.crystalSeed = registry.item( "crystal_seed", ItemCrystalSeed::new )
+				.rendering( new ItemCrystalSeedRendering() )
+				.build();
 
 		// rv1
 		this.encodedPattern = registry.item( "encoded_pattern", ItemEncodedPattern::new ).features( AEFeature.Patterns ).build();
 
 		this.paintBall = registry.item( "paint_ball", ItemPaintBall::new )
 				.features( AEFeature.PaintBalls )
-				.rendering( new PaintBallRenderingCustomizer() )
+				.rendering( new ItemPaintBallRendering() )
 				.build();
 		this.coloredPaintBall = registry.colored( this.paintBall, 0 );
 		this.coloredLumenPaintBall = registry.colored( this.paintBall, 20 );

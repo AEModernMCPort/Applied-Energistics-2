@@ -93,19 +93,14 @@ public class BlockCableBus extends AEBaseTileBlock
 	@Override
 	protected BlockStateContainer createBlockState()
 	{
-		return new ExtendedBlockState( this, new IProperty[0], new IUnlistedProperty[] { cableBus } );
-	}
-
-	@Override
-	public IBlockState getActualState( IBlockState state, IBlockAccess world, BlockPos pos )
-	{
-		return state;
+		return new ExtendedBlockState( this, new IProperty[0], new IUnlistedProperty[] { FORWARD, UP, cableBus } );
 	}
 
 	@Override
 	public IBlockState getExtendedState( IBlockState state, IBlockAccess world, BlockPos pos )
 	{
-		return ( (IExtendedBlockState) state ).withProperty( cableBus, ( (TileCableBus) world.getTileEntity( pos ) ).getCableBus() );
+		return ( (IExtendedBlockState) super.getExtendedState( state, world, pos ) )
+				.withProperty( cableBus, ( (TileCableBus) world.getTileEntity( pos ) ).getCableBus() );
 	}
 
 	@Override

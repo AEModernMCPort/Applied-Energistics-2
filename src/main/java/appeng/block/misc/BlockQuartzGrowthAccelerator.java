@@ -68,7 +68,7 @@ public class BlockQuartzGrowthAccelerator extends AEBaseTileBlock
 	@Override
 	protected IProperty[] getAEStates()
 	{
-		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP, POWERED };
+		return new IProperty[] { POWERED };
 	}
 
 	@SideOnly( Side.CLIENT )

@@ -22,23 +22,16 @@ package appeng.items.misc;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.AEApi;
 import appeng.api.definitions.IMaterials;
@@ -55,8 +48,8 @@ import appeng.util.Platform;
 public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 {
 
-	private static final int LEVEL_OFFSET = 200;
-	private static final int SINGLE_OFFSET = LEVEL_OFFSET * 3;
+	static final int LEVEL_OFFSET = 200;
+	static final int SINGLE_OFFSET = LEVEL_OFFSET * 3;
 
 	public static final int CERTUS = 0;
 	public static final int NETHER = SINGLE_OFFSET;
@@ -91,7 +84,7 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 		return itemStack;
 	}
 
-	private static int getProgress( final ItemStack is )
+	static int getProgress( final ItemStack is )
 	{
 		if( is.hasTagCompound() )
 		{
@@ -254,74 +247,6 @@ public class ItemCrystalSeed extends AEBaseItem implements IGrowableCrystal
 		itemStacks.add( newStyle( new ItemStack( this, 1, LEVEL_OFFSET * 2 + CERTUS ) ) );
 		itemStacks.add( newStyle( new ItemStack( this, 1, LEVEL_OFFSET * 2 + NETHER ) ) );
 		itemStacks.add( newStyle( new ItemStack( this, 1, LEVEL_OFFSET * 2 + FLUIX ) ) );
-	}
-
-	private static final ModelResourceLocation[] MODELS_CERTUS = {
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Certus" ),
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Certus2" ),
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Certus3" )
-	};
-	private static final ModelResourceLocation[] MODELS_FLUIX = {
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Fluix" ),
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Fluix2" ),
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Fluix3" )
-	};
-	private static final ModelResourceLocation[] MODELS_NETHER = {
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Nether" ),
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Nether2" ),
-		new ModelResourceLocation( "appliedenergistics2:ItemCrystalSeed.Nether3" )
-	};
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public List<ResourceLocation> getItemVariants()
-	{
-		return ImmutableList.<ResourceLocation>builder().add( MODELS_CERTUS ).add( MODELS_FLUIX ).add( MODELS_NETHER ).build();
-	}
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public ItemMeshDefinition getItemMeshDefinition()
-	{
-		return is -> {
-			int damage = getProgress( is );
-
-			// Split the damage value into crystal type and growth level
-			int type = damage / SINGLE_OFFSET;
-			int level = ( damage % SINGLE_OFFSET ) / LEVEL_OFFSET;
-
-			// Determine which list of models to use based on the type of crystal
-			ModelResourceLocation[] models;
-			switch( type )
-			{
-				case 0:
-					models = MODELS_CERTUS;
-					break;
-				case 1:
-					models = MODELS_NETHER;
-					break;
-				case 2:
-					models = MODELS_FLUIX;
-					break;
-				default:
-					// We use this as the fallback for broken items
-					models = MODELS_CERTUS;
-					break;
-			}
-
-			// Return one of the 3 models based on the level
-			if( level < 0 )
-			{
-				level = 0;
-			}
-			else if( level >= models.length )
-			{
-				level = models.length - 1;
-			}
-
-			return models[level];
-
-		};
 	}
 
 }

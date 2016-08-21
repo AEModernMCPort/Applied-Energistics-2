@@ -25,7 +25,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
@@ -51,12 +50,6 @@ public class BlockLightDetector extends AEBaseTileBlock implements IOrientableBl
 		this.setOpaque( false );
 
 		this.setTileEntity( TileLightDetector.class );
-	}
-
-	@Override
-	protected IProperty[] getAEStates()
-	{
-		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP };
 	}
 
 	@Override

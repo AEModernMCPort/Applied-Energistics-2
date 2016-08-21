@@ -70,7 +70,7 @@ public final class BlockVibrationChamber extends AEBaseTileBlock
 	@Override
 	protected IProperty[] getAEStates()
 	{
-		return new IProperty[]{ AE_BLOCK_FORWARD, AE_BLOCK_UP, ACTIVE };
+		return new IProperty[]{ ACTIVE };
 	}
 
 	@Override

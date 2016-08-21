@@ -3,6 +3,7 @@ package appeng.block.networking;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.block.AEBaseItemBlockChargeable;
@@ -12,26 +13,33 @@ import appeng.bootstrap.IItemRendering;
 import appeng.tile.networking.TileEnergyCell;
 
 
-public class BlockEnergyCellRenderCustomizer extends BlockRenderingCustomizer
+public class BlockEnergyCellRendering extends BlockRenderingCustomizer
 {
+
+	private final ResourceLocation baseModel;
+
+	public BlockEnergyCellRendering( ResourceLocation baseModel )
+	{
+		this.baseModel = baseModel;
+	}
 
 	@Override
 	public void customize( IBlockRendering rendering, IItemRendering itemRendering )
 	{
-		itemRendering.meshDefinition( BlockEnergyCellRenderCustomizer::getItemModel );
+		itemRendering.meshDefinition( this::getItemModel );
+		// Note: Since we use the block models, we dont need to register custom variants
 	}
 
 	/**
 	 * Determines which version of the energy cell model should be used depending on the fill factor
 	 * of the item stack.
 	 */
-	private static ModelResourceLocation getItemModel( ItemStack is )
+	private ModelResourceLocation getItemModel( ItemStack is )
 	{
 		double fillFactor = getFillFactor( is );
 
 		int storageLevel = TileEnergyCell.getStorageLevelFromFillFactor( fillFactor );
-
-		return new ModelResourceLocation( "appliedenergistics2:tile.BlockEnergyCell", "fullness=" + storageLevel );
+		return new ModelResourceLocation( baseModel, "fullness=" + storageLevel );
 	}
 
 	/**

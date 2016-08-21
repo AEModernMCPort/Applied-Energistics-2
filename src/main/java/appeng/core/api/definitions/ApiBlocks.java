@@ -21,6 +21,7 @@ package appeng.core.api.definitions;
 
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -56,7 +57,7 @@ import appeng.block.networking.BlockCreativeEnergyCell;
 import appeng.block.networking.BlockDenseEnergyCell;
 import appeng.block.networking.BlockEnergyAcceptor;
 import appeng.block.networking.BlockEnergyCell;
-import appeng.block.networking.BlockEnergyCellRenderCustomizer;
+import appeng.block.networking.BlockEnergyCellRendering;
 import appeng.block.networking.BlockWireless;
 import appeng.block.networking.CableBusColor;
 import appeng.block.networking.CableModelCustomizer;
@@ -75,6 +76,7 @@ import appeng.bootstrap.BlockRenderingCustomizer;
 import appeng.bootstrap.FeatureFactory;
 import appeng.bootstrap.IBlockRendering;
 import appeng.bootstrap.IItemRendering;
+import appeng.core.AppEng;
 import appeng.core.features.AEFeature;
 import appeng.debug.BlockChunkloader;
 import appeng.debug.BlockCubeGenerator;
@@ -253,12 +255,12 @@ public final class ApiBlocks implements IBlocks
 		this.quartzGrowthAccelerator = registry.block( "quartz_growth_accelerator", BlockQuartzGrowthAccelerator::new ).build();
 		this.energyCell = registry.block( "energy_cell", BlockEnergyCell::new )
 				.item( AEBaseItemBlockChargeable::new )
-				.rendering( new BlockEnergyCellRenderCustomizer() )
+				.rendering( new BlockEnergyCellRendering( new ResourceLocation( AppEng.MOD_ID, "energy_cell" ) ) )
 				.build();
 		this.energyCellDense = registry.block( "dense_energy_cell", BlockDenseEnergyCell::new )
 				.features( AEFeature.DenseEnergyCells )
 				.item( AEBaseItemBlockChargeable::new )
-				.rendering( new BlockEnergyCellRenderCustomizer() )
+				.rendering( new BlockEnergyCellRendering( new ResourceLocation( AppEng.MOD_ID, "dense_energy_cell" ) ) )
 				.build();
 		this.energyCellCreative = registry.block( "creative_energy_cell", BlockCreativeEnergyCell::new )
 				.features( AEFeature.Creative )
@@ -286,14 +288,14 @@ public final class ApiBlocks implements IBlocks
 		this.lightDetector = registry.block( "light_detector", BlockLightDetector::new ).features( AEFeature.LightDetector ).build();
 		this.paint = registry.block( "paint", BlockPaint::new ).features( AEFeature.PaintBalls ).build();
 
-		this.skyStoneStair = makeStairs( registry, this.skyStone() );
-		this.skyStoneBlockStair = makeStairs( registry, this.skyStoneBlock() );
-		this.skyStoneBrickStair = makeStairs( registry, this.skyStoneBrick() );
-		this.skyStoneSmallBrickStair = makeStairs( registry, this.skyStoneSmallBrick() );
-		this.fluixStair = makeStairs( registry, this.fluix() );
-		this.quartzStair = makeStairs( registry, this.quartz() );
-		this.chiseledQuartzStair = makeStairs( registry, this.quartzChiseled() );
-		this.quartzPillarStair = makeStairs( registry, this.quartzPillar() );
+		this.skyStoneStair = makeStairs( "stair_skystone_stone", registry, this.skyStone() );
+		this.skyStoneBlockStair = makeStairs( "stair_skystone_block", registry, this.skyStoneBlock() );
+		this.skyStoneBrickStair = makeStairs( "stair_skystone_brick", registry, this.skyStoneBrick() );
+		this.skyStoneSmallBrickStair = makeStairs( "stair_skystone_brick_small", registry, this.skyStoneSmallBrick() );
+		this.fluixStair = makeStairs( "stair_fluix", registry, this.fluix() );
+		this.quartzStair = makeStairs( "stair_quartz_certus", registry, this.quartz() );
+		this.chiseledQuartzStair = makeStairs( "stair_quartz_certus_chiseled", registry, this.quartzChiseled() );
+		this.quartzPillarStair = makeStairs( "stair_quartz_certus_pillar", registry, this.quartzPillar() );
 
 		this.multiPart = registry.block( "multipart_block", BlockCableBus::new )
 				.rendering( new BlockRenderingCustomizer()
@@ -334,9 +336,9 @@ public final class ApiBlocks implements IBlocks
 		this.cubeGenerator = registry.block( "debug_cube_gen", BlockCubeGenerator::new ).features( AEFeature.UnsupportedDeveloperTools, AEFeature.Creative ).build();
 	}
 
-	private static IBlockDefinition makeStairs( FeatureFactory registry, IBlockDefinition block )
+	private static IBlockDefinition makeStairs( String registryName, FeatureFactory registry, IBlockDefinition block )
 	{
-		return registry.block( "stair_" + block.identifier(), () -> new BlockStairCommon( block.maybeBlock().get(), block.identifier() ) )
+		return registry.block( registryName, () -> new BlockStairCommon( block.maybeBlock().get(), block.identifier() ) )
 				.features( AEFeature.DecorativeQuartzBlocks )
 				.build();
 	}

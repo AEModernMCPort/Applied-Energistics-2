@@ -83,7 +83,7 @@ public class BlockEnergyCell extends AEBaseTileBlock
 	@Override
 	protected IProperty[] getAEStates()
 	{
-		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP, ENERGY_STORAGE };
+		return new IProperty[] { ENERGY_STORAGE };
 	}
 
 }

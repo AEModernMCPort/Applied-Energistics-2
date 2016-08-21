@@ -21,16 +21,9 @@ package appeng.items.misc;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.util.AEColor;
 import appeng.core.localization.GuiText;
@@ -94,28 +87,10 @@ public class ItemPaintBall extends AEBaseItem
 		}
 	}
 
-	public boolean isLumen( final ItemStack is )
+	public static boolean isLumen( final ItemStack is )
 	{
 		final int dmg = is.getItemDamage();
 		return dmg >= DAMAGE_THRESHOLD;
 	}
 
-	private static final ModelResourceLocation MODEL_NORMAL = new ModelResourceLocation( "appliedenergistics2:ItemPaintBall" );
-	private static final ModelResourceLocation MODEL_SHIMMER = new ModelResourceLocation( "appliedenergistics2:ItemPaintBallShimmer" );
-
-	@Override
-	public List<ResourceLocation> getItemVariants()
-	{
-		return ImmutableList.of(
-				MODEL_NORMAL,
-				MODEL_SHIMMER
-		);
-	}
-
-	@Override
-	@SideOnly( Side.CLIENT )
-	public ItemMeshDefinition getItemMeshDefinition()
-	{
-		return is -> isLumen( is ) ? MODEL_SHIMMER : MODEL_NORMAL;
-	}
 }
