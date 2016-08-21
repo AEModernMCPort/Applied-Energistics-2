@@ -37,14 +37,13 @@ import net.minecraft.world.World;
 
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
-import appeng.block.IHasSpecialItemModel;
 import appeng.core.sync.GuiBridge;
 import appeng.helpers.ICustomCollision;
 import appeng.tile.storage.TileSkyChest;
 import appeng.util.Platform;
 
 
-public class BlockSkyChest extends AEBaseTileBlock implements ICustomCollision, IHasSpecialItemModel
+public class BlockSkyChest extends AEBaseTileBlock implements ICustomCollision
 {
 
 	public enum SkyChestType

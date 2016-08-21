@@ -25,7 +25,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 
 
-public abstract class AEBaseStairBlock extends BlockStairs implements IHasSpecialItemModel
+public abstract class AEBaseStairBlock extends BlockStairs
 {
 
 	protected AEBaseStairBlock( final Block block, final String type )
