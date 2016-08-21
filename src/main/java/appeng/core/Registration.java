@@ -40,11 +40,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 
-import appeng.api.AEApi;
-import appeng.api.IAppEngApi;
 import appeng.api.config.Upgrades;
 import appeng.api.definitions.IBlocks;
-import appeng.api.definitions.IDefinitions;
 import appeng.api.definitions.IItems;
 import appeng.api.definitions.IParts;
 import appeng.api.features.IRecipeHandlerRegistry;
@@ -330,9 +327,9 @@ public final class Registration
 	{
 		this.registerSpatial( true );
 
-		final IAppEngApi api = AEApi.instance();
+		final Api api = Api.INSTANCE;
 		final IRegistryContainer registries = api.registries();
-		final IDefinitions definitions = api.definitions();
+		ApiDefinitions definitions = api.definitions();
 		final IParts parts = definitions.parts();
 		final IBlocks blocks = definitions.blocks();
 		final IItems items = definitions.items();
@@ -349,6 +346,8 @@ public final class Registration
 		{
 			( (BlockCableBus) block ).setupTile();
 		}
+
+		definitions.getRegistry().getBootstrapComponents().forEach( b -> b.postInitialize( event.getSide() ) );
 
 		// Interface
 		Upgrades.CRAFTING.registerItem( parts.iface(), 1 );

@@ -19,101 +19,26 @@
 package appeng.core.features;
 
 
-import java.lang.reflect.Constructor;
-
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ObjectArrays;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 import appeng.api.definitions.IBlockDefinition;
-import appeng.block.AEBaseBlock;
 
 
 public class BlockDefinition extends ItemDefinition implements IBlockDefinition
 {
 	private final Optional<Block> block;
 
-	public BlockDefinition( String registryName, Block block )
+	public BlockDefinition( String registryName, Block block, ItemBlock item )
 	{
-		super( registryName, constructItemFromBlock( block ) );
+		super( registryName, item );
 		this.block = Optional.fromNullable( block );
-	}
-
-	/**
-	 * Create an {@link ItemBlock} from a {@link Block} to register it later as {@link Item}
-	 *
-	 * @param block source block
-	 *
-	 * @return item from block
-	 */
-	private static Item constructItemFromBlock( Block block )
-	{
-		if( block == null )
-		{
-			return null;
-		}
-		return constructItemBlock( block, getItemBlockConstructor( block ) );
-	}
-
-	/**
-	 * Returns the constructor to use.
-	 *
-	 * Either {@link ItemBlock} or in case of an {@link AEBaseBlock} the class returned by
-	 * AEBaseBlock.getItemBlockClass().
-	 *
-	 * @param block the block used to determine the used constructor.
-	 *
-	 * @return a {@link Class} extending ItemBlock
-	 */
-	private static Class<? extends ItemBlock> getItemBlockConstructor( final Block block )
-	{
-		if( block instanceof AEBaseBlock )
-		{
-			final AEBaseBlock aeBaseBlock = (AEBaseBlock) block;
-			return aeBaseBlock.getItemBlockClass();
-		}
-
-		return ItemBlock.class;
-	}
-
-	/**
-	 * Actually construct an instance of {@link Item} with the block and earlier determined constructor.
-	 *
-	 * Shamelessly stolen from the forge magic.
-	 *
-	 * TODO: throw an exception instead of returning null? As this could cause issue later on.
-	 *
-	 * @param block the block to create the {@link ItemBlock} from
-	 * @param itemclass the class used to construct it.
-	 *
-	 * @return an {@link Item} for the block. Actually always a sub type of {@link ItemBlock}
-	 */
-	private static Item constructItemBlock( final Block block, final Class<? extends ItemBlock> itemclass )
-	{
-		try
-		{
-			final Object[] itemCtorArgs = {};
-			final Class<?>[] ctorArgClasses = new Class<?>[itemCtorArgs.length + 1];
-			ctorArgClasses[0] = Block.class;
-			for( int idx = 1; idx < ctorArgClasses.length; idx++ )
-			{
-				ctorArgClasses[idx] = itemCtorArgs[idx - 1].getClass();
-			}
-
-			final Constructor<? extends ItemBlock> itemCtor = itemclass.getConstructor( ctorArgClasses );
-			return itemCtor.newInstance( ObjectArrays.concat( block, itemCtorArgs ) );
-		}
-		catch( final Throwable t )
-		{
-			return null;
-		}
 	}
 
 	@Override
@@ -141,5 +66,4 @@ public class BlockDefinition extends ItemDefinition implements IBlockDefinition
 	{
 		return this.isEnabled() && world.getBlockState( pos ).getBlock() == this.block.get();
 	}
-
 }

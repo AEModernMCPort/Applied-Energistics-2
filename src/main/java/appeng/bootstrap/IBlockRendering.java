@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -15,19 +16,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Allows for client-side rendering to be customized in the context of block/item registration.
  */
-public interface IRenderingCustomizer
+public interface IBlockRendering
 {
 
 	@SideOnly( Side.CLIENT )
-	IRenderingCustomizer modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer );
+	IBlockRendering modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer );
 
 	@SideOnly( Side.CLIENT )
-	IRenderingCustomizer blockColor( IBlockColor blockColor );
+	IBlockRendering blockColor( IBlockColor blockColor );
 
 	@SideOnly( Side.CLIENT )
-	IRenderingCustomizer itemColor( IItemColor itemColor );
+	IBlockRendering itemColor( IItemColor itemColor );
 
 	@SideOnly( Side.CLIENT )
-	IRenderingCustomizer tesr( TileEntitySpecialRenderer<?> tesr );
+	IBlockRendering stateMapper( IStateMapper mapper );
+
+	@SideOnly( Side.CLIENT )
+	IBlockRendering tesr( TileEntitySpecialRenderer<?> tesr );
 
 }

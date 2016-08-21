@@ -23,6 +23,7 @@ import appeng.api.definitions.IItemDefinition;
 import appeng.api.definitions.IItems;
 import appeng.api.util.AEColoredItemDefinition;
 import appeng.bootstrap.FeatureFactory;
+import appeng.core.CreativeTabFacade;
 import appeng.core.features.AEFeature;
 import appeng.debug.ToolDebugCard;
 import appeng.debug.ToolEraser;
@@ -32,6 +33,7 @@ import appeng.items.materials.MaterialType;
 import appeng.items.misc.ItemCrystalSeed;
 import appeng.items.misc.ItemEncodedPattern;
 import appeng.items.misc.ItemPaintBall;
+import appeng.items.misc.PaintBallRenderingCustomizer;
 import appeng.items.parts.ItemFacade;
 import appeng.items.storage.ItemBasicStorageCell;
 import appeng.items.storage.ItemCreativeStorageCell;
@@ -160,13 +162,19 @@ public final class ApiItems implements IItems
 		this.spatialCell16 = spatialCells.item( "spatial_storage_cell_16_cubed", () -> new ItemSpatialStorageCell( 16 ) ).build();
 		this.spatialCell128 = spatialCells.item( "spatial_storage_cell_128_cubed", () -> new ItemSpatialStorageCell( 128 ) ).build();
 
-		this.facade = registry.item( "facade", ItemFacade::new ).features( AEFeature.Facades ).build();
+		this.facade = registry.item( "facade", ItemFacade::new )
+				.features( AEFeature.Facades )
+				.creativeTab( CreativeTabFacade.instance )
+				.build();
 		this.crystalSeed = registry.item( "crystal_seed", ItemCrystalSeed::new ).build();
 
 		// rv1
 		this.encodedPattern = registry.item( "encoded_pattern", ItemEncodedPattern::new ).features( AEFeature.Patterns ).build();
 
-		this.paintBall = registry.item( "paint_ball", ItemPaintBall::new ).features( AEFeature.PaintBalls ).build();
+		this.paintBall = registry.item( "paint_ball", ItemPaintBall::new )
+				.features( AEFeature.PaintBalls )
+				.rendering( new PaintBallRenderingCustomizer() )
+				.build();
 		this.coloredPaintBall = registry.colored( this.paintBall, 0 );
 		this.coloredLumenPaintBall = registry.colored( this.paintBall, 20 );
 

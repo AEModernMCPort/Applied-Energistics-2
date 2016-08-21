@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.google.common.base.Optional;
 
+import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 
 import appeng.api.definitions.ITileDefinition;
@@ -34,9 +35,9 @@ public final class TileDefinition extends BlockDefinition implements ITileDefini
 
 	private final Optional<AEBaseTileBlock> block;
 
-	public TileDefinition( @Nonnull String registryName, AEBaseTileBlock block )
+	public TileDefinition( @Nonnull String registryName, AEBaseTileBlock block, ItemBlock item )
 	{
-		super( registryName, block );
+		super( registryName, block, item );
 		this.block = Optional.fromNullable( block );
 	}
 
@@ -45,5 +46,4 @@ public final class TileDefinition extends BlockDefinition implements ITileDefini
 	{
 		return this.block.transform( AEBaseTileBlock::getTileEntityClass );
 	}
-
 }

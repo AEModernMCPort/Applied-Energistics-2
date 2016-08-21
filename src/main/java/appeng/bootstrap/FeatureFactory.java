@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import appeng.api.definitions.IItemDefinition;
 import appeng.api.util.AEColor;
 import appeng.api.util.AEColoredItemDefinition;
-import appeng.block.AEBaseTileBlock;
 import appeng.bootstrap.components.InitComponent;
 import appeng.bootstrap.components.ModelOverrideComponent;
 import appeng.bootstrap.components.PostInitComponent;
@@ -57,17 +56,12 @@ public class FeatureFactory
 		}
 	}
 
-	public BlockDefinitionBuilder block( String id, Supplier<Block> block )
+	public IBlockBuilder block( String id, Supplier<Block> block )
 	{
 		return new BlockDefinitionBuilder( this, id, block ).features( defaultFeatures );
 	}
 
-	public TileDefinitionBuilder tile( String id, Supplier<AEBaseTileBlock> block )
-	{
-		return new TileDefinitionBuilder( this, id, block ).features( defaultFeatures );
-	}
-
-	public ItemDefinitionBuilder item( String id, Supplier<Item> item )
+	public IItemBuilder item( String id, Supplier<Item> item )
 	{
 		return new ItemDefinitionBuilder( this, id, item ).features( defaultFeatures );
 	}
@@ -118,4 +112,5 @@ public class FeatureFactory
 	{
 		return bootstrapComponents;
 	}
+
 }

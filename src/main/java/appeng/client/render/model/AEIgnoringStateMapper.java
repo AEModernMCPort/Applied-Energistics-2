@@ -3,11 +3,11 @@ package appeng.client.render.model;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.common.collect.Maps;
 
@@ -18,6 +18,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +28,12 @@ public class AEIgnoringStateMapper extends StateMapperBase implements IResourceM
 {
 
 	private final ResourceLocation ignoredRL;
-	private final List<String> ignored = new ArrayList<>();
+	private final Set<String> ignored = new HashSet<>();
+
+	public AEIgnoringStateMapper()
+	{
+		this.ignoredRL = null;
+	}
 
 	public AEIgnoringStateMapper( ResourceLocation ignoredRL )
 	{
@@ -37,16 +43,19 @@ public class AEIgnoringStateMapper extends StateMapperBase implements IResourceM
 	@Override
 	public void onResourceManagerReload( IResourceManager resourceManager )
 	{
-		try
+		ignored.clear();
+		ignored.add( "forward" );
+		ignored.add( "up" );
+		if( ignoredRL != null )
 		{
-			ignored.clear();
-			ignored.add( "forward" );
-			ignored.add( "up" );
-			ignored.addAll( IOUtils.readLines( resourceManager.getResource( ignoredRL ).getInputStream() ) );
-		}
-		catch( IOException e )
-		{
-			// There's no ignore file, so everything is ok.
+			try( IResource resource = resourceManager.getResource( ignoredRL ) )
+			{
+				ignored.addAll( IOUtils.readLines( resource.getInputStream() ) );
+			}
+			catch( IOException e )
+			{
+				// There's no ignore file, so everything is ok.
+			}
 		}
 	}
 
@@ -62,7 +71,6 @@ public class AEIgnoringStateMapper extends StateMapperBase implements IResourceM
 				it.remove();
 			}
 		}
-		return new ModelResourceLocation( (ResourceLocation) Block.REGISTRY.getNameForObject( state.getBlock() ), this.getPropertyString( map ) );
+		return new ModelResourceLocation( Block.REGISTRY.getNameForObject( state.getBlock() ), this.getPropertyString( map ) );
 	}
-
 }

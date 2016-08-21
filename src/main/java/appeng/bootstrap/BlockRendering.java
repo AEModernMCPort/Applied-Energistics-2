@@ -6,6 +6,7 @@ import java.util.function.BiFunction;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -17,15 +18,17 @@ import appeng.bootstrap.components.BlockColorRegistration;
 import appeng.bootstrap.components.ItemColorRegistration;
 import appeng.bootstrap.components.ItemModelRegistrationComponent;
 import appeng.bootstrap.components.ItemVariantsComponent;
+import appeng.bootstrap.components.StateMapperComponent;
 import appeng.bootstrap.components.TesrComponent;
+import appeng.client.render.model.AEIgnoringStateMapper;
 import appeng.client.render.model.CachingRotatingBakedModel;
 
 
-public class RenderingCustomizer implements IRenderingCustomizer
+class BlockRendering implements IBlockRendering
 {
 
 	@SideOnly( Side.CLIENT )
-	BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> modelCustomizer;
+	private BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> modelCustomizer;
 
 	@SideOnly( Side.CLIENT )
 	private IBlockColor blockColor;
@@ -37,7 +40,10 @@ public class RenderingCustomizer implements IRenderingCustomizer
 	private TileEntitySpecialRenderer<?> tesr;
 
 	@SideOnly( Side.CLIENT )
-	public IRenderingCustomizer modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer )
+	private IStateMapper stateMapper;
+
+	@SideOnly( Side.CLIENT )
+	public IBlockRendering modelCustomizer( BiFunction<ModelResourceLocation, IBakedModel, IBakedModel> customizer )
 	{
 		modelCustomizer = customizer;
 		return this;
@@ -45,7 +51,7 @@ public class RenderingCustomizer implements IRenderingCustomizer
 
 	@SideOnly( Side.CLIENT )
 	@Override
-	public IRenderingCustomizer blockColor( IBlockColor blockColor )
+	public IBlockRendering blockColor( IBlockColor blockColor )
 	{
 		this.blockColor = blockColor;
 		return this;
@@ -53,7 +59,7 @@ public class RenderingCustomizer implements IRenderingCustomizer
 
 	@SideOnly( Side.CLIENT )
 	@Override
-	public IRenderingCustomizer itemColor( IItemColor itemColor )
+	public IBlockRendering itemColor( IItemColor itemColor )
 	{
 		this.itemColor = itemColor;
 		return this;
@@ -61,9 +67,17 @@ public class RenderingCustomizer implements IRenderingCustomizer
 
 	@SideOnly( Side.CLIENT )
 	@Override
-	public IRenderingCustomizer tesr( TileEntitySpecialRenderer<?> tesr )
+	public IBlockRendering tesr( TileEntitySpecialRenderer<?> tesr )
 	{
 		this.tesr = tesr;
+		return this;
+	}
+
+	@SideOnly( Side.CLIENT )
+	@Override
+	public IBlockRendering stateMapper( IStateMapper mapper )
+	{
+		this.stateMapper = mapper;
 		return this;
 	}
 
@@ -74,6 +88,10 @@ public class RenderingCustomizer implements IRenderingCustomizer
 
 		if( tesr != null )
 		{
+			if( tileEntityClass == null )
+			{
+				throw new IllegalStateException( "Tried to register a TESR for " + block + " even though no tile entity has been specified." );
+			}
 			registry.addBootstrapComponent( new TesrComponent( tileEntityClass, tesr ) );
 		}
 
@@ -94,6 +112,15 @@ public class RenderingCustomizer implements IRenderingCustomizer
 		if( itemColor != null )
 		{
 			registry.addBootstrapComponent( new ItemColorRegistration( item, itemColor ) );
+		}
+
+		if( stateMapper != null )
+		{
+			registry.addBootstrapComponent( new StateMapperComponent( block, stateMapper ) );
+		}
+		else
+		{
+			registry.addBootstrapComponent( new StateMapperComponent( block, new AEIgnoringStateMapper() ) );
 		}
 	}
 }
