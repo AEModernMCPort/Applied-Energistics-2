@@ -210,11 +210,11 @@ public final class ApiBlocks implements IBlocks
 
 		this.skyChest = registry.block( "sky_chest_stone", () -> new BlockSkyChest( SkyChestType.STONE ) )
 				.features( AEFeature.SkyStoneChests )
-				.rendering( new SkyChestRenderingCustomizer() )
+				.rendering( new SkyChestRenderingCustomizer( SkyChestType.STONE ) )
 				.build();
 		this.skyChestBlock = registry.block( "sky_chest_block", () -> new BlockSkyChest( SkyChestType.BLOCK ) )
 				.features( AEFeature.SkyStoneChests )
-				.rendering( new SkyChestRenderingCustomizer() )
+				.rendering( new SkyChestRenderingCustomizer( SkyChestType.BLOCK ) )
 				.build();
 
 		this.skyCompass = registry.block( "sky_compass", BlockSkyCompass::new ).features( AEFeature.MeteoriteCompass ).build();
@@ -302,7 +302,7 @@ public final class ApiBlocks implements IBlocks
 				{
 					@Override
 					@SideOnly( Side.CLIENT )
-					public void customize( IBlockRendering rendering, IItemRendering itemRendering  )
+					public void customize( IBlockRendering rendering, IItemRendering itemRendering )
 					{
 						rendering.modelCustomizer( new CableModelCustomizer()::customizeModel )
 								.blockColor( new CableBusColor() );
