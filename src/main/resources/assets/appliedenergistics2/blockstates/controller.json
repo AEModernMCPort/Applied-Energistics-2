@@ -2,7 +2,7 @@
     "multipart": [
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_block_offline"
+                "model": "appliedenergistics:controller/controller_block_offline"
             },
             "when": {
                 "state": "offline",
@@ -11,7 +11,7 @@
         },
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_block_online.uvl"
+                "model": "appliedenergistics:controller/controller_block_online.uvl"
             },
             "when": {
                 "state": "online",
@@ -20,7 +20,7 @@
         },
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_block_conflicted.uvl"
+                "model": "appliedenergistics:controller/controller_block_conflicted.uvl"
             },
             "when": {
                 "state": "conflicted",
@@ -29,7 +29,7 @@
         },
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_column_offline"
+                "model": "appliedenergistics:controller/controller_column_offline"
             },
             "when": {
                 "state": "offline",
@@ -38,7 +38,7 @@
         },
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_column_online.uvl"
+                "model": "appliedenergistics:controller/controller_column_online.uvl"
             },
             "when": {
                 "state": "online",
@@ -47,7 +47,7 @@
         },
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_column_conflicted.uvl"
+                "model": "appliedenergistics:controller/controller_column_conflicted.uvl"
             },
             "when": {
                 "state": "conflicted",
@@ -56,7 +56,7 @@
         },
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_inside_a"
+                "model": "appliedenergistics:controller/controller_inside_a"
             },
             "when": {
                 "state": "offline|online|conflicted",
@@ -65,7 +65,7 @@
         },
         {
             "apply": {
-                "model": "appliedenergistics2:controller/controller_inside_b"
+                "model": "appliedenergistics:controller/controller_inside_b"
             },
             "when": {
                 "state": "offline|online|conflicted",

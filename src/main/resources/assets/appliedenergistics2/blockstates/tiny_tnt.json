@@ -1,7 +1,7 @@
 {
     "variants": {
         "normal": {
-            "model": "appliedenergistics2:tiny_tnt"
+            "model": "appliedenergistics:tiny_tnt"
         }
     }
 }

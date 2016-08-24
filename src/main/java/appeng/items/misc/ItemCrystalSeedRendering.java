@@ -17,19 +17,19 @@ public class ItemCrystalSeedRendering extends ItemRenderingCustomizer
 {
 
 	private static final ModelResourceLocation[] MODELS_CERTUS = {
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_certus" ),
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_certus2" ),
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_certus3" )
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_certus" ),
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_certus2" ),
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_certus3" )
 	};
 	private static final ModelResourceLocation[] MODELS_FLUIX = {
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_fluix" ),
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_fluix2" ),
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_fluix3" )
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_fluix" ),
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_fluix2" ),
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_fluix3" )
 	};
 	private static final ModelResourceLocation[] MODELS_NETHER = {
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_nether" ),
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_nether2" ),
-			new ModelResourceLocation( "appliedenergistics2:crystal_seed_nether3" )
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_nether" ),
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_nether2" ),
+			new ModelResourceLocation( "appliedenergistics:crystal_seed_nether3" )
 	};
 
 	@Override

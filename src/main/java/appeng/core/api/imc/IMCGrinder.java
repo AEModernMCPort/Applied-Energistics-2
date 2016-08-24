@@ -28,7 +28,7 @@
  msg.setTag( "out", out );
  msg.setInteger( "turns", 8 );
 
- FMLInterModComms.sendMessage( "appliedenergistics2", "add-grindable", msg );
+ FMLInterModComms.sendMessage( "appliedenergistics", "add-grindable", msg );
 
  -- or --
 
@@ -46,7 +46,7 @@
  msg.setFloat( "chance", 0.5 );
  msg.setInteger( "turns", 8 );
 
- FMLInterModComms.sendMessage( "appliedenergistics2", "add-grindable", msg );
+ FMLInterModComms.sendMessage( "appliedenergistics", "add-grindable", msg );
 
  */
 

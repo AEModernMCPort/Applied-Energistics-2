@@ -1,13 +1,13 @@
 {
     "textures": {
-        "frame": "appliedenergistics2:parts/crafting_terminal/frame",
-        "sides": "appliedenergistics2:parts/crafting_terminal/sides",
-        "back": "appliedenergistics2:parts/crafting_terminal/back",
-        "l0": "appliedenergistics2:parts/crafting_terminal/l0",
-        "l1": "appliedenergistics2:parts/crafting_terminal/l1",
-        "l2": "appliedenergistics2:parts/crafting_terminal/l2",
-        "SidesStatus": "appliedenergistics2:parts/crafting_terminal/sidesstatus",
-        "Backlights": "appliedenergistics2:parts/crafting_terminal/backlights"
+        "frame": "appliedenergistics:parts/crafting_terminal/frame",
+        "sides": "appliedenergistics:parts/crafting_terminal/sides",
+        "back": "appliedenergistics:parts/crafting_terminal/back",
+        "l0": "appliedenergistics:parts/crafting_terminal/l0",
+        "l1": "appliedenergistics:parts/crafting_terminal/l1",
+        "l2": "appliedenergistics:parts/crafting_terminal/l2",
+        "SidesStatus": "appliedenergistics:parts/crafting_terminal/sidesstatus",
+        "Backlights": "appliedenergistics:parts/crafting_terminal/backlights"
     },
     "elements": [
         {

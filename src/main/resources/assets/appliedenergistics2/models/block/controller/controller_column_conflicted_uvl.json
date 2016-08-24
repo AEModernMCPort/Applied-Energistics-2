@@ -183,8 +183,8 @@
     ],
     "parent": "block/block",
     "textures": {
-        "block": "appliedenergistics2:blocks/controller_column_powered",
-        "lights": "appliedenergistics2:blocks/controller_column_conflict",
+        "block": "appliedenergistics:blocks/controller_column_powered",
+        "lights": "appliedenergistics:blocks/controller_column_conflict",
         "particle": "#block"
     }
 }

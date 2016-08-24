@@ -1,6 +1,6 @@
 [
     {
-        "modid":"appliedenergistics2",
+        "modid":"appliedenergistics",
         "name":"Applied Energistics 2",
         "description":"A Mod about Matter, Energy and using them to conquer the world..",
         "version":"${version}",
@@ -11,7 +11,7 @@
          "AlgorithmX2"
         ],
         "credits":"AlgorithmX2",
-        "logoFile":"assets/appliedenergistics2/meta/logo.png",
+        "logoFile":"assets/appliedenergistics/meta/logo.png",
         "screenshots":[]
     }
 ]

@@ -1,19 +1,19 @@
 {
     "variants": {
         "facing=east": {
-            "model": "appliedenergistics2:drive",
+            "model": "appliedenergistics:drive",
             "y": 270
         },
         "facing=north": {
-            "model": "appliedenergistics2:drive",
+            "model": "appliedenergistics:drive",
             "y": 180
         },
         "facing=south": {
-            "model": "appliedenergistics2:drive",
+            "model": "appliedenergistics:drive",
             "y": 0
         },
         "facing=west": {
-            "model": "appliedenergistics2:drive",
+            "model": "appliedenergistics:drive",
             "y": 90
         }
     }

@@ -1,6 +1,6 @@
 {
     "textures": {
-        "base": "appliedenergistics2:parts/cable/dense/${color}"
+        "base": "appliedenergistics:parts/cable/dense/${color}"
     },
     "elements": [
         {

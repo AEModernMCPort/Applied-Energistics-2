@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "appliedenergistics2:items/color_applicator_tip_medium"
+        "layer0": "appliedenergistics:items/color_applicator_tip_medium"
     }
 }

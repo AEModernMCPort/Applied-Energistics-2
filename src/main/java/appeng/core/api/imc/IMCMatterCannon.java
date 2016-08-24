@@ -25,7 +25,7 @@
  msg.setTag( "item", item );
  msg.setDouble( "weight", 32.0 );
 
- FMLInterModComms.sendMessage( "appliedenergistics2", "add-mattercannon-ammo", msg );
+ FMLInterModComms.sendMessage( "appliedenergistics", "add-mattercannon-ammo", msg );
 
  */
 

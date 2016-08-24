@@ -1,6 +1,6 @@
 {
     "textures": {
-        "0": "appliedenergistics2:blocks/quartz_glass_frame"
+        "0": "appliedenergistics:blocks/quartz_glass_frame"
     },
     "elements": [
         {

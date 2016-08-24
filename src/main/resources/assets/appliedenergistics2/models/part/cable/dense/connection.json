@@ -1,7 +1,7 @@
 {
     "textures": {
-        "base": "appliedenergistics2:parts/cable/dense/${color}",
-        "channels": "appliedenergistics2:parts/cable/dense/${channels}"
+        "base": "appliedenergistics:parts/cable/dense/${color}",
+        "channels": "appliedenergistics:parts/cable/dense/${channels}"
     },
     "elements": [
         {

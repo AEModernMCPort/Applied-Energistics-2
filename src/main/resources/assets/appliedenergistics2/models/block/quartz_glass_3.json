@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "appliedenergistics2:blocks/quartz_glass_3"
+        "all": "appliedenergistics:blocks/quartz_glass_3"
     }
 }

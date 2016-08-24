@@ -104,14 +104,14 @@ sourceSets {
 
         resources {
             srcDir "src/main/resources/"
-            include "assets/appliedenergistics2/recipes/**/*.recipe",
-                    "assets/appliedenergistics2/recipes/README.html",
-                    "assets/appliedenergistics2/lang/*.lang",
-                    "assets/appliedenergistics2/blockstates/**/*.json",
-                    "assets/appliedenergistics2/models/**/*.json",
-                    "assets/appliedenergistics2/textures/**/*.png",
-                    "assets/appliedenergistics2/textures/**/*.mcmeta",
-                    "assets/appliedenergistics2/meta/*",
+            include "assets/appliedenergistics/recipes/**/*.recipe",
+                    "assets/appliedenergistics/recipes/README.html",
+                    "assets/appliedenergistics/lang/*.lang",
+                    "assets/appliedenergistics/blockstates/**/*.json",
+                    "assets/appliedenergistics/models/**/*.json",
+                    "assets/appliedenergistics/textures/**/*.png",
+                    "assets/appliedenergistics/textures/**/*.mcmeta",
+                    "assets/appliedenergistics/meta/*",
                     "mcmod.info",
                     "pack.mcmeta"
         }

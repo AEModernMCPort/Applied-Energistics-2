@@ -1,7 +1,7 @@
 {
     "variants": {
         "normal": {
-            "model": "appliedenergistics2:charged_quartz_ore"
+            "model": "appliedenergistics:charged_quartz_ore"
         }
     }
 }

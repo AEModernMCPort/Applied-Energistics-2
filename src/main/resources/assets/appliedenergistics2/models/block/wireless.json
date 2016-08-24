@@ -762,7 +762,7 @@
         }
     ],
     "textures": {
-        "0": "appliedenergistics2:blocks/wireless_inside",
-        "1": "appliedenergistics2:blocks/wireless"
+        "0": "appliedenergistics:blocks/wireless_inside",
+        "1": "appliedenergistics:blocks/wireless"
     }
 }

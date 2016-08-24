@@ -24,6 +24,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 
 import appeng.container.interfaces.IProgressProvider;
+import appeng.core.AppEng;
 import appeng.core.localization.GuiText;
 
 
@@ -49,7 +50,7 @@ public class GuiProgressBar extends GuiButton implements ITooltip
 		this.source = source;
 		this.xPosition = posX;
 		this.yPosition = posY;
-		this.texture = new ResourceLocation( "appliedenergistics2", "textures/" + texture );
+		this.texture = new ResourceLocation( AppEng.MOD_ID, "textures/" + texture );
 		this.width = width;
 		this.height = height;
 		this.fill_u = u;

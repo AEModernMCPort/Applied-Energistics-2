@@ -1,6 +1,6 @@
 {
     "textures": {
-        "base": "appliedenergistics2:parts/cable/smart/${color}"
+        "base": "appliedenergistics:parts/cable/smart/${color}"
     },
     "elements": [
         {
