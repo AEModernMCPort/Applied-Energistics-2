@@ -50,6 +50,7 @@ import appeng.api.config.StorageFilter;
 import appeng.api.config.TerminalStyle;
 import appeng.api.config.ViewItems;
 import appeng.api.config.YesNo;
+import appeng.core.AppEng;
 import appeng.core.localization.ButtonToolTips;
 
 
@@ -208,7 +209,7 @@ public class GuiImgButton extends GuiButton implements ITooltip
 					GL11.glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
 				}
 
-				par1Minecraft.renderEngine.bindTexture( new ResourceLocation( "appliedenergistics2", "textures/guis/states.png" ) );
+				par1Minecraft.renderEngine.bindTexture( new ResourceLocation( AppEng.MOD_ID, "textures/guis/states.png" ) );
 				this.hovered = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
 
 				final int uv_y = (int) Math.floor( iconIndex / 16 );
@@ -231,7 +232,7 @@ public class GuiImgButton extends GuiButton implements ITooltip
 					GL11.glColor4f( 0.5f, 0.5f, 0.5f, 1.0f );
 				}
 
-				par1Minecraft.renderEngine.bindTexture( new ResourceLocation( "appliedenergistics2", "textures/guis/states.png" ) );
+				par1Minecraft.renderEngine.bindTexture( new ResourceLocation( AppEng.MOD_ID, "textures/guis/states.png" ) );
 				this.hovered = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
 
 				final int uv_y = (int) Math.floor( iconIndex / 16 );

@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "bottom": "appliedenergistics:blocks/cell_work_bench_bottom",
+        "side": "appliedenergistics:blocks/cell_work_bench_side",
+        "top": "appliedenergistics:blocks/cell_work_bench"
+    }
+}

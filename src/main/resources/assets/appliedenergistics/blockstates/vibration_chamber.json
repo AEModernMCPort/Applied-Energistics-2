@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "active=false": {
+            "model": "appliedenergistics:vibration_chamber_off"
+        },
+        "active=true": {
+            "model": "appliedenergistics:vibration_chamber_on"
+        }
+    }
+}

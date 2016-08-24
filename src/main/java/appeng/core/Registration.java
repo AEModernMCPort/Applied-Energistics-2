@@ -310,13 +310,13 @@ public final class Registration
 		if( AEConfig.instance.isFeatureEnabled( AEFeature.EnableDisassemblyCrafting ) )
 		{
 			GameRegistry.addRecipe( new DisassembleRecipe() );
-			RecipeSorter.register( "appliedenergistics2:disassemble", DisassembleRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
+			RecipeSorter.register( "appliedenergistics:disassemble", DisassembleRecipe.class, Category.SHAPELESS, "after:minecraft:shapeless" );
 		}
 
 		if( AEConfig.instance.isFeatureEnabled( AEFeature.EnableFacadeCrafting ) )
 		{
 			GameRegistry.addRecipe( new FacadeRecipe() );
-			RecipeSorter.register( "appliedenergistics2:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
+			RecipeSorter.register( "appliedenergistics:facade", FacadeRecipe.class, Category.SHAPED, "after:minecraft:shaped" );
 		}
 	}
 

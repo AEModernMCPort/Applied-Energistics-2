@@ -1,0 +1,10 @@
+{
+    "ambientocclusion": false,
+    "parent": "appliedenergistics:block/cube/cube_ae_machine",
+    "textures": {
+        "bottom": "appliedenergistics:blocks/grinder_bottom",
+        "front": "appliedenergistics:blocks/grinder_front",
+        "side": "appliedenergistics:blocks/grinder_side",
+        "top": "appliedenergistics:blocks/grinder"
+    }
+}

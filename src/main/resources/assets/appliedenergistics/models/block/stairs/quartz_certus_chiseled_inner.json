@@ -1,0 +1,8 @@
+{
+    "parent": "block/inner_stairs",
+    "textures": {
+        "bottom": "appliedenergistics:blocks/chiseled_quartz_block_top",
+        "side": "appliedenergistics:blocks/chiseled_quartz_block_side",
+        "top": "appliedenergistics:blocks/chiseled_quartz_block_top"
+    }
+}

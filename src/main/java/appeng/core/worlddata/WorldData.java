@@ -51,7 +51,7 @@ import appeng.services.compass.CompassThreadFactory;
  */
 public final class WorldData implements IWorldData
 {
-	private static final String AE2_DIRECTORY_NAME = "AE2";
+	private static final String AE2_DIRECTORY_NAME = "appliedenergistics";
 	private static final String SETTING_FILE_NAME = "settings.cfg";
 	private static final String SPAWNDATA_DIR_NAME = "spawndata";
 	private static final String COMPASS_DIR_NAME = "compass";
@@ -107,7 +107,7 @@ public final class WorldData implements IWorldData
 	}
 
 	/**
-	 * @return ae2 data related to a specific world
+	 * @return appliedenergistics data related to a specific world
 	 *
 	 * @deprecated do not use singletons which are dependent on specific world state
 	 */
@@ -139,7 +139,7 @@ public final class WorldData implements IWorldData
 
 	private void onServerStarting()
 	{
-		// check if ae2 folder already exists, else create
+		// check if appliedenergistics folder already exists, else create
 		if( !this.ae2directory.isDirectory() && !this.ae2directory.mkdir() )
 		{
 			throw new IllegalStateException( "Failed to create " + this.ae2directory.getAbsolutePath() );

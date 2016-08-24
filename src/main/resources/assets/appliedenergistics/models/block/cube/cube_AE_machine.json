@@ -1,0 +1,12 @@
+{
+    "parent": "appliedenergistics:block/cube/cube_ae",
+    "textures": {
+        "down": "#bottom",
+        "east": "#side",
+        "north": "#front",
+        "particle": "#front",
+        "south": "#side",
+        "up": "#top",
+        "west": "#side"
+    }
+}

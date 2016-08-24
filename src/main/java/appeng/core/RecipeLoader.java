@@ -48,7 +48,7 @@ public class RecipeLoader implements Runnable
 	/**
 	 * recipe path in the jar
 	 */
-	private static final String ASSETS_RECIPE_PATH = "/assets/appliedenergistics2/recipes/";
+	private static final String ASSETS_RECIPE_PATH = "/assets/appliedenergistics/recipes/";
 
 	@Nonnull
 	private final IRecipeHandler handler;
@@ -77,7 +77,7 @@ public class RecipeLoader implements Runnable
 		if( this.config.isEnabled() )
 		{
 			// setup copying
-			final RecipeResourceCopier copier = new RecipeResourceCopier( "assets/appliedenergistics2/recipes/" );
+			final RecipeResourceCopier copier = new RecipeResourceCopier( "assets/appliedenergistics/recipes/" );
 
 			final File generatedRecipesDir = new File( this.recipeDirectory, "generated" );
 			final File userRecipesDir = new File( this.recipeDirectory, "user" );

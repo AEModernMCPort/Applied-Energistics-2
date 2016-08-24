@@ -74,6 +74,7 @@ import appeng.container.slot.SlotOutput;
 import appeng.container.slot.SlotPatternTerm;
 import appeng.container.slot.SlotRestrictedInput;
 import appeng.core.AELog;
+import appeng.core.AppEng;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketInventoryAction;
 import appeng.core.sync.packets.PacketSwapSlots;
@@ -925,7 +926,7 @@ public abstract class AEBaseGui extends GuiContainer
 
 	public void bindTexture( final String file )
 	{
-		final ResourceLocation loc = new ResourceLocation( "appliedenergistics2", "textures/" + file );
+		final ResourceLocation loc = new ResourceLocation( AppEng.MOD_ID, "textures/" + file );
 		this.mc.getTextureManager().bindTexture( loc );
 	}
 	protected GuiScrollbar getScrollBar()

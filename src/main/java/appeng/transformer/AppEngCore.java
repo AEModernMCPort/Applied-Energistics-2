@@ -52,7 +52,7 @@ public final class AppEngCore extends DummyModContainer implements IFMLLoadingPl
 		this.metadata.version = this.getVersion();
 		this.metadata.name = this.getName();
 		this.metadata.url = "http://ae2.ae-mod.info";
-		this.metadata.logoFile = "assets/appliedenergistics2/meta/logo.png";
+		this.metadata.logoFile = "assets/appliedenergistics/meta/logo.png";
 		this.metadata.description = "Embedded Coremod for Applied Energistics 2";
 	}
 
@@ -101,7 +101,7 @@ public final class AppEngCore extends DummyModContainer implements IFMLLoadingPl
 	@Override
 	public String getModId()
 	{
-		return "appliedenergistics2-core";
+		return "appliedenergistics-core";
 	}
 
 	@Override

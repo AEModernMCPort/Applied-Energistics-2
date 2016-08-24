@@ -66,9 +66,9 @@ public enum AECableType
 	{
 		this.type = type;
 		this.displayedChannels = displayedChannels;
-		this.model = new ResourceLocation( "appliedenergistics2", "part/cable/" + type + "/center" );
-		this.connectionModel = new ResourceLocation( "appliedenergistics2", "part/cable/" + type + "/connection" );
-		this.straightModel = new ResourceLocation( "appliedenergistics2", "part/cable/" + type + "/straight" );
+		this.model = new ResourceLocation( "appliedenergistics", "part/cable/" + type + "/center" );
+		this.connectionModel = new ResourceLocation( "appliedenergistics", "part/cable/" + type + "/connection" );
+		this.straightModel = new ResourceLocation( "appliedenergistics", "part/cable/" + type + "/straight" );
 	}
 
 	public int displayedChannels()
