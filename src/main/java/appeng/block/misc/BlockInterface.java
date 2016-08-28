@@ -19,7 +19,6 @@
 package appeng.block.misc;
 
 
-import java.util.EnumSet;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
@@ -37,7 +36,6 @@ import net.minecraft.world.World;
 import appeng.api.util.AEPartLocation;
 import appeng.api.util.IOrientable;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.misc.TileInterface;
 import appeng.util.Platform;
@@ -53,13 +51,12 @@ public class BlockInterface extends AEBaseTileBlock
 		super( Material.IRON );
 
 		this.setTileEntity( TileInterface.class );
-		this.setFeature( EnumSet.of( AEFeature.Core ) );
 	}
 
 	@Override
 	protected IProperty[] getAEStates()
 	{
-		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP, OMNIDIRECTIONAL };
+		return new IProperty[] { OMNIDIRECTIONAL };
 	}
 
 	@Override
@@ -68,7 +65,8 @@ public class BlockInterface extends AEBaseTileBlock
 		// Determine whether the interface is omni-directional or not
 		TileInterface te = getTileEntity( world, pos );
 		boolean omniDirectional = true; // The default
-		if (te != null) {
+		if( te != null )
+		{
 			omniDirectional = te.isOmniDirectional();
 		}
 
@@ -110,5 +108,4 @@ public class BlockInterface extends AEBaseTileBlock
 			( (TileInterface) rotatable ).setSide( axis );
 		}
 	}
-
 }

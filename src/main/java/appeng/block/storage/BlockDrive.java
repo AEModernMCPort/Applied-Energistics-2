@@ -19,22 +19,25 @@
 package appeng.block.storage;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.storage.TileDrive;
 import appeng.util.Platform;
@@ -43,17 +46,41 @@ import appeng.util.Platform;
 public class BlockDrive extends AEBaseTileBlock
 {
 
+	public static final DriveSlotsStateProperty SLOTS_STATE = new DriveSlotsStateProperty();
+
 	public BlockDrive()
 	{
 		super( Material.IRON );
 		this.setTileEntity( TileDrive.class );
-		this.setFeature( EnumSet.of( AEFeature.StorageCells, AEFeature.MEDrive ) );
 	}
 
 	@Override
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState()
+	{
+		return new ExtendedBlockState( this, getAEStates(), new IUnlistedProperty[] {
+				SLOTS_STATE,
+				FORWARD,
+				UP
+		} );
+	}
+
+	@Override
+	public IBlockState getExtendedState( IBlockState state, IBlockAccess world, BlockPos pos )
+	{
+		TileDrive te = getTileEntity( world, pos );
+		if( te == null )
+		{
+			return super.getExtendedState( state, world, pos );
+		}
+
+		IExtendedBlockState extState = (IExtendedBlockState) super.getExtendedState( state, world, pos );
+		return extState.withProperty( SLOTS_STATE, DriveSlotsState.fromChestOrDrive( te ) );
 	}
 
 	@Override

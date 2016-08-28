@@ -19,24 +19,20 @@
 package appeng.block.networking;
 
 
-import java.util.EnumSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
 import appeng.tile.networking.TileController;
-
 
 public class BlockController extends AEBaseTileBlock
 {
@@ -60,7 +56,7 @@ public class BlockController extends AEBaseTileBlock
      */
 	public enum ControllerRenderType implements IStringSerializable
 	{
-		block, column, inside_a, inside_b;
+		block, column_x, column_y, column_z, inside_a, inside_b;
 
 		@Override
 		public String getName()
@@ -74,10 +70,26 @@ public class BlockController extends AEBaseTileBlock
 
 	public static final PropertyEnum<ControllerRenderType> CONTROLLER_TYPE = PropertyEnum.create( "type", ControllerRenderType.class );
 
+	public BlockController()
+	{
+		super( Material.IRON );
+		this.setTileEntity( TileController.class );
+		this.setHardness( 6 );
+		this.setDefaultState( getDefaultState()
+				.withProperty( CONTROLLER_STATE, ControllerBlockState.offline )
+				.withProperty( CONTROLLER_TYPE, ControllerRenderType.block ) );
+	}
+
 	@Override
 	protected IProperty[] getAEStates()
 	{
-		return new IProperty[] { AE_BLOCK_FORWARD, AE_BLOCK_UP, CONTROLLER_STATE, CONTROLLER_TYPE };
+		return new IProperty[] { CONTROLLER_STATE, CONTROLLER_TYPE };
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState()
+	{
+		return new BlockStateContainer( this, getAEStates() );
 	}
 
 	/**
@@ -90,8 +102,6 @@ public class BlockController extends AEBaseTileBlock
 	{
 
 		// Only used for columns, really
-		EnumFacing up = EnumFacing.UP;
-		EnumFacing forward = EnumFacing.NORTH;
 		ControllerRenderType type = ControllerRenderType.block;
 
 		int x = pos.getX();
@@ -105,21 +115,15 @@ public class BlockController extends AEBaseTileBlock
 
 		if( xx && !yy && !zz )
 		{
-			up = EnumFacing.EAST;
-			forward = EnumFacing.UP;
-			type = ControllerRenderType.column;
+			type = ControllerRenderType.column_x;
 		}
 		else if( !xx && yy && !zz )
 		{
-			up = EnumFacing.UP;
-			forward = EnumFacing.NORTH;
-			type = ControllerRenderType.column;
+			type = ControllerRenderType.column_y;
 		}
 		else if( !xx && !yy && zz )
 		{
-			up = EnumFacing.NORTH;
-			forward = EnumFacing.UP;
-			type = ControllerRenderType.column;
+			type = ControllerRenderType.column_z;
 		}
 		else if( ( xx ? 1 : 0 ) + ( yy ? 1 : 0 ) + ( zz ? 1 : 0 ) >= 2 )
 		{
@@ -137,7 +141,13 @@ public class BlockController extends AEBaseTileBlock
 			}
 		}
 
-		return state.withProperty( AE_BLOCK_FORWARD, forward ).withProperty( AE_BLOCK_UP, up ).withProperty( CONTROLLER_TYPE, type );
+		return state.withProperty( CONTROLLER_TYPE, type );
+	}
+
+	@Override
+	public IBlockState getExtendedState( IBlockState state, IBlockAccess world, BlockPos pos )
+	{
+		return state;
 	}
 
 	@Override
@@ -157,15 +167,6 @@ public class BlockController extends AEBaseTileBlock
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
-	}
-
-	public BlockController()
-	{
-		super( Material.IRON );
-		this.setTileEntity( TileController.class );
-		this.setHardness( 6 );
-		this.setFeature( EnumSet.of( AEFeature.Channels ) );
-		this.setDefaultState( getDefaultState().withProperty( CONTROLLER_STATE, ControllerBlockState.offline ).withProperty( CONTROLLER_TYPE, ControllerRenderType.block ) );
 	}
 
 	@Override

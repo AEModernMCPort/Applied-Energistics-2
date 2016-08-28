@@ -19,15 +19,10 @@
 package appeng.items.tools.powered;
 
 
-import java.util.EnumSet;
 import java.util.List;
-
 import javax.annotation.Nullable;
 
-import com.google.common.base.Optional;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -71,7 +66,6 @@ import appeng.core.localization.GuiText;
 import appeng.core.localization.PlayerMessages;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketMatterCannon;
-import appeng.hooks.DispenserMatterCannon;
 import appeng.hooks.TickHandler;
 import appeng.hooks.TickHandler.PlayerColor;
 import appeng.items.contents.CellConfig;
@@ -89,15 +83,7 @@ public class ToolMassCannon extends AEBasePoweredItem implements IStorageCell
 
 	public ToolMassCannon()
 	{
-		super( AEConfig.instance.matterCannonBattery, Optional.<String>absent() );
-		this.setFeature( EnumSet.of( AEFeature.MatterCannon, AEFeature.PoweredTools ) );
-	}
-
-	@Override
-	public void postInit()
-	{
-		super.postInit();
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject( this, new DispenserMatterCannon() );
+		super( AEConfig.instance.matterCannonBattery );
 	}
 
 	@Override
@@ -299,10 +285,10 @@ public class ToolMassCannon extends AEBasePoweredItem implements IStorageCell
 				final Block whatsThere = w.getBlockState( hitPos ).getBlock();
 				if( whatsThere.isReplaceable( w, hitPos ) && w.isAirBlock( hitPos ) )
 				{
-					for( final Block paintBlock : AEApi.instance().definitions().blocks().paint().maybeBlock().asSet() )
+					AEApi.instance().definitions().blocks().paint().maybeBlock().ifPresent( paintBlock ->
 					{
 						w.setBlockState( hitPos, paintBlock.getDefaultState(), 3 );
-					}
+					} );
 				}
 
 				final TileEntity te = w.getTileEntity( hitPos );

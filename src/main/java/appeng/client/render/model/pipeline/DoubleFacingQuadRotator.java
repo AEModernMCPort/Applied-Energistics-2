@@ -4,7 +4,6 @@ package appeng.client.render.model.pipeline;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
@@ -12,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 import appeng.api.client.BakingPipelineElement;
 import appeng.block.AEBaseTileBlock;
@@ -26,10 +26,20 @@ public class DoubleFacingQuadRotator implements BakingPipelineElement<QuadVertex
 	{
 		if( state != null )
 		{
-			final EnumFacing forward = state.getValue( AEBaseTileBlock.AE_BLOCK_FORWARD );
-			final EnumFacing up = state.getValue( AEBaseTileBlock.AE_BLOCK_UP );
+			IExtendedBlockState extState = (IExtendedBlockState) state;
+
+			EnumFacing forward = extState.getValue( AEBaseTileBlock.FORWARD );
+			if( forward == null )
+			{
+				forward = EnumFacing.NORTH;
+			}
+			EnumFacing up = extState.getValue( AEBaseTileBlock.UP );
+			if( up == null )
+			{
+				up = EnumFacing.UP;
+			}
 			final FacingToRotation f2r = FacingToRotation.get( forward, up );
-			List<QuadVertexData> rotated = new ArrayList();
+			List<QuadVertexData> rotated = new ArrayList<>();
 			for( QuadVertexData data : elements )
 			{
 				data.setFace( f2r.rotate( data.getFace() ) );

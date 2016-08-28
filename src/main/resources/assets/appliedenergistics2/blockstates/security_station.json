@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=false": { "model": "appliedenergistics2:security_station_off" },
+    "powered=true": { "model": "appliedenergistics2:security_station_on" }
+  }
+}

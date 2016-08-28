@@ -19,8 +19,6 @@
 package appeng.block.grindstone;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -30,6 +28,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -38,11 +37,9 @@ import net.minecraftforge.common.util.FakePlayer;
 
 import appeng.api.implementations.tiles.ICrankable;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
 import appeng.core.stats.Stats;
 import appeng.tile.AEBaseTile;
 import appeng.tile.grindstone.TileCrank;
-
 
 public class BlockCrank extends AEBaseTileBlock
 {
@@ -55,7 +52,6 @@ public class BlockCrank extends AEBaseTileBlock
 		this.setLightOpacity( 0 );
 		this.setHarvestLevel( "axe", 0 );
 		this.setFullSize( this.setOpaque( false ) );
-		this.setFeature( EnumSet.of( AEFeature.GrindStone ) );
 	}
 
 	@Override
@@ -133,6 +129,12 @@ public class BlockCrank extends AEBaseTileBlock
 	}
 
 	@Override
+	public EnumBlockRenderType getRenderType( IBlockState state )
+	{
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
+
+	@Override
 	public void neighborChanged( final IBlockState state, final World world, final BlockPos pos, final Block neighborBlock )
 	{
 
@@ -155,4 +157,11 @@ public class BlockCrank extends AEBaseTileBlock
 	{
 		return this.findCrankable( world, pos ) != null;
 	}
+
+	@Override
+	public boolean isFullCube( IBlockState state )
+	{
+		return false;
+	}
+
 }

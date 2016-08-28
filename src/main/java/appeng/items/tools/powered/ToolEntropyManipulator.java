@@ -20,15 +20,11 @@ package appeng.items.tools.powered;
 
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Optional;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -52,8 +48,6 @@ import net.minecraft.world.World;
 import appeng.api.util.DimensionalCoord;
 import appeng.block.misc.BlockTinyTNT;
 import appeng.core.AEConfig;
-import appeng.core.features.AEFeature;
-import appeng.hooks.DispenserBlockTool;
 import appeng.hooks.IBlockTool;
 import appeng.items.tools.powered.powersink.AEBasePoweredItem;
 import appeng.util.InWorldToolOperationResult;
@@ -67,9 +61,7 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 
 	public ToolEntropyManipulator()
 	{
-		super( AEConfig.instance.entropyManipulatorBattery, Optional.<String>absent() );
-
-		this.setFeature( EnumSet.of( AEFeature.EntropyManipulator, AEFeature.PoweredTools ) );
+		super( AEConfig.instance.entropyManipulatorBattery );
 
 		this.heatUp = new HashMap<InWorldToolOperationIngredient, InWorldToolOperationResult>();
 		this.coolDown = new HashMap<InWorldToolOperationIngredient, InWorldToolOperationResult>();
@@ -89,13 +81,6 @@ public class ToolEntropyManipulator extends AEBasePoweredItem implements IBlockT
 		this.heatUp.put( new InWorldToolOperationIngredient( Blocks.FLOWING_WATER, true ), new InWorldToolOperationResult() );
 		this.heatUp.put( new InWorldToolOperationIngredient( Blocks.WATER, true ), new InWorldToolOperationResult() );
 		this.heatUp.put( new InWorldToolOperationIngredient( Blocks.SNOW, true ), new InWorldToolOperationResult( new ItemStack( Blocks.FLOWING_WATER ) ) );
-	}
-
-	@Override
-	public void postInit()
-	{
-		super.postInit();
-		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject( this, new DispenserBlockTool() );
 	}
 
 	private static class InWorldToolOperationIngredient

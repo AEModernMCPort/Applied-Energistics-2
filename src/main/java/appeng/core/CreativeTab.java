@@ -19,6 +19,8 @@
 package appeng.core;
 
 
+import java.util.Optional;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -60,16 +62,17 @@ public final class CreativeTab extends CreativeTabs
 		final IItems items = definitions.items();
 		final IMaterials materials = definitions.materials();
 
-		return this.findFirst( blocks.controller(), blocks.chest(), blocks.cellWorkbench(), blocks.fluix(), items.cell1k(), items.networkTool(), materials.fluixCrystal(), materials.certusQuartzCrystal() );
+		return this.findFirst( blocks.controller(), blocks.chest(), blocks.cellWorkbench(), blocks.fluixBlock(), items.cell1k(), items.networkTool(), materials.fluixCrystal(), materials.certusQuartzCrystal() );
 	}
 
 	private ItemStack findFirst( final IItemDefinition... choices )
 	{
 		for( final IItemDefinition definition : choices )
 		{
-			for( final ItemStack definitionStack : definition.maybeStack( 1 ).asSet() )
+			Optional<ItemStack> maybeIs = definition.maybeStack( 1 );
+			if( maybeIs.isPresent() )
 			{
-				return definitionStack;
+				return maybeIs.get();
 			}
 		}
 

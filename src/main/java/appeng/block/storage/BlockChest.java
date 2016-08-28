@@ -19,24 +19,25 @@
 package appeng.block.storage;
 
 
-import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import appeng.api.AEApi;
 import appeng.api.storage.ICellHandler;
 import appeng.api.util.AEPartLocation;
 import appeng.block.AEBaseTileBlock;
-import appeng.core.features.AEFeature;
 import appeng.core.localization.PlayerMessages;
 import appeng.core.sync.GuiBridge;
 import appeng.tile.storage.TileChest;
@@ -46,17 +47,49 @@ import appeng.util.Platform;
 public class BlockChest extends AEBaseTileBlock
 {
 
+	private final static PropertyEnum<DriveSlotState> SLOT_STATE = PropertyEnum.create( "slot_state", DriveSlotState.class );
+
 	public BlockChest()
 	{
 		super( Material.IRON );
 		this.setTileEntity( TileChest.class );
-		this.setFeature( EnumSet.of( AEFeature.StorageCells, AEFeature.MEChest ) );
+		this.setDefaultState( getDefaultState().withProperty( SLOT_STATE, DriveSlotState.EMPTY ) );
+	}
+
+	@Override
+	protected IProperty[] getAEStates()
+	{
+		return new IProperty[] { SLOT_STATE };
 	}
 
 	@Override
 	public BlockRenderLayer getBlockLayer()
 	{
 		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public IBlockState getActualState( IBlockState state, IBlockAccess worldIn, BlockPos pos )
+	{
+		DriveSlotState slotState = DriveSlotState.EMPTY;
+
+		TileChest te = getTileEntity( worldIn, pos );
+
+		if( te != null )
+		{
+			if( te.getCellCount() >= 1 )
+			{
+				slotState = DriveSlotState.fromCellStatus( te.getCellStatus( 0 ) );
+			}
+			// Power-state has to be checked separately
+			if( !te.isPowered() && slotState != DriveSlotState.EMPTY )
+			{
+				slotState = DriveSlotState.OFFLINE;
+			}
+		}
+
+		return super.getActualState( state, worldIn, pos )
+				.withProperty( SLOT_STATE, slotState );
 	}
 
 	@Override

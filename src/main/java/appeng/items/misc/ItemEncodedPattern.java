@@ -19,14 +19,10 @@
 package appeng.items.misc;
 
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,16 +33,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.AEApi;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.data.IAEItemStack;
-import appeng.client.ClientHelper;
 import appeng.core.CommonHelper;
-import appeng.core.features.AEFeature;
 import appeng.core.localization.GuiText;
 import appeng.helpers.PatternHelper;
 import appeng.items.AEBaseItem;
@@ -60,7 +52,6 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 
 	public ItemEncodedPattern()
 	{
-		this.setFeature( EnumSet.of( AEFeature.Patterns ) );
 		this.setMaxStackSize( 1 );
 	}
 
@@ -89,16 +80,16 @@ public class ItemEncodedPattern extends AEBaseItem implements ICraftingPatternIt
 
 			final InventoryPlayer inv = player.inventory;
 
-			for( int s = 0; s < player.inventory.getSizeInventory(); s++ )
+			ItemStack is = AEApi.instance().definitions().materials().blankPattern().maybeStack( stack.stackSize ).orElse( null );
+			if( is != null )
 			{
-				if( inv.getStackInSlot( s ) == stack )
+				for( int s = 0; s < player.inventory.getSizeInventory(); s++ )
 				{
-					for( final ItemStack blankPattern : AEApi.instance().definitions().materials().blankPattern().maybeStack( stack.stackSize ).asSet() )
+					if( inv.getStackInSlot( s ) == stack )
 					{
-						inv.setInventorySlotContents( s, blankPattern );
+						inv.setInventorySlotContents( s, is );
+						return true;
 					}
-
-					return true;
 				}
 			}
 		}

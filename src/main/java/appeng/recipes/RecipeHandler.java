@@ -34,7 +34,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Nonnull;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 
@@ -131,10 +131,10 @@ public class RecipeHandler implements IRecipeHandler
 		final IBlocks blocks = definitions.blocks();
 
 		final Optional<Item> maybeCrystalSeedItem = items.crystalSeed().maybeItem();
-		final Optional<Item> maybeSkyStoneItem = blocks.skyStone().maybeItem();
+		final Optional<Item> maybeSkyStoneItem = blocks.skyStoneBlock().maybeItem();
 		final Optional<Item> maybeCStorageItem = blocks.craftingStorage1k().maybeItem();
 		final Optional<Item> maybeCUnitItem = blocks.craftingUnit().maybeItem();
-		final Optional<Item> maybeSkyChestItem = blocks.skyChest().maybeItem();
+		final Optional<Item> maybeSkyChestItem = blocks.skyStoneChest().maybeItem();
 
 		if( maybeCrystalSeedItem.isPresent() && is.getItem() == maybeCrystalSeedItem.get() )
 		{

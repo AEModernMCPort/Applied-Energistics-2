@@ -19,11 +19,11 @@
 package appeng.core.features;
 
 
+import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -37,21 +37,11 @@ public class ItemDefinition implements IItemDefinition
 	private final String identifier;
 	private final Optional<Item> item;
 
-	public ItemDefinition( final String identifier, final Item item, final ActivityState state )
+	public ItemDefinition( String registryName, Item item )
 	{
-		this.identifier = Preconditions.checkNotNull( identifier );
-		Preconditions.checkArgument( !identifier.isEmpty() );
-		Preconditions.checkNotNull( item );
-		Preconditions.checkNotNull( state );
-
-		if( state == ActivityState.Enabled )
-		{
-			this.item = Optional.of( item );
-		}
-		else
-		{
-			this.item = Optional.absent();
-		}
+		Preconditions.checkArgument( !Strings.isNullOrEmpty( registryName ), "registryName" );
+		this.identifier = registryName;
+		this.item = Optional.ofNullable( item );
 	}
 
 	@Nonnull
@@ -70,7 +60,7 @@ public class ItemDefinition implements IItemDefinition
 	@Override
 	public Optional<ItemStack> maybeStack( final int stackSize )
 	{
-		return this.item.transform( new ItemStackTransformer( stackSize ) );
+		return this.item.map( item -> new ItemStack( item, stackSize ) );
 	}
 
 	@Override
@@ -82,24 +72,7 @@ public class ItemDefinition implements IItemDefinition
 	@Override
 	public final boolean isSameAs( final ItemStack comparableStack )
 	{
-		return this.isEnabled() && Platform.isSameItemType( comparableStack, this.maybeStack( 1 ).get() );
+		return isEnabled() && Platform.isSameItemType( comparableStack, this.maybeStack( 1 ).get() );
 	}
 
-	private static class ItemStackTransformer implements Function<Item, ItemStack>
-	{
-		private final int stackSize;
-
-		public ItemStackTransformer( final int stackSize )
-		{
-			Preconditions.checkArgument( stackSize > 0 );
-
-			this.stackSize = stackSize;
-		}
-
-		@Override
-		public ItemStack apply( final Item input )
-		{
-			return new ItemStack( input, this.stackSize );
-		}
-	}
 }
