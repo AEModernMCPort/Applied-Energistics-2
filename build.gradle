@@ -125,3 +125,9 @@ processResources {
         expand 'version': project.version, 'mcversion': minecraft_version
     }
 }
+
+idea { 
+    module { 
+        inheritOutputDirs = true
+        }
+    }

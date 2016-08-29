@@ -18,5 +18,5 @@
             ]
         }
     },
-    "parent": "appliedenergistics2:fluix/block"
+    "parent": "appliedenergistics2:block/fluix"
 }
