@@ -185,6 +185,6 @@
     "textures": {
         "block": "appliedenergistics2:blocks/controller_powered",
         "lights": "appliedenergistics2:blocks/controller_lights",
-        "particle": "#block"
+        "particle": "appliedenergistics2:blocks/controller_powered"
     }
 }
