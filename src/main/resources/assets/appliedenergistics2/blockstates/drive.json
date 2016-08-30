@@ -15,6 +15,10 @@
         "facing=west": {
             "model": "appliedenergistics2:drive",
             "y": 90
+        },
+        "normal": {
+            "model": "appliedenergistics2:drive"
         }
+
     }
 }
