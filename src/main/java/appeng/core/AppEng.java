@@ -21,15 +21,19 @@ package appeng.core;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
+import appeng.core.lib.module.ModuleLoaderHelper;
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -97,6 +101,7 @@ public final class AppEng
 
 	private ImmutableMap<String, Module> modules;
 	private ImmutableMap<Class, Module> classModule;
+	private ImmutableList<String> moduleOrder;
 	/*
 	 * TODO 1.10.2-MODUSEP - Do we even want some modules be @Mod at the same time? Weird.
 	 */
@@ -145,74 +150,26 @@ public final class AppEng
 			}
 		}
 
-		// TODO 1.10.2-MODUSEP - Implement ordering...
-		Map<String, Class<Module>> modules = new HashMap<>();
-		for( Entry<String, Pair<Class<Module>, String>> e : foundModules.entrySet() )
-		{
-			boolean load = true;
-			if( e.getValue().getRight() != null )
-			{
-				for( String dep : e.getValue().getRight().split( ";" ) )
-				{
-					String[] depkv = dep.split( ":" );
-					String[] keys = depkv[0].split( "\\-" );
-					String value = depkv.length > 0 ? depkv[1] : null;
 
-					Side side = ArrayUtils.contains( keys, "client" ) ? Side.CLIENT : ArrayUtils.contains( keys, "server" ) ? Side.SERVER : null;
-					boolean required = ArrayUtils.contains( keys, "required" );
-					boolean force = ArrayUtils.contains( keys, "force" );
+		Map<String, Class<Module>> modules = Maps.newHashMap();
+		List<String> order = ModuleLoaderHelper.checkAndOrderModules(foundModules, event.getSide(), modules);
+		ImmutableList.Builder<String> orderBuilder = ImmutableList.builder();
+		order.addAll(order);
+		this.moduleOrder = orderBuilder.build();
 
-					if( side != null && value == null )
-					{
-						load &= side == event.getSide();
-						if( side == event.getSide() || !force )
-						{
-							continue;
-						}
-					}
-					else if( required && value != null )
-					{
-						String what = value.substring( 0, value.indexOf( '-' ) );
-						String which = value.substring( value.indexOf( '-' ) + 1, value.length() );
-						boolean found = side == null || side == event.getSide();
-						switch( what )
-						{
-							case "mod":
-								found &= Loader.isModLoaded( which );
-								break;
-							case "module":
-								found &= modules.containsKey( which );
-								break;
-							default:
-								found = false;
-						}
-						if( found || !force )
-						{
-							load &= found;
-							continue;
-						}
-					}
-					//TODO 1.10.2-MODUSEP - Report this in a fancier way ;)... Maybe >D...
-					throw new RuntimeException( String.format( "Missing hard required dependency for module %s - %s", e.getKey(), dep ) );
-				}
-			}
-			if( load )
-			{
-				modules.put( e.getKey(), e.getValue().getLeft() );
-			}
-		}
 
 		ImmutableMap.Builder<String, Module> modulesBuilder = ImmutableMap.builder();
 		ImmutableMap.Builder<Class, Module> classModuleBuilder = ImmutableMap.builder();
 		ImmutableMap.Builder<Module, Boolean> internalBuilder = ImmutableMap.builder();
-		for( Entry<String, Class<Module>> e : modules.entrySet() )
-		{
+		for(String name : moduleOrder)
+			{
 			try
 			{
-				Module module = e.getValue().newInstance();
-				modulesBuilder.put( e.getKey(), module );
-				classModuleBuilder.put( e.getValue(), module );
-				internalBuilder.put( module, !e.getValue().isAnnotationPresent( Mod.class ) );
+				Class<Module> moduleClass = modules.get(name);
+				Module module = moduleClass.newInstance();
+				modulesBuilder.put( name, module );
+				classModuleBuilder.put( moduleClass, module );
+				internalBuilder.put( module, !moduleClass.isAnnotationPresent( Mod.class ) );
 			}
 			catch( Exception exc )
 			{
@@ -223,7 +180,7 @@ public final class AppEng
 		this.classModule = classModuleBuilder.build();
 		this.internal = internalBuilder.build();
 
-		AELog.info( "Succesfully loaded %s modules", foundModules.size() );
+		AELog.info( "Succesfully loaded %s modules", modules.size() );
 
 		final Stopwatch watch = Stopwatch.createStarted();
 		AELog.info( "Pre Initialization ( started )" );
@@ -231,8 +188,9 @@ public final class AppEng
 		this.configDirectory = new File( event.getModConfigurationDirectory().getPath(), "AppliedEnergistics2" );
 		AEConfig.instance = new AEConfig( new File( AppEng.instance().getConfigDirectory(), "AppliedEnergistics2.cfg" ) );
 
-		for( Module module : this.modules.values() )
+		for( String name : moduleOrder)
 		{
+			Module module = getModule(name);
 			if( this.internal.get( module ) )
 			{
 				module.preInit( event );
@@ -248,9 +206,10 @@ public final class AppEng
 		final Stopwatch start = Stopwatch.createStarted();
 		AELog.info( "Initialization ( started )" );
 
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.init( event );
 			}
@@ -265,9 +224,10 @@ public final class AppEng
 		final Stopwatch start = Stopwatch.createStarted();
 		AELog.info( "Post Initialization ( started )" );
 
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.postInit( event );
 			}
@@ -294,9 +254,10 @@ public final class AppEng
 	@EventHandler
 	private void serverAboutToStart( final FMLServerAboutToStartEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverAboutToStart( event );
 			}
@@ -306,9 +267,10 @@ public final class AppEng
 	@EventHandler
 	private void serverStarting( final FMLServerStartingEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverStarting( event );
 			}
@@ -318,9 +280,10 @@ public final class AppEng
 	@EventHandler
 	private void serverStopping( final FMLServerStoppingEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverStopping( event );
 			}
@@ -330,9 +293,10 @@ public final class AppEng
 	@EventHandler
 	private void serverStopped( final FMLServerStoppedEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverStopped( event );
 			}
