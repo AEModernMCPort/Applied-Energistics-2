@@ -21,15 +21,28 @@ package appeng.core;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 
+import appeng.core.lib.module.Toposorter;
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiErrorScreen;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
+import net.minecraftforge.fml.common.ModClassLoader;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -58,6 +71,7 @@ import appeng.core.lib.crash.CrashInfo;
 import appeng.core.lib.crash.ModCrashEnhancement;
 import appeng.core.lib.module.AEModule;
 import appeng.core.lib.module.Module;
+import org.lwjgl.Sys;
 
 
 @Mod( modid = AppEng.MOD_ID, name = AppEng.MOD_NAME, version = AEConfig.VERSION, dependencies = AppEng.MOD_DEPENDENCIES, acceptedMinecraftVersions = ForgeVersion.mcVersion, guiFactory = "appeng.client.gui.config.AEConfigGuiFactory" )
@@ -82,7 +96,14 @@ public final class AppEng
 
 	@Nonnull
 	private static final AppEng INSTANCE = new AppEng();
-
+	private ImmutableMap<String, Module> modules;
+	private ImmutableMap<Class, Module> classModule;
+	private ImmutableList<String> moduleOrder;
+	/*
+	 * TODO 1.10.2-MODUSEP - Do we even want some modules be @Mod at the same time? Weird.
+	 */
+	private ImmutableMap<Module, Boolean> internal;
+	private File configDirectory;
 	private AppEng()
 	{
 		FMLCommonHandler.instance().registerCrashCallable( new ModCrashEnhancement( CrashInfo.MOD_VERSION ) );
@@ -95,13 +116,6 @@ public final class AppEng
 		return INSTANCE;
 	}
 
-	private ImmutableMap<String, Module> modules;
-	private ImmutableMap<Class, Module> classModule;
-	/*
-	 * TODO 1.10.2-MODUSEP - Do we even want some modules be @Mod at the same time? Weird.
-	 */
-	private ImmutableMap<Module, Boolean> internal;
-
 	public <M extends Module> M getModule( String name )
 	{
 		return (M) modules.get( name );
@@ -112,11 +126,105 @@ public final class AppEng
 		return (M) classModule.get( clas );
 	}
 
-	private File configDirectory;
-
 	public File getConfigDirectory()
 	{
 		return configDirectory;
+	}
+
+	/**
+	 * Checks whether all required dependencies are here
+     */
+	private boolean isValid(String name, Map<String, Pair<Class<Module>, String>> modules, Side currentSide, List<String> validModules, List<String> checkedModules){
+		if(checkedModules.contains(name))
+			return validModules.contains(name);
+		checkedModules.add(name);
+		if(!modules.containsKey(name))
+			return false;
+		for(String dep : modules.get(name).getRight().split(";")){
+			String[] temp = dep.split(":");
+			String[] modifiers = dep.split("\\-");
+			String depName = temp.length>0?temp[1]:null;
+			Side requiredSide = ArrayUtils.contains(modifiers, "client" ) ? Side.CLIENT : ArrayUtils.contains(modifiers, "server" ) ? Side.SERVER : currentSide;
+			boolean hard = ArrayUtils.contains(modifiers, "hard");
+			boolean soft = ArrayUtils.contains(modifiers, "soft");
+			boolean crash = hard&&ArrayUtils.contains(modifiers, "crash");
+			if(soft && hard)
+				return false;
+			if(soft) //Allows "client-soft" as side specifier, but noone would write it
+				continue;
+			if(name==null){
+				if(requiredSide==currentSide)
+					continue;
+				else if(crash)
+					throw new CustomModLoadingErrorDisplayException(String.format("Module %s is %s side only!", name, requiredSide.toString()), null) { //Will open a gui.
+						@Override public void initGui(GuiErrorScreen errorScreen, FontRenderer fontRenderer) {}//Used to add buttons, we have none
+
+						@Override
+						public void drawScreen(GuiErrorScreen errorScreen, FontRenderer fontRenderer, int mouseRelX, int mouseRelY, float tickTime) {
+							//from net.minecraftforge.fml.client.GuiModsMissing
+							errorScreen.drawDefaultBackground();
+							String text = "Module " + TextFormatting.BOLD + name + TextFormatting.RESET+" can only be used on "+TextFormatting.BOLD+requiredSide.toString()+TextFormatting.RESET+"!";
+							errorScreen.drawCenteredString(fontRenderer, text, errorScreen.width / 2, 75, 0xFFFFFF);
+						}
+					};
+				return false;
+			}else if(depName!=null&&hard){
+				String what = depName.substring( 0, depName.indexOf( '-' ) );
+				String which = depName.substring( depName.indexOf( '-' ) + 1, depName.length() );
+				boolean depFound = false;
+				if(requiredSide==currentSide) {
+					if (which.equals("mod")){
+						depFound = Loader.isModLoaded(what);
+					}else if(which.equals("module")){
+						depFound = isValid(what, modules, currentSide, validModules, checkedModules);
+					}
+				}
+				if(!depFound)
+					if(crash)
+						throw new CustomModLoadingErrorDisplayException(String.format("Missing hard required dependency for module %s - %s", name, depName), null) { //Will open a gui.
+							@Override
+							public void initGui(GuiErrorScreen errorScreen, FontRenderer fontRenderer) {}//Used to add buttons, we have none
+
+							@Override
+							public void drawScreen(GuiErrorScreen errorScreen, FontRenderer fontRenderer, int mouseRelX, int mouseRelY, float tickTime) {
+								//from net.minecraftforge.fml.client.GuiModsMissing
+								errorScreen.drawDefaultBackground();
+								String modMissingDependenciesText = "Module " + TextFormatting.BOLD + name + TextFormatting.RESET+" is missing required hard dependency "+TextFormatting.BOLD+depName+TextFormatting.RESET+".";
+								errorScreen.drawCenteredString(fontRenderer, modMissingDependenciesText, errorScreen.width / 2, 75, 0xFFFFFF);
+							}
+						};
+					return false;
+			}else return false; //Syntax error
+		}
+		validModules.add(name);
+		return true;
+	}
+
+	private void addAsNode(String name, Map<String, Pair<Class<Module>, String>> foundModules, Toposorter.Graph<String> graph, Side currentSide){
+		if(graph.hasNode(name))
+			return;
+		Toposorter.Graph<String>.Node node = graph.addNewNode(name, name);
+		for(String dep : foundModules.get(name).getRight().split(";")){
+			String[] temp = dep.split(":");
+			String[] modifiers = dep.split("\\-");
+			String depName = temp.length>0?temp[1]:null;
+			Side requiredSide = ArrayUtils.contains(modifiers, "client" ) ? Side.CLIENT : ArrayUtils.contains(modifiers, "server" ) ? Side.SERVER : currentSide;
+			boolean before = ArrayUtils.contains(modifiers, "before");
+			boolean after = ArrayUtils.contains(modifiers, "after");
+			if(depName!=null){
+				String what = depName.substring( 0, depName.indexOf( '-' ) );
+				String which = depName.substring( depName.indexOf( '-' ) + 1, depName.length() );
+				if(which.equals("module") && requiredSide==currentSide){
+					addAsNode(what, foundModules, graph, currentSide);
+					if(after)
+						node.dependOn(graph.getNode(what));
+					else if(before)
+						node.dependencyOf(graph.getNode(what));
+					//"mod" cannot be handled here because AE2 cannot control mod loading
+					//else there is no vertex added to this graph
+				}
+			}
+		}
 	}
 
 	@EventHandler
@@ -124,7 +232,8 @@ public final class AppEng
 	{
 		if( !Loader.isModLoaded( "appliedenergistics2-core" ) )
 		{
-			// TODO 1.10.2-MODUSEP - I dunno what to do with proxies. Srsly. I think we will have to use a proxy per module. If so, do we also need generic proxy :D ?
+			// TODO 1.10.2-MODUSEP - I dunno what to do with proxies. Srsly. I think we will have to use a proxy per module. If so, do we also need generic proxy
+			// TODO 1.10.2-MODUSEP Answer: Internal modules have to have a proxy provided by AE2 or at least a proxy created by AE2 - external mods are @Mod so they have their own
 			CommonHelper.proxy.missingCoreMod();
 		}
 
@@ -145,74 +254,66 @@ public final class AppEng
 			}
 		}
 
-		// TODO 1.10.2-MODUSEP - Implement ordering...
-		Map<String, Class<Module>> modules = new HashMap<>();
-		for( Entry<String, Pair<Class<Module>, String>> e : foundModules.entrySet() )
-		{
-			boolean load = true;
-			if( e.getValue().getRight() != null )
-			{
-				for( String dep : e.getValue().getRight().split( ";" ) )
-				{
-					String[] depkv = dep.split( ":" );
-					String[] keys = depkv[0].split( "\\-" );
-					String value = depkv.length > 0 ? depkv[1] : null;
 
-					Side side = ArrayUtils.contains( keys, "client" ) ? Side.CLIENT : ArrayUtils.contains( keys, "server" ) ? Side.SERVER : null;
-					boolean required = ArrayUtils.contains( keys, "required" );
-					boolean force = ArrayUtils.contains( keys, "force" );
 
-					if( side != null && value == null )
-					{
-						load &= side == event.getSide();
-						if( side == event.getSide() || !force )
-						{
-							continue;
-						}
-					}
-					else if( required && value != null )
-					{
-						String what = value.substring( 0, value.indexOf( '-' ) );
-						String which = value.substring( value.indexOf( '-' ) + 1, value.length() );
-						boolean found = side == null || side == event.getSide();
-						switch( what )
-						{
-							case "mod":
-								found &= Loader.isModLoaded( which );
-								break;
-							case "module":
-								found &= modules.containsKey( which );
-								break;
-							default:
-								found = false;
-						}
-						if( found || !force )
-						{
-							load &= found;
-							continue;
-						}
-					}
-					//TODO 1.10.2-MODUSEP - Report this in a fancier way ;)... Maybe >D...
-					throw new RuntimeException( String.format( "Missing hard required dependency for module %s - %s", e.getKey(), dep ) );
-				}
-			}
-			if( load )
-			{
-				modules.put( e.getKey(), e.getValue().getLeft() );
+		List<String> checked = Lists.newArrayList();
+		List<String> valid = Lists.newArrayList();
+		Map<String, Class<Module>> modules = Maps.newHashMap();
+		for(Map.Entry<String, Pair<Class<Module>, String>> entry:foundModules.entrySet()){
+			if(isValid(entry.getKey(), foundModules, event.getSide(), valid, checked)){
+				modules.put(entry.getKey(), entry.getValue().getLeft());
 			}
 		}
+		Toposorter.Graph<String> graph = new Toposorter.Graph<String>();
+		for(String name : modules.keySet()){
+			addAsNode(name, foundModules, graph, event.getSide());
+		}
 
+		List<String> ls = null;
+		try {
+			ls = Toposorter.toposort(graph);
+		} catch (Toposorter.SortingException e) {
+			boolean moduleFound = false;
+			event.getModLog().error("Module "+e.getNode()+" has circular dependencies:");
+			for(String s : e.getVisitedNodes()){
+				if(s.equals(e.getNode())){
+					moduleFound = true;
+					event.getModLog().error("\""+s+"\"");
+					continue;
+				}
+				if(moduleFound){
+					event.getModLog().error("depending on: \""+s+"\"");
+				}
+			}
+			event.getModLog().error("again depending on \""+e.getNode()+"\"");
+
+			throw new CustomModLoadingErrorDisplayException(String.format("Circular dependency at module %s", e.getNode()), null) { //Will open a gui.
+				@Override
+				public void initGui(GuiErrorScreen errorScreen, FontRenderer fontRenderer) {}
+
+				@Override
+				public void drawScreen(GuiErrorScreen errorScreen, FontRenderer fontRenderer, int mouseRelX, int mouseRelY, float tickTime) {
+					//from net.minecraftforge.fml.client.GuiModsMissing
+					errorScreen.drawDefaultBackground();
+					String modMissingDependenciesText = "The module " + TextFormatting.BOLD + e.getNode() + TextFormatting.RESET+" has circular dependencies! See the log for a list!";
+					errorScreen.drawCenteredString(fontRenderer, modMissingDependenciesText, errorScreen.width / 2, 75, 0xFFFFFF);
+				}
+			};
+		}
+		moduleOrder = new ImmutableList.Builder<String>().addAll(ls).build();
 		ImmutableMap.Builder<String, Module> modulesBuilder = ImmutableMap.builder();
 		ImmutableMap.Builder<Class, Module> classModuleBuilder = ImmutableMap.builder();
 		ImmutableMap.Builder<Module, Boolean> internalBuilder = ImmutableMap.builder();
-		for( Entry<String, Class<Module>> e : modules.entrySet() )
-		{
+
+		for(String name : moduleOrder)
+			{
 			try
 			{
-				Module module = e.getValue().newInstance();
-				modulesBuilder.put( e.getKey(), module );
-				classModuleBuilder.put( e.getValue(), module );
-				internalBuilder.put( module, !e.getValue().isAnnotationPresent( Mod.class ) );
+				Class<Module> moduleClass = modules.get(name);
+				Module module = moduleClass.newInstance();
+				modulesBuilder.put( name, module );
+				classModuleBuilder.put( moduleClass, module );
+				internalBuilder.put( module, !moduleClass.isAnnotationPresent( Mod.class ) );
 			}
 			catch( Exception exc )
 			{
@@ -223,7 +324,7 @@ public final class AppEng
 		this.classModule = classModuleBuilder.build();
 		this.internal = internalBuilder.build();
 
-		AELog.info( "Succesfully loaded %s modules", foundModules.size() );
+		AELog.info( "Succesfully loaded %s modules", modules.size() );
 
 		final Stopwatch watch = Stopwatch.createStarted();
 		AELog.info( "Pre Initialization ( started )" );
@@ -231,8 +332,9 @@ public final class AppEng
 		this.configDirectory = new File( event.getModConfigurationDirectory().getPath(), "AppliedEnergistics2" );
 		AEConfig.instance = new AEConfig( new File( AppEng.instance().getConfigDirectory(), "AppliedEnergistics2.cfg" ) );
 
-		for( Module module : this.modules.values() )
+		for( String name : moduleOrder)
 		{
+			Module module = getModule(name);
 			if( this.internal.get( module ) )
 			{
 				module.preInit( event );
@@ -248,9 +350,10 @@ public final class AppEng
 		final Stopwatch start = Stopwatch.createStarted();
 		AELog.info( "Initialization ( started )" );
 
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.init( event );
 			}
@@ -265,9 +368,10 @@ public final class AppEng
 		final Stopwatch start = Stopwatch.createStarted();
 		AELog.info( "Post Initialization ( started )" );
 
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.postInit( event );
 			}
@@ -294,9 +398,10 @@ public final class AppEng
 	@EventHandler
 	private void serverAboutToStart( final FMLServerAboutToStartEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverAboutToStart( event );
 			}
@@ -306,9 +411,10 @@ public final class AppEng
 	@EventHandler
 	private void serverStarting( final FMLServerStartingEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverStarting( event );
 			}
@@ -318,9 +424,10 @@ public final class AppEng
 	@EventHandler
 	private void serverStopping( final FMLServerStoppingEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverStopping( event );
 			}
@@ -330,9 +437,10 @@ public final class AppEng
 	@EventHandler
 	private void serverStopped( final FMLServerStoppedEvent event )
 	{
-		for( Module module : modules.values() )
+		for( String name : moduleOrder)
 		{
-			if( internal.get( module ) )
+			Module module = getModule(name);
+			if( this.internal.get( module ) )
 			{
 				module.serverStopped( event );
 			}
