@@ -20,24 +20,28 @@ package appeng.block.grindstone;
 
 
 import java.util.EnumSet;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import appeng.api.implementations.tiles.ICrankable;
 import appeng.block.AEBaseTileBlock;
+import appeng.client.render.tesr.CrankTesr;
 import appeng.core.features.AEFeature;
 import appeng.core.stats.Stats;
 import appeng.tile.AEBaseTile;
@@ -155,4 +159,24 @@ public class BlockCrank extends AEBaseTileBlock
 	{
 		return this.findCrankable( world, pos ) != null;
 	}
+
+	@Override
+	@SideOnly( Side.CLIENT )
+	public TileEntitySpecialRenderer<? extends AEBaseTile> getTESR()
+	{
+		return new CrankTesr();
+	}
+
+	@Override
+	public boolean isOpaque()
+	{
+		return false;
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType( IBlockState state )
+	{
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
+
 }
